@@ -16,6 +16,7 @@ export const Content = styled.div`
 
     width: 100%;
     max-width: 700px;
+    font-weight: 500;
 `;
 
 const apperFromRight = keyframes`
@@ -38,6 +39,7 @@ export const AnimationContainer = styled.div`
     animation: ${apperFromRight} 1s;
 
     .img {
+        margin-top: 10px;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -108,8 +110,10 @@ export const AnimationContainer = styled.div`
     }
 
     form {
-        margin: 80px 0;
-        width: 340px;
+        margin: 40px 0 40px 0;
+        /* width: 340px; */
+        /* max-width: 520px; */
+
         text-align: center;
 
         h1 {
@@ -149,7 +153,7 @@ export const AnimationContainer = styled.div`
     > a {
         color: #ff9000;
         display: block;
-        margin-top: 24px;
+        /* margin-top: 24px; */
         text-decoration: none;
         transition: color 0.2s;
         display: flex;
@@ -164,8 +168,24 @@ export const AnimationContainer = styled.div`
         }
     }
 `;
+
 export const Background = styled.div`
     flex: 1;
     background: url(${signUpBackground}) no-repeat center;
     background-size: cover;
+`;
+
+export const Row = styled.div`
+    flex-wrap: nowrap;
+    width: 100%;
+    margin-bottom: 7px;
+`;
+
+export const Column = styled.div`
+    display: flex;
+    flex: 1 1 0;
+
+    span {
+        margin: 0px 7px;
+    }
 `;

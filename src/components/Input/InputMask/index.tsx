@@ -44,7 +44,7 @@ const InputMask: React.FC<Props> = ({ name, icon: Icon, cepIcon, getCep, ...rest
     }, [fieldName, registerField]);
 
     return (
-        <Container className="input-group" isErrored={!!error} isFilled={isFilled} isFocused={isFocused}>
+        <Container isErrored={!!error} isFilled={isFilled} isFocused={isFocused}>
             {Icon && <Icon size={20} />}
             <ReactInputMask
                 onFocus={handleInputFocus}
@@ -62,7 +62,7 @@ const InputMask: React.FC<Props> = ({ name, icon: Icon, cepIcon, getCep, ...rest
             )}
             {cepIcon && (
                 <div style={{ marginRight: 0 }}>
-                    <FaSearch style={{ marginRight: 0, cursor: 'pointer' }} onClick={getCep} color="#e82b43" />
+                    <FaSearch style={{ marginRight: 0, cursor: 'pointer' }} onClick={getCep} color="#2e656a" />
                 </div>
             )}
         </Container>

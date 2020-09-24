@@ -99,3 +99,7 @@ export const AnimationContainer = styled.div`
         }
     }
 `;
+
+export const Row = styled.div`
+    margin-bottom: 7px;
+`;

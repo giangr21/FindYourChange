@@ -8,7 +8,7 @@ import logoImg from '../../assets/logo.svg';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import getValidationErrors from '../../util/getValidationErrors';
-import { Background, Container, Content, AnimationContainer } from './styles';
+import { Background, Container, Content, AnimationContainer, Row } from './styles';
 // import { useAuth } from '../../hooks/Auth';
 
 interface SignInFormData {
@@ -62,18 +62,12 @@ const SignIn: React.FC = () => {
                     <img src={logoImg} alt="logo" />
                     <Form ref={formRef} onSubmit={handleSubmit}>
                         <h1>Login</h1>
-                        <Input
-                            name="email"
-                            icon={FiMail}
-                            placeholder="E-mail"
-                        />
-
-                        <Input
-                            name="password"
-                            icon={FiLock}
-                            type="password"
-                            placeholder="Senha"
-                        />
+                        <Row>
+                            <Input name="email" icon={FiMail} placeholder="E-mail" />
+                        </Row>
+                        <Row>
+                            <Input name="password" icon={FiLock} type="password" placeholder="Senha" />
+                        </Row>
 
                         <Button type="submit">Entrar</Button>
 
