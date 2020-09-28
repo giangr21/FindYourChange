@@ -7,6 +7,7 @@ import { Link, useHistory } from 'react-router-dom';
 import logoImg from '../../assets/logo.svg';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import { useAuth } from '../../hooks/Auth';
 import getValidationErrors from '../../util/getValidationErrors';
 import { Background, Container, Content, AnimationContainer, Row } from './styles';
 // import { useAuth } from '../../hooks/Auth';
@@ -19,9 +20,9 @@ interface SignInFormData {
 const SignIn: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
 
-    // const { signIn } = useAuth();
+    const { signIn } = useAuth();
     // const { addToast } = useToast();
-    // const history = useHistory();
+    const history = useHistory();
 
     const handleSubmit = useCallback(async (data: SignInFormData) => {
         try {
@@ -35,11 +36,11 @@ const SignIn: React.FC = () => {
             // await schema.validate(data, {
             //     abortEarly: false,
             // });
-            // await signIn({
-            //     email: data.email,
-            //     password: data.password,
-            // });
-            // history.push('/dashboard');
+            await signIn({
+                email: data.email,
+                password: data.password,
+            });
+            history.push('/home');
         } catch (err) {
             // if (err instanceof Yup.ValidationError) {
             //     const errors = getValidationErrors(err);
