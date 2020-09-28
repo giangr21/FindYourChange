@@ -4,7 +4,7 @@ import React, { useCallback, useRef } from 'react';
 import { FiLock, FiLogIn, FiMail } from 'react-icons/fi';
 // import * as Yup from 'yup';
 import { Link, useHistory } from 'react-router-dom';
-import logoImg from '../../assets/logo.svg';
+import logoImg from '../../assets/logoFYC.png';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { useAuth } from '../../hooks/Auth';

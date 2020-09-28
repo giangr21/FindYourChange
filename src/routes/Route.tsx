@@ -16,7 +16,6 @@ const Route: React.FC<RouteProps> = ({ isPrivate = false, signPages = false, com
     if (signPages) {
         Layout = null;
     } else {
-        console.log(user);
         Layout = user ? AuthLayout : DefaultLayout;
     }
 

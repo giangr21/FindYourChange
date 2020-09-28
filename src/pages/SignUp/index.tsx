@@ -12,7 +12,7 @@ import Switch from 'react-switch';
 import { Link, useHistory } from 'react-router-dom';
 import { FaMapSigns, FaPhoneAlt } from 'react-icons/fa';
 import api from '../../services/api';
-import logoImg from '../../assets/logo.svg';
+import logoImg from '../../assets/logoFYC.png';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import InputMask from '../../components/Input/InputMask';

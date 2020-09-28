@@ -6,6 +6,7 @@ import Index from '../pages/Index';
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
 import HomePageAuthenticate from '../pages/HomePageAuthenticate';
+import ConfigProvider from '../pages/ConfigProvider';
 
 const Routes: React.FC = () => (
     <Switch>
@@ -14,6 +15,7 @@ const Routes: React.FC = () => (
         <Route path="/signUp" signPages component={SignUp} />
 
         <Route path="/home" isPrivate component={HomePageAuthenticate} />
+        <Route path="/configProvider" isPrivate component={ConfigProvider} />
     </Switch>
 );
 
