@@ -1,26 +1,5 @@
 /* eslint-disable import/no-duplicates */
-// import React, { useRef } from 'react';
-// import { FormHandles } from '@unform/core';
-
-// import { Container } from './styles';
-// import { useAuth } from '../../hooks/Auth';
-
-// const Index: React.FC = () => {
-//     const formRef = useRef<FormHandles>(null);
-//     const { signOut } = useAuth();
-
-//     return (
-//         <Container>
-//             <h1>Logged</h1>
-//             <button type="button" onClick={signOut}>
-//                 Sair
-//             </button>
-//         </Container>
-//     );
-// };
-
-// export default Index;
-
+/* eslint-disable @typescript-eslint/camelcase */
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { FiClock } from 'react-icons/fi';
 import { isToday, format, parseISO, isAfter } from 'date-fns';
@@ -49,7 +28,7 @@ interface Appointment {
     };
 }
 
-const Dashboard: React.FC = () => {
+const HomePageAuthenticate: React.FC = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [monthAvailability, setMonthAvailability] = useState<MonthAvailability[]>([]);
@@ -126,9 +105,28 @@ const Dashboard: React.FC = () => {
     }, [appointments]);
 
     const afternoonAppointments = useMemo(() => {
-        return appointments.filter((appointment) => {
-            return parseISO(appointment.date).getHours() >= 12;
-        });
+        // return appointments.filter((appointment) => {
+        //     return parseISO(appointment.date).getHours() >= 12;
+        // });
+        return [
+            {
+                id: '1',
+                hourFormatted: '14:00',
+                user: {
+                    avatar_url:
+                        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQDbMKZteobkIiPdEh2uBMlZCP3jdqm5nBSQkryYPuy6w&usqp=CAU&ec=45707743',
+                    name: 'Pedro',
+                },
+            },
+            {
+                id: '2',
+                hourFormatted: '15:00',
+                user: {
+                    avatar_url: 'https://pickaface.net/gallery/avatar/unr_whatsapp_180806_1904_2m02lx0.png',
+                    name: 'Daniela',
+                },
+            },
+        ];
     }, [appointments]);
 
     const nextAppointment = useMemo(() => {
@@ -233,4 +231,4 @@ const Dashboard: React.FC = () => {
     );
 };
 
-export default Dashboard;
+export default HomePageAuthenticate;

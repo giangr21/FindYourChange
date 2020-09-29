@@ -1,0 +1,19 @@
+.input-group {
+    position: relative;
+}
+
+.input-group .input-area + .label {
+    top: -11px;
+    padding: 0 3px;
+    font-size: 14px;
+    color: black;
+    font-weight: 500;
+    border-radius: 8px;
+}
+
+.input-group .label {
+    position: absolute;
+    top: 20px;
+    left: 13px;
+    background: #ffffff;
+}
