@@ -52,7 +52,7 @@ const Select: React.FC<Props> = ({
             colors: {
                 ...theme.colors,
                 primary25: '#f9f9f9',
-                primary: '#e82b43',
+                primary: '#ff9000',
             },
         };
     }, []);

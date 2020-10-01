@@ -35,47 +35,6 @@ export const Content = styled.div`
         color: black;
         font-weight: 600;
     }
-
-    .radioButton {
-        span {
-            color: #232129;
-            cursor: pointer;
-            margin-left: 10px;
-            margin-right: 15px;
-        }
-    }
-
-    input[type='radio'] {
-        cursor: pointer;
-    }
-
-    input[type='radio']:after {
-        width: 15px;
-        height: 15px;
-        border-radius: 15px;
-        top: -2px;
-        left: -1px;
-        position: relative;
-        background-color: #d1d3d1;
-        content: '';
-        display: inline-block;
-        visibility: visible;
-        border: 2px solid white;
-    }
-
-    input[type='radio']:checked:after {
-        width: 15px;
-        height: 15px;
-        border-radius: 15px;
-        top: -2px;
-        left: -1px;
-        position: relative;
-        background-color: #2e656a;
-        content: '';
-        display: inline-block;
-        visibility: visible;
-        border: 2px solid white;
-    }
 `;
 
 export const Footer = styled.div`
@@ -95,15 +54,34 @@ export const Container = styled.div`
     flex-wrap: nowrap;
     width: 100%;
 
-    .timePicker {
-        input {
-            background: #f9f9f9;
-            border-radius: 10px;
-            padding: 12px;
-            width: 100%;
-            border: 1px solid #c8c8c8;
-            color: #232129 !important;
-            font-size: 16px;
+    .img {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        label {
+            width: 38px;
+            height: 38px;
+            background: #ff9000;
+            border-radius: 50%;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            input {
+                display: none;
+            }
+
+            svg {
+                width: 20px;
+                height: 20px;
+                color: #312e38;
+            }
         }
     }
 `;

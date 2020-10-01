@@ -5,8 +5,8 @@ export const Container = styled.div`
     padding: 10px 10px;
     align-items: center;
     justify-content: space-between;
-    height: 80px;
-    max-height: 80px;
+    height: 70px;
+    max-height: 70px;
     background-color: var(--color-primary);
 `;
 

@@ -13,6 +13,14 @@ export default createGlobalStyle`
 		background: #312E38;
 		color: #FFF;
 		-webkit-font-smoothing: antialiased;
+
+        .rc-time-picker-panel-select-option-selected {
+            color: black;
+        }
+        .rc-time-picker-panel-select li {
+            color: black;
+        }
+
 	}
 
 	body, input, button {

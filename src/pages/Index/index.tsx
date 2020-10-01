@@ -14,8 +14,8 @@ const Index: React.FC = () => {
             <SearchContainer>
                 <Title>Descubra profissionais perto de voce</Title>
                 <Form ref={formRef} onSubmit={() => {}}>
-                    <Input name="email" icon={FaSearch} placeholder="search" />
-                    <Select name="state" placeholder="teste" />
+                    <Input name="email" icon={FaSearch} placeholder="Pesquisar Serviço" />
+                    <Select name="state" placeholder="Cidade" />
                 </Form>
             </SearchContainer>
             <Recommendation>recomendacao</Recommendation>

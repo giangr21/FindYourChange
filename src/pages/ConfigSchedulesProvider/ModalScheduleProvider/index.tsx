@@ -35,11 +35,17 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, isOpen, edit }
         setHourEnd(moment(value, ['HH:mm']));
     }, []);
 
+    useEffect(() => {
+        setTimeout(() => {
+            formRef.current?.setFieldValue('active', 'true');
+        }, 500);
+    }, []);
+
     return (
-        <Modal width="420px" height="330px" isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Modal width="420px" height="420px" isOpen={isOpen} setIsOpen={setIsOpen}>
             <Form ref={formRef} onSubmit={() => {}}>
                 <Header>
-                    {edit ? <h1>Editar Serviço</h1> : <h1>Novo Serviço</h1>}
+                    {edit ? <h1>Editar Turno</h1> : <h1>Novo Turno</h1>}
                     <FaWindowClose size={20} onClick={setIsOpen} />
                 </Header>
                 <Content>
@@ -51,18 +57,34 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, isOpen, edit }
                             <div
                                 style={{
                                     padding: '2px',
-                                    marginBottom: '15px',
                                     width: '100%',
                                 }}
                             >
                                 <Input name="name" placeholder="Dia da semana" />
                             </div>
                         </Container>
+                        <p>Horario Inicio</p>
                         <Container>
                             <div
                                 style={{
                                     padding: '2px',
-                                    marginBottom: '15px',
+                                    width: '100%',
+                                }}
+                            >
+                                <TimePicker
+                                    showSecond={false}
+                                    onChange={onChangeHourStart}
+                                    className="timePicker"
+                                    inputReadOnly
+                                    value={hourStart}
+                                />
+                            </div>
+                        </Container>
+                        <p>Horario Fim</p>
+                        <Container>
+                            <div
+                                style={{
+                                    padding: '2px',
                                     width: '100%',
                                 }}
                             >
@@ -75,6 +97,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, isOpen, edit }
                                 />
                             </div>
                         </Container>
+                        <p>Ativo</p>
                         <Container>
                             <Radio
                                 name="active"
@@ -96,7 +119,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, isOpen, edit }
                     >
                         <IconButton
                             icon={FiCheckSquare}
-                            title={edit ? 'Editar Serviço' : 'Adicionar Serviço'}
+                            title={edit ? 'Editar Turno' : 'Adicionar Turno'}
                             background="#2e656a"
                             action={() => {}}
                         />
