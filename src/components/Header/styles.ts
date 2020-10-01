@@ -1,12 +1,18 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    display: flex;
     padding: 10px 10px;
-    align-items: center;
-    justify-content: space-between;
     height: 70px;
     max-height: 70px;
+    background-color: var(--color-primary);
+`;
+
+export const Content = styled.div`
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
     background-color: var(--color-primary);
 `;
 

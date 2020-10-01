@@ -60,6 +60,7 @@ export const Container = styled.div`
         flex-direction: row;
         align-items: center;
         justify-content: center;
+
         label {
             width: 38px;
             height: 38px;
