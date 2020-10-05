@@ -1,9 +1,11 @@
 import React, { useRef } from 'react';
-import { FaSearch } from 'react-icons/fa';
+import { FaArrowRight, FaSearch } from 'react-icons/fa';
 import { FormHandles } from '@unform/core';
 
+import { useHistory } from 'react-router-dom';
 import Input from '../../components/Input/MainSearchInput';
 import Select from '../../components/Select/MainSearchSelect';
+import IconButton from '../../components/Button/IconButton';
 import {
     Container,
     SearchContainer,
@@ -19,14 +21,23 @@ import card3 from '../../assets/reco3.png';
 
 const Index: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
+    const history = useHistory();
 
     return (
         <Container>
             <SearchContainer>
-                <Title>Agende online os serviços de beleza mais próximos de você</Title>
+                <Title>Barbearia? Tatuagem? Piercing? Agende online os serviços mais próximos de você</Title>
                 <Form ref={formRef} onSubmit={() => {}}>
                     <Input name="email" icon={FaSearch} placeholder="Pesquisar Serviço" />
                     <Select name="state" placeholder="Cidade" />
+                    <IconButton
+                        icon={FaArrowRight}
+                        title="Buscar"
+                        background="#3A3A3A"
+                        action={() => {
+                            history.push('/service');
+                        }}
+                    />
                 </Form>
             </SearchContainer>
             <Recommendation>

@@ -15,7 +15,6 @@ const Select: React.FC<Props> = ({
     name,
     // fieldValue = 'value',
     // fieldLabel = 'label',
-    options = [],
     notCleaning,
     ...rest
 }) => {
@@ -118,7 +117,6 @@ const Select: React.FC<Props> = ({
                 defaultValue={defaultValue}
                 ref={selectRef}
                 classNamePrefix="react-select"
-                options={selectOptions}
                 theme={customTheme}
                 styles={customStyles}
                 noOptionsMessage={() => 'Não há opções disponíveis'}

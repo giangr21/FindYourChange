@@ -22,7 +22,7 @@ export const SearchContainer = styled.div`
 export const Title = styled.span`
     color: #fff;
     text-align: center;
-    width: 500px;
+    width: 550px;
     font-size: 35px;
     font-weight: 500;
     margin-bottom: 30px;
@@ -32,6 +32,10 @@ export const Form = styled(Unform)`
     width: 30%;
     display: flex;
     align-items: center;
+
+    button {
+        margin-left: 7px;
+    }
 `;
 
 export const Recommendation = styled.div`

@@ -11,7 +11,6 @@ import { Form, Container, Header, Footer, Content } from './styles';
 import Input from '../../../components/Input/InputModal';
 import Modal from '../../../components/Modal';
 import IconButton from '../../../components/Button/IconButton';
-import Radio from '../../../components/Radio';
 // import api from '../../../services/api';
 // import getValidationErrors from '../../../util/getValidationErrors';
 // import Loading from '../../../components/Loading';

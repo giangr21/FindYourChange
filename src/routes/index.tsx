@@ -10,10 +10,12 @@ import HomePageAuthenticate from '../pages/HomePageAuthenticate';
 import ConfigServicesProvider from '../pages/ConfigServicesProvider';
 import ConfigSchedulesProvider from '../pages/ConfigSchedulesProvider';
 import ConfigProductsProvider from '../pages/ConfigProductsProvider';
+import Service from '../pages/Service';
 
 const Routes: React.FC = () => (
     <Switch>
         <Route path="/" exact component={Index} />
+        <Route path="/service" component={Service} />
         <Route path="/signIn" signPages component={SignIn} />
         <Route path="/signUp" signPages component={SignUp} />
         <Route path="/forgotPassword" signPages component={ForgotPassword} />

@@ -10,9 +10,8 @@ import './style.css';
 
 interface Props extends Omit<ReactDatePickerProps, 'onChange'> {
     name: string;
-    label: string;
 }
-const DatePicker: React.FC<Props> = ({ name, label, ...rest }) => {
+const DatePicker: React.FC<Props> = ({ name, ...rest }) => {
     const datepickerRef = useRef(null);
     const { fieldName, registerField, defaultValue, error } = useField(name);
     const [date, setDate] = useState(defaultValue || null);
@@ -52,12 +51,11 @@ const DatePicker: React.FC<Props> = ({ name, label, ...rest }) => {
         });
     }, [fieldName, registerField]);
 
-    const CustomInput = ({ value, onClick }: any) => (
-        <Container className="input-group" isErrored={!!error}>
-            <input onClick={onClick} className="input-area" defaultValue={value} />
-            <label className="label">{label}</label>
-        </Container>
-    );
+    // const CustomInput = ({ value, onClick }: any) => (
+    //     <Container className="input-group" isErrored={!!error}>
+    //         <input onClick={onClick} className="input-area" defaultValue={value} />
+    //     </Container>
+    // );
 
     return (
         <ReactDatePicker
@@ -70,7 +68,8 @@ const DatePicker: React.FC<Props> = ({ name, label, ...rest }) => {
             selected={date}
             onChange={setDate}
             className="input-area"
-            customInput={<CustomInput />}
+            // customInput={<CustomInput />}
+            placeholderText="Qualquer Data"
             {...rest}
         />
     );

@@ -15,7 +15,7 @@ const Index: React.FC = () => {
                 </Left>
                 <Right>
                     <Link to="/">Inicio</Link>
-                    <Link to="/">Navegar</Link>
+                    <Link to="/service">Navegar</Link>
                     <IconButton
                         icon={FaUserAlt}
                         title="Entrar ou Registrar"
