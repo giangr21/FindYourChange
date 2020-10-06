@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { FaArrowRight, FaSearch } from 'react-icons/fa';
+import { FaArrowRight } from 'react-icons/fa';
 import { FormHandles } from '@unform/core';
 
+import { useHistory } from 'react-router-dom';
 import IconButton from '../../components/Button/IconButton';
 import Select from '../../components/Select/MainSearchSelect';
 import {
@@ -27,6 +28,7 @@ import provider5 from '../../assets/provider5.png';
 const Index: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
     const secondFormRef = useRef<FormHandles>(null);
+    const history = useHistory();
 
     useEffect(() => {
         setTimeout(() => {
@@ -156,7 +158,9 @@ const Index: React.FC = () => {
                                     icon={FaArrowRight}
                                     title="Ver mais serviços"
                                     background="#3A3A3A"
-                                    action={() => {}}
+                                    action={() => {
+                                        history.push('/provider');
+                                    }}
                                 />
                             </ProviderContent>
                         </Provider>
@@ -183,7 +187,9 @@ const Index: React.FC = () => {
                                     icon={FaArrowRight}
                                     title="Ver mais serviços"
                                     background="#3A3A3A"
-                                    action={() => {}}
+                                    action={() => {
+                                        history.push('/provider');
+                                    }}
                                 />
                             </ProviderContent>
                         </Provider>
@@ -210,7 +216,9 @@ const Index: React.FC = () => {
                                     icon={FaArrowRight}
                                     title="Ver mais serviços"
                                     background="#3A3A3A"
-                                    action={() => {}}
+                                    action={() => {
+                                        history.push('/provider');
+                                    }}
                                 />
                             </ProviderContent>
                         </Provider>
@@ -237,7 +245,9 @@ const Index: React.FC = () => {
                                     icon={FaArrowRight}
                                     title="Ver mais serviços"
                                     background="#3A3A3A"
-                                    action={() => {}}
+                                    action={() => {
+                                        history.push('/provider');
+                                    }}
                                 />
                             </ProviderContent>
                         </Provider>
@@ -264,7 +274,9 @@ const Index: React.FC = () => {
                                     icon={FaArrowRight}
                                     title="Ver mais serviços"
                                     background="#3A3A3A"
-                                    action={() => {}}
+                                    action={() => {
+                                        history.push('/provider');
+                                    }}
                                 />
                             </ProviderContent>
                         </Provider>

@@ -10,7 +10,11 @@ const Index: React.FC = () => {
     return (
         <Container>
             <Content>
-                <Left>
+                <Left
+                    onClick={() => {
+                        history.push('/');
+                    }}
+                >
                     <h1>Find Your Change</h1>
                 </Left>
                 <Right>

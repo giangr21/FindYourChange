@@ -70,6 +70,7 @@ export const RecommendationCard = styled.div`
     display: flex;
     flex-direction: column;
     width: 300px;
+    cursor: pointer;
     /* text-align: center; */
     align-items: center;
 

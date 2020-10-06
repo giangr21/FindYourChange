@@ -30,4 +30,5 @@ export const Right = styled.div`
 export const Left = styled.div`
     display: flex;
     align-items: center;
+    cursor: pointer;
 `;

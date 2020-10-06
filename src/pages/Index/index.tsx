@@ -44,17 +44,29 @@ const Index: React.FC = () => {
                 <span className="title">Serviços Recomendados</span>
                 <div className="separator" />
                 <RecommendationContent>
-                    <RecommendationCard>
+                    <RecommendationCard
+                        onClick={() => {
+                            history.push('/provider');
+                        }}
+                    >
                         <img src={card1} alt="" />
                         <span>De Angelo Barbearia</span>
                         <p>Centro, Curitiba - PR 81000-000</p>
                     </RecommendationCard>
-                    <RecommendationCard>
+                    <RecommendationCard
+                        onClick={() => {
+                            history.push('/provider');
+                        }}
+                    >
                         <img src={card2} alt="" />
                         <span>Los Santos Tatuagens</span>
                         <p>Centro, Itajaí - SC 82000-000</p>
                     </RecommendationCard>
-                    <RecommendationCard>
+                    <RecommendationCard
+                        onClick={() => {
+                            history.push('/provider');
+                        }}
+                    >
                         <img src={card3} alt="" />
                         <span>Retro Body Piercing</span>
                         <p>Centro, Curitiba - PR 83000-000</p>
