@@ -12,16 +12,19 @@ import ConfigSchedulesProvider from '../pages/ConfigSchedulesProvider';
 import ConfigProductsProvider from '../pages/ConfigProductsProvider';
 import Service from '../pages/Service';
 import Provider from '../pages/Provider';
+import Marketplace from '../pages/Marketplace';
 
 const Routes: React.FC = () => (
     <Switch>
         <Route path="/" exact component={Index} />
         <Route path="/service" component={Service} />
         <Route path="/provider" component={Provider} />
+
         <Route path="/signIn" signPages component={SignIn} />
         <Route path="/signUp" signPages component={SignUp} />
         <Route path="/forgotPassword" signPages component={ForgotPassword} />
 
+        <Route path="/marketplace" isPrivate component={Marketplace} />
         <Route path="/home" isPrivate component={HomePageAuthenticate} />
         <Route path="/configServicesProvider" isPrivate component={ConfigServicesProvider} />
         <Route path="/configSchedulesProvider" isPrivate component={ConfigSchedulesProvider} />
