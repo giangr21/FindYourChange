@@ -154,7 +154,9 @@ const Index: React.FC = () => {
                                     icon={FaArrowRight}
                                     title="Informações"
                                     background="#ff9000"
-                                    action={() => {}}
+                                    action={() => {
+                                        history.push('/product');
+                                    }}
                                 />
                             </div>
                         </Product>
@@ -170,7 +172,9 @@ const Index: React.FC = () => {
                                     icon={FaArrowRight}
                                     title="Informações"
                                     background="#ff9000"
-                                    action={() => {}}
+                                    action={() => {
+                                        history.push('/product');
+                                    }}
                                 />
                             </div>
                         </Product>
@@ -186,7 +190,9 @@ const Index: React.FC = () => {
                                     icon={FaArrowRight}
                                     title="Informações"
                                     background="#ff9000"
-                                    action={() => {}}
+                                    action={() => {
+                                        history.push('/product');
+                                    }}
                                 />
                             </div>
                         </Product>
@@ -204,7 +210,9 @@ const Index: React.FC = () => {
                                     icon={FaArrowRight}
                                     title="Informações"
                                     background="#ff9000"
-                                    action={() => {}}
+                                    action={() => {
+                                        history.push('/product');
+                                    }}
                                 />
                             </div>
                         </Product>
@@ -220,7 +228,9 @@ const Index: React.FC = () => {
                                     icon={FaArrowRight}
                                     title="Informações"
                                     background="#ff9000"
-                                    action={() => {}}
+                                    action={() => {
+                                        history.push('/product');
+                                    }}
                                 />
                             </div>
                         </Product>
@@ -236,7 +246,9 @@ const Index: React.FC = () => {
                                     icon={FaArrowRight}
                                     title="Informações"
                                     background="#ff9000"
-                                    action={() => {}}
+                                    action={() => {
+                                        history.push('/product');
+                                    }}
                                 />
                             </div>
                         </Product>
