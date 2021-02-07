@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import signUpBackground from '../../assets/sign-up-background.png';
 
 export const Container = styled.div`
-    height: 100vh;
+    margin: 10px 0px;
     display: flex;
     align-items: stretch;
 `;
@@ -15,6 +15,11 @@ export const Content = styled.div`
     justify-content: center;
 
     width: 100%;
+
+    @media (min-width: 767px) {
+        height: 100vh;
+    }
+
     max-width: 700px;
     font-weight: 500;
 `;
@@ -39,7 +44,7 @@ export const AnimationContainer = styled.div`
     animation: ${apperFromRight} 1s;
 
     .img {
-        margin-top: 10px;
+        margin-top: 30px;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -111,6 +116,7 @@ export const AnimationContainer = styled.div`
 
     form {
         margin: 40px 0 40px 0;
+        padding: 0px 20px;
         /* width: 340px; */
         /* max-width: 520px; */
 
@@ -170,9 +176,11 @@ export const AnimationContainer = styled.div`
 `;
 
 export const Background = styled.div`
-    flex: 1;
-    background: url(${signUpBackground}) no-repeat center;
-    background-size: cover;
+    /* @media (min-width: 1024px) {
+    } */
+        flex: 1;
+        background: url(${signUpBackground}) no-repeat center;
+        background-size: cover;
 `;
 
 export const Row = styled.div`
@@ -183,9 +191,26 @@ export const Row = styled.div`
 
 export const Column = styled.div`
     display: flex;
+
+    div + div {
+        margin-left: 7px;
+    }
+
     flex: 1 1 0;
 
     span {
         margin: 0px 7px;
+    }
+
+    @media (max-width: 620px) {
+        flex-direction: column;
+
+        div + div {
+            margin-left: 0px;
+        }
+
+        div {
+            margin-bottom: 7px;
+        }
     }
 `;

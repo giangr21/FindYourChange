@@ -98,6 +98,46 @@ export const AnimationContainer = styled.div`
             color: ${shade(0.2, '#ff9000')};
         }
     }
+
+    input[type='radio'] {
+        cursor: pointer;
+    }
+
+    .radioButton span {
+        color: white !important;
+        cursor: pointer !important;
+        margin-left: 10px !important;
+        margin-right: 20px !important;
+        font-weight: 400;
+    }
+
+    input[type='radio']:after {
+        width: 15px;
+        height: 15px;
+        border-radius: 15px;
+        top: -2px;
+        left: -1px;
+        position: relative;
+        background-color: #d1d3d1;
+        content: '';
+        display: inline-block;
+        visibility: visible;
+        border: 2px solid white;
+    }
+
+    input[type='radio']:checked:after {
+        width: 15px;
+        height: 15px;
+        border-radius: 15px;
+        top: -2px;
+        left: -1px;
+        position: relative;
+        background-color: #ff9000;
+        content: '';
+        display: inline-block;
+        visibility: visible;
+        border: 2px solid white;
+    }
 `;
 
 export const Row = styled.div`

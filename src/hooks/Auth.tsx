@@ -15,6 +15,7 @@ interface AuthState {
 interface SignInCredentials {
     email: string;
     password: string;
+    isProvider: boolean;
 }
 
 interface AuthContextData {
@@ -36,17 +37,18 @@ const AuthProvider: React.FC = ({ children }) => {
         return {} as AuthState;
     });
 
-    const signIn = useCallback(async ({ email, password }) => {
-        // const response = await api.post('sessions/merchant', {
-        //     email,
-        //     password,
-        // });
-        // const { token, merchant } = response.data;
-        localStorage.setItem('@FYC:token', 'abc');
-        localStorage.setItem('@FYC:user', JSON.stringify({ id: 'asd', name: 'asd', email: 'asd' }));
+    const signIn = useCallback(async ({ email, password, isProvider }) => {
+        const response = await api.post('sessions', {
+            email,
+            password,
+            isProvider
+        });
+        const { token, user } = response.data;
+        localStorage.setItem('@FYC:token', JSON.stringify(token));
+        localStorage.setItem('@FYC:user', JSON.stringify(user));
 
-        // api.defaults.headers.authorization = `Bearer ${token}`;
-        setData({ token: 'abc', user: { id: 'asd', name: 'asd', email: 'asd' } });
+        api.defaults.headers.authorization = `Bearer ${token}`;
+        setData({ token, user });
     }, []);
 
     const signOut = useCallback(() => {

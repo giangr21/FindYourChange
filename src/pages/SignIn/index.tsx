@@ -1,16 +1,17 @@
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FiLock, FiLogIn, FiMail } from 'react-icons/fi';
-// import * as Yup from 'yup';
+import * as Yup from 'yup';
 import { Link, useHistory } from 'react-router-dom';
-import logoImg from '../../assets/logoFYC.png';
+import logoImg from '../../assets/logoFMobile.png';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { useAuth } from '../../hooks/Auth';
 import getValidationErrors from '../../util/getValidationErrors';
 import { Background, Container, Content, AnimationContainer, Row } from './styles';
-// import { useAuth } from '../../hooks/Auth';
+import { toast } from 'react-toastify';
+import Radio from '../../components/Radio';
 
 interface SignInFormData {
     email: string;
@@ -19,41 +20,47 @@ interface SignInFormData {
 
 const SignIn: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
-
+    const [isProvider, setIsProvider] = useState(false);
     const { signIn } = useAuth();
-    // const { addToast } = useToast();
     const history = useHistory();
+
+    useEffect(() => {
+        setTimeout(() => {
+            formRef.current?.setFieldValue('isProvider', 'false');
+        }, 500);
+    }, []);
 
     const handleSubmit = useCallback(async (data: SignInFormData) => {
         try {
-            // formRef.current?.setErrors({});
-            // const schema = Yup.object().shape({
-            //     email: Yup.string()
-            //         .required('E-mail obrigatório')
-            //         .email('Digite um e-mail válido'),
-            //     password: Yup.string().required('Senha obrigatória'),
-            // });
-            // await schema.validate(data, {
-            //     abortEarly: false,
-            // });
+            formRef.current?.setErrors({});
+            const schema = Yup.object().shape({
+                email: Yup.string().required('E-mail obrigatório').email('Digite um e-mail válido'),
+                password: Yup.string().required('Senha obrigatória'),
+            });
+
+            await schema.validate(data, {
+                abortEarly: false,
+            });
+
             await signIn({
                 email: data.email,
                 password: data.password,
+                isProvider,
             });
             history.push('/home');
         } catch (err) {
-            // if (err instanceof Yup.ValidationError) {
-            //     const errors = getValidationErrors(err);
-            //     formRef.current?.setErrors(errors);
-            //     return;
-            // }
-            // addToast({
-            //     type: 'error',
-            //     title: 'Erro na autenticação',
-            //     description:
-            //         'Ocorreu um erro ao fazer login, cheque as credenciais.',
-            // });
+            console.log(err);
+            if (err instanceof Yup.ValidationError) {
+                const errors = getValidationErrors(err);
+                formRef.current?.setErrors(errors);
+                return;
+            }
+            toast.error('Ocorreu um erro ao fazer login, cheque as credenciais.')
         }
+    }, [isProvider]);
+
+    const changeRadioButton = useCallback(() => {
+        setIsProvider((prevState) => !prevState);
     }, []);
 
     return (
@@ -63,6 +70,29 @@ const SignIn: React.FC = () => {
                     <img src={logoImg} alt="logo" />
                     <Form ref={formRef} onSubmit={handleSubmit}>
                         <h1>Login</h1>
+                        <div
+                            style={{
+                                marginBottom: '24px',
+                            }}
+                        >
+                            <Radio
+                                style={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}
+                                name="isProvider"
+                                options={[
+                                    {
+                                        id: 'false',
+                                        label: 'Cliente',
+                                    },
+                                    { id: 'true', label: 'Prestador de serviço' },
+                                ]}
+                                onChange={changeRadioButton}
+                            />
+                        </div>
                         <Row>
                             <Input name="email" icon={FiMail} placeholder="E-mail" />
                         </Row>

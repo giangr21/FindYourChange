@@ -3,6 +3,9 @@ import { shade } from 'polished';
 import styled from 'styled-components';
 
 export const Header = styled.header`
+    @media (max-width: 990px) {
+        display: none;
+    }
     padding: 24px 0;
     background: #28262e;
 `;

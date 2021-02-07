@@ -7,12 +7,14 @@ import { FiArrowLeft, FiCamera, FiLock, FiMail, FiUser } from 'react-icons/fi';
 import { MdClose, MdCheck } from 'react-icons/md';
 import { BsCheckAll } from 'react-icons/bs';
 import Switch from 'react-switch';
+import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 
 // import * as Yup from 'yup';
 import { Link, useHistory } from 'react-router-dom';
 import { FaMapSigns, FaPhoneAlt } from 'react-icons/fa';
 import api from '../../services/api';
-import logoImg from '../../assets/logoFYC.png';
+import logoImg from '../../assets/logoFMobile.png';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import InputMask from '../../components/Input/InputMask';
@@ -20,10 +22,32 @@ import Radio from '../../components/Radio';
 import getValidationErrors from '../../util/getValidationErrors';
 import { Background, Container, Content, AnimationContainer, Row, Column } from './styles';
 
-interface SignUpFormData {
+interface SignUpUserData {
     name: string;
+    lastName: string;
     email: string;
     password: string;
+    phone: string;
+    avatar: string;
+}
+interface SignUpProviderData {
+    name: string;
+    lastName: string;
+    email: string;
+    password: string;
+    phone: string;
+    avatar: string;
+    addressZipCode: string;
+    addressStreet: string;
+    addressNumber: string;
+    addressComplement: string;
+    addressArea: string;
+    addressCity: string;
+    addressState: string;
+    addressCountry: string;
+    isBarber: boolean;
+    isTattoo: boolean;
+    isPiercing: boolean;
 }
 
 const SignUp: React.FC = () => {
@@ -36,40 +60,77 @@ const SignUp: React.FC = () => {
 
     const history = useHistory();
 
-    const handleSubmit = useCallback(async (data: SignUpFormData) => {
-        // try {
-        //     formRef.current?.setErrors({});
-        //     const schema = Yup.object().shape({
-        //         name: Yup.string().required('Nome obrigatório'),
-        //         email: Yup.string()
-        //             .required('E-mail obrigatório')
-        //             .email('Digite um e-mail válido'),
-        //         password: Yup.string().min(6, 'No mínimo 6 digitos'),
-        //     });
-        //     await schema.validate(data, {
-        //         abortEarly: false,
-        //     });
-        //     await api.post('users', data);
-        //     history.push('/');
-        //     addToast({
-        //         type: 'success',
-        //         title: 'Cadastro realizado!',
-        //         description: 'Voce já pode fazer seu login no GoBarber!',
-        //     });
-        // } catch (err) {
-        //     if (err instanceof Yup.ValidationError) {
-        //         const errors = getValidationErrors(err);
-        //         formRef.current?.setErrors(errors);
-        //         return;
-        //     }
-        //     addToast({
-        //         type: 'error',
-        //         title: 'Erro no cadastro',
-        //         description:
-        //             'Ocorreu um erro ao fazer cadastro, tente novamente.',
-        //     });
-        // }
-    }, []);
+    const handleSubmitUser = useCallback(async (data: SignUpUserData) => {
+        try {
+            formRef.current?.setErrors({});
+            const schema = Yup.object().shape({
+                name: Yup.string().required('Nome obrigatório'),
+                lastName: Yup.string().required('Sobrenome obrigatório'),
+                email: Yup.string()
+                    .required('E-mail obrigatório')
+                    .email('Digite um e-mail válido'),
+                password: Yup.string().min(4, 'No mínimo 4 digitos'),
+            });
+
+            await schema.validate(data, {
+                abortEarly: false,
+            });
+
+            if (data.phone && data.phone !== '') {
+                data.phone = data.phone.replace(/[^\d]/g, '');
+            }
+
+            await api.post('user', data);
+            history.push('/');
+            toast.success('Usuario criado com sucesso!')
+        } catch (err) {
+            if (err instanceof Yup.ValidationError) {
+                const errors = getValidationErrors(err);
+                formRef.current?.setErrors(errors);
+                return;
+            }
+        }
+    }, [history]);
+
+    const handleSubmitProvider = useCallback(async (data: SignUpProviderData) => {
+        try {
+            formRef.current?.setErrors({});
+            const schema = Yup.object().shape({
+                name: Yup.string().required('Nome obrigatório'),
+                lastName: Yup.string().required('Sobrenome obrigatório'),
+                email: Yup.string()
+                    .required('E-mail obrigatório')
+                    .email('Digite um e-mail válido'),
+                password: Yup.string().min(4, 'No mínimo 4 digitos'),
+                addressStreet: Yup.string().required('Rua obrigatório'),
+                addressNumber: Yup.string().required('Numero obrigatório'),
+                addressArea: Yup.string().required('Bairro obrigatório'),
+                addressCity: Yup.string().required('Cidade obrigatório'),
+                addressState: Yup.string().required('Estado obrigatório'),
+                addressCountry: Yup.string().required('Pais obrigatório'),
+            });
+
+            await schema.validate(data, {
+                abortEarly: false,
+            });
+
+            if (data.phone && data.phone !== '') {
+                data.phone = data.phone.replace(/[^\d]/g, '');
+            }
+
+            data.isBarber = isBarber;
+            data.isTattoo = isTattoo;
+            data.isPiercing = isPiercing;
+            await api.post('provider', data);
+            history.push('/');
+        } catch (err) {
+            if (err instanceof Yup.ValidationError) {
+                const errors = getValidationErrors(err);
+                formRef.current?.setErrors(errors);
+                return;
+            }
+        }
+    }, [isBarber, isTattoo, isPiercing]);
 
     useEffect(() => {
         setTimeout(() => {
@@ -108,51 +169,40 @@ const SignUp: React.FC = () => {
     }, []);
 
     const getCep = useCallback(async () => {
-        //     let cep = formRef.current?.getFieldValue('addressZipCode');
-        //     cep = cep.replace(/[^\d]/g, '');
-        //     if (cep === '' || cep.length < 8) {
-        //         toast.error('Digite um cep valido.');
-        //     } else {
-        //         await api
-        //             .get(`/street/${cep}`)
-        //             .then((response) => {
-        //                 if (response.data !== '') {
-        //                     if (response.data.clearPublicPlace === '') {
-        //                         setDisableAddressFields(false);
-        //                     } else {
-        //                         setDisableAddressFields(true);
-        //                     }
-        //                     formRef.current?.setFieldValue('addressArea', `${response.data.area.clearName}`);
-        //                     formRef.current?.setFieldValue('addressCity', `${response.data.city.clearName}`);
-        //                     formRef.current?.setFieldValue('addressCountry', 'Brasil');
-        //                     formRef.current?.setFieldValue('addressStreet', `${response.data.clearPublicPlace}`);
-        //                     formRef.current?.setFieldValue('addressState', {
-        //                         value: response.data.stateId,
-        //                         label: response.data.stateId,
-        //                     });
-        //                     if (edit) {
-        //                         formRef.current?.setFieldValue('addressNumber', '');
-        //                         formRef.current?.setFieldValue('addressComplement', '');
-        //                     }
-        //                     const inputNumber = formRef.current?.getFieldRef('addressNumber');
-        //                     if (inputNumber) {
-        //                         inputNumber.focus();
-        //                     }
-        //                 } else {
-        //                     toast.error('Digite um cep valido.');
-        //                 }
-        //             })
-        //             .catch((error) => {
-        //                 console.log(error);
-        //                 toast.error('Falha ao buscar cep');
-        //             });
-        //     }
+            let cep = formRef.current?.getFieldValue('addressZipCode');
+            cep = cep.replace(/[^\d]/g, '');
+            if (cep === '' || cep.length < 8) {
+                toast.error('Digite um cep valido.');
+            } else {
+                await api
+                    .get(`https://olog-api.jclan.com.br/street/${cep}`)
+                    .then((response) => {
+                        if (response.data !== '') {
+                            formRef.current?.setFieldValue('addressArea', `${response.data.area.clearName}`);
+                            formRef.current?.setFieldValue('addressCity', `${response.data.city.clearName}`);
+                            formRef.current?.setFieldValue('addressCountry', 'Brasil');
+                            formRef.current?.setFieldValue('addressStreet', `${response.data.clearPublicPlace}`);
+                            formRef.current?.setFieldValue('addressState', `${response.data.stateId}`);
+
+                            const inputNumber = formRef.current?.getFieldRef('addressNumber');
+                            if (inputNumber) {
+                                inputNumber.focus();
+                            }
+                        } else {
+                            toast.error('Digite um cep valido.');
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        toast.error('Falha ao buscar cep');
+                    });
+            }
     }, []);
 
     const handleKeyPress = useCallback((event) => {
-        //     if (event.key === 'Enter') {
-        //         getCep();
-        //     }
+            if (event.key === 'Enter') {
+                getCep();
+            }
     }, []);
 
     const toggleBarber = useCallback(() => {
@@ -169,10 +219,9 @@ const SignUp: React.FC = () => {
         <Container>
             <Background />
             <Content>
+                <img src={logoImg} alt="logo" />
                 <AnimationContainer>
-                    <img src={logoImg} alt="logo" />
-
-                    <Form ref={formRef} onSubmit={handleSubmit}>
+                    <Form ref={formRef} onSubmit={isProvider ? handleSubmitProvider : handleSubmitUser}>
                         <div
                             style={{
                                 marginBottom: '24px',
@@ -232,13 +281,11 @@ const SignUp: React.FC = () => {
                                     <Column>
                                         <Column>
                                             <Input
-                                                // disabled={disableAddressFields}
                                                 name="addressStreet"
                                                 placeholder="Rua"
                                                 icon={FaMapSigns}
                                             />
                                             <Input
-                                                // disabled={disableAddressFields}
                                                 name="addressArea"
                                                 placeholder="Bairro"
                                                 icon={FaMapSigns}
@@ -250,7 +297,6 @@ const SignUp: React.FC = () => {
                                     <Column>
                                         <Input name="addressNumber" placeholder="Numero" icon={FaMapSigns} />
                                         <Input
-                                            disabled
                                             name="addressCity"
                                             placeholder="Cidade"
                                             icon={FaMapSigns}
@@ -259,9 +305,8 @@ const SignUp: React.FC = () => {
                                 </Row>
                                 <Row>
                                     <Column>
-                                        <Input name="addressNumber" placeholder="Estado" icon={FaMapSigns} />
+                                        <Input name="addressState" placeholder="Estado" icon={FaMapSigns} />
                                         <Input
-                                            disabled
                                             name="addressComplement"
                                             placeholder="Complemento"
                                             icon={FaMapSigns}
