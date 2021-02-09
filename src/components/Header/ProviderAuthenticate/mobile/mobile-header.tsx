@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../../../../assets/logoFMobile.png';
+import logo from '../../../../assets/logoPrincipalMobile.png';
 
 import {
     MobileHeaderWrapper,
