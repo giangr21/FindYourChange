@@ -14,6 +14,7 @@ import Service from '../pages/Service';
 import Provider from '../pages/Provider';
 import Marketplace from '../pages/Marketplace';
 import Product from '../pages/Product';
+import Clerk from '../pages/Clerk'
 
 const Routes: React.FC = () => (
     <Switch>
@@ -31,6 +32,8 @@ const Routes: React.FC = () => (
         <Route path="/configServicesProvider" isPrivate component={ConfigServicesProvider} />
         <Route path="/configSchedulesProvider" isPrivate component={ConfigSchedulesProvider} />
         <Route path="/configProductsProvider" isPrivate component={ConfigProductsProvider} />
+        <Route path="/configProductsProvider" isPrivate component={ConfigProductsProvider} />
+        <Route path="/Clerk" isPrivate component={Clerk} />
     </Switch>
 );
 
