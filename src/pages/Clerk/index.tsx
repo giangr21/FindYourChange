@@ -1,32 +1,32 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 import { FaPlus, FaSearch } from 'react-icons/fa';
 import { FormHandles } from '@unform/core';
 
 import Header from '../../components/Header/ProviderAuthenticate';
 import { Container, HeaderContainer, HeaderGrid, Grid } from './styles';
 import IconButton from '../../components/Button/IconButton';
-import ScheduleRow from './ScheduleRow/index';
-import ModalScheduleProvider from './ModalScheduleProvider';
+import ClerkRow from './ClerkRow/index';
+import ModalProvider from './ModalClerkProvider';
 import api from '../../services/api';
 
 const Index: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
+    const [clerks, setClerks] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
-    const [schedules, setSchedule] = useState([]);
     const [modalViewOpen, setModalViewOpen] = useState(false);
     const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [idProvider, setIdProvider] = useState('');
 
-    const getSchedules = useCallback(async () => {
-        await api.get('/schedule').then((response) => {
+    const getClerks = useCallback(async () => {
+        await api.get('/clerk').then((response) => {
             const data = response.data;
-            setSchedule(data);
+            setClerks(data);
         })
     }, [])
 
     useEffect(() => {
-        getSchedules();
+        getClerks();
     }, [])
 
     const toggleModal = useCallback((): void => {
@@ -85,17 +85,17 @@ const Index: React.FC = () => {
                     />
                 </HeaderContainer>
                 <HeaderGrid>
-                    <strong>Dia da semana</strong>
-                    <strong>Horário Inicio</strong>
-                    <strong>Horário Fim</strong>
-                    <strong>Ativo</strong>
+                    <strong>Atendente</strong>
+                    <strong>E-mail</strong>
+                    <strong>Telefone</strong>
                     <strong>Ações</strong>
+
                 </HeaderGrid>
                 <Grid>
-                    {schedules.map((schedule: any) => (
-                        <ScheduleRow
-                            key={schedule.id}
-                            data={schedule}
+                    {clerks.map((clerk: any) => (
+                        <ClerkRow
+                            key={clerk.id}
+                            data={clerk}
                             handleDelete={toggleModalDelete}
                             handleEdit={handleEdit}
                             handleView={handleView}
@@ -103,7 +103,7 @@ const Index: React.FC = () => {
                     ))}
                 </Grid>
 
-                {modalOpen && <ModalScheduleProvider isOpen={modalOpen} setIsOpen={toggleModal} edit={isEdit} />}
+                {modalOpen && <ModalProvider isOpen={modalOpen} setIsOpen={toggleModal} edit={isEdit} />}
             </Container>
         </>
     );
