@@ -5,7 +5,7 @@ import { Header, HeaderContent, Profile } from './styles';
 import { useAuth } from '../../../hooks/Auth';
 
 const Index: React.FC = () => {
-    const { signOut } = useAuth();
+    const { signOut, user } = useAuth();
 
     return (
         <Header>
@@ -22,9 +22,8 @@ const Index: React.FC = () => {
                     <img src="https://pickaface.net/gallery/avatar/20140501_004912_2217_comm.png" alt="asd" />
                     <div>
                         <span>Bem-vindo,</span>
-                        <Link to="/profile">
-                            Usuario
-                            {/* <strong>{user.name}</strong> */}
+                        <Link to="/providerProfile">
+                            <strong>{user.name}</strong>
                         </Link>
                     </div>
                 </Profile>
