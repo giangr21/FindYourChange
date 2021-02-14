@@ -1,110 +1,132 @@
-import React, { useCallback, useRef, useState, useEffect } from 'react';
-import { FaPlus, FaSearch } from 'react-icons/fa';
-import { FormHandles } from '@unform/core';
+import React, { useCallback, useState, useEffect } from 'react';
+import { FaPlus } from 'react-icons/fa';
 
-import Header from '../../components/Header/ProviderAuthenticate';
+import { toast } from 'react-toastify';
 import { Container, HeaderContainer, HeaderGrid, Grid } from './styles';
 import IconButton from '../../components/Button/IconButton';
+import ModalDeleteClerk from '../../components/Modal/DeleteModal';
 import ClerkRow from './ClerkRow/index';
-import ModalProvider from './ModalClerkProvider';
+import ModalClerkProvider from './ModalClerkProvider';
 import api from '../../services/api';
+import Loading from '../../components/Loading';
+
+export interface ClerkData {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+}
 
 const Index: React.FC = () => {
-    const formRef = useRef<FormHandles>(null);
-    const [clerks, setClerks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [clerks, setClerks] = useState<ClerkData[]>([]);
     const [modalOpen, setModalOpen] = useState(false);
-    const [modalViewOpen, setModalViewOpen] = useState(false);
     const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
     const [isEdit, setIsEdit] = useState<boolean>(false);
-    const [idProvider, setIdProvider] = useState('');
+    const [idClerk, setIdClerk] = useState('');
 
     const getClerks = useCallback(async () => {
-        await api.get('/clerk').then((response) => {
-            const data = response.data;
-            setClerks(data);
-        })
-    }, [])
+        await api
+            .get('/clerk')
+            .then((response) => {
+                const { data } = response;
+                setClerks(data);
+                setLoading(false);
+            })
+            .catch((e) => {
+                toast.error('Houve um erro ao buscar dados!');
+                console.log(e);
+            });
+    }, []);
 
     useEffect(() => {
         getClerks();
-    }, [])
+    }, []);
 
     const toggleModal = useCallback((): void => {
         setModalOpen((prevState) => !prevState);
         if (isEdit) {
             setIsEdit(false);
-            setIdProvider('');
+            setIdClerk('');
         }
     }, [isEdit]);
 
-    const toggleModalInfo = useCallback((): void => {
-        setModalViewOpen((prevState) => !prevState);
-    }, []);
-
     const toggleModalDelete = useCallback((id?: string): void => {
         if (id) {
-            setIdProvider(id);
+            setIdClerk(id);
         }
         setModalDeleteOpen((prevState) => !prevState);
     }, []);
 
     const handleDelete = useCallback(async (): Promise<void> => {
-        // try {
-        //     await api.delete(`/deliverer/${idDeliverer}`);
-        //     const filterDeliverers = deliverers.filter((deliverer) => deliverer.id !== idDeliverer);
-        //     setDeliverers(filterDeliverers);
-        //     toast.success('Entregador apagado com sucesso!');
-        //     setModalDeleteOpen(false);
-        // } catch (err) {
-        //     toast.error('Houve um erro ao apagar entregador!');
-        // }
-    }, []);
+        try {
+            await api.delete(`/clerk/${idClerk}`);
+            const filterClerks = clerks.filter((clerk) => clerk.id !== idClerk);
+            setClerks(filterClerks);
+            toast.success('Atendente apagado com sucesso!');
+            setModalDeleteOpen(false);
+        } catch (err) {
+            toast.error('Houve um erro ao apagar atendente!');
+        }
+    }, [clerks, idClerk]);
 
     const handleEdit = useCallback((id: string) => {
         setModalOpen((prevState) => !prevState);
-        setIdProvider(id);
+        setIdClerk(id);
         setIsEdit(true);
-    }, []);
-
-    const handleView = useCallback((id: string) => {
-        setModalViewOpen((prevState) => !prevState);
-        setIdProvider(id);
     }, []);
 
     return (
         <>
-            <Header />
-            <Container>
-                <HeaderContainer>
-                    <IconButton
-                        // style={{ marginTop: 19 }}
-                        icon={FaPlus}
-                        title="Novo"
-                        background="#2e656a"
-                        action={toggleModal}
-                    />
-                </HeaderContainer>
-                <HeaderGrid>
-                    <strong>Atendente</strong>
-                    <strong>E-mail</strong>
-                    <strong>Telefone</strong>
-                    <strong>Ações</strong>
-
-                </HeaderGrid>
-                <Grid>
-                    {clerks.map((clerk: any) => (
-                        <ClerkRow
-                            key={clerk.id}
-                            data={clerk}
-                            handleDelete={toggleModalDelete}
-                            handleEdit={handleEdit}
-                            handleView={handleView}
+            {loading ? (
+                <Loading />
+            ) : (
+                <Container>
+                    <HeaderContainer>
+                        <IconButton
+                            // style={{ marginTop: 19 }}
+                            icon={FaPlus}
+                            title="Novo"
+                            background="#2e656a"
+                            action={toggleModal}
                         />
-                    ))}
-                </Grid>
+                    </HeaderContainer>
+                    <HeaderGrid>
+                        <strong>Atendente</strong>
+                        <strong>E-mail</strong>
+                        <strong>Telefone</strong>
+                        <strong>Ações</strong>
+                    </HeaderGrid>
+                    <Grid>
+                        {clerks.map((clerk: any) => (
+                            <ClerkRow
+                                key={clerk.id}
+                                data={clerk}
+                                handleDelete={toggleModalDelete}
+                                handleEdit={handleEdit}
+                            />
+                        ))}
+                    </Grid>
 
-                {modalOpen && <ModalProvider isOpen={modalOpen} setIsOpen={toggleModal} edit={isEdit} />}
-            </Container>
+                    {modalOpen && (
+                        <ModalClerkProvider
+                            reloadClerk={getClerks}
+                            clerkId={idClerk}
+                            isOpen={modalOpen}
+                            setIsOpen={toggleModal}
+                            edit={isEdit}
+                        />
+                    )}
+
+                    {modalDeleteOpen && (
+                        <ModalDeleteClerk
+                            isOpen={modalDeleteOpen}
+                            setIsOpen={toggleModalDelete}
+                            handleConfirm={handleDelete}
+                        />
+                    )}
+                </Container>
+            )}
         </>
     );
 };

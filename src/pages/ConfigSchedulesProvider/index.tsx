@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FaPlus, FaSearch } from 'react-icons/fa';
 import { FormHandles } from '@unform/core';
 
-import Header from '../../components/Header/ProviderAuthenticate';
 import { Container, HeaderContainer, HeaderGrid, Grid } from './styles';
 import IconButton from '../../components/Button/IconButton';
 import ScheduleRow from './ScheduleRow/index';
@@ -20,14 +19,14 @@ const Index: React.FC = () => {
 
     const getSchedules = useCallback(async () => {
         await api.get('/schedule').then((response) => {
-            const data = response.data;
+            const { data } = response;
             setSchedule(data);
-        })
-    }, [])
+        });
+    }, []);
 
     useEffect(() => {
         getSchedules();
-    }, [])
+    }, []);
 
     const toggleModal = useCallback((): void => {
         setModalOpen((prevState) => !prevState);
@@ -73,7 +72,6 @@ const Index: React.FC = () => {
 
     return (
         <>
-            <Header />
             <Container>
                 <HeaderContainer>
                     <IconButton
