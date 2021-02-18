@@ -14,12 +14,14 @@ import Service from '../pages/Service';
 import Provider from '../pages/Provider';
 import Marketplace from '../pages/Marketplace';
 import Product from '../pages/Product';
+import About from '../pages/About';
 
 const Routes: React.FC = () => (
     <Switch>
         <Route path="/" exact component={Index} />
         <Route path="/service" component={Service} />
         <Route path="/provider" component={Provider} />
+        <Route path="/About" component={About} />
 
         <Route path="/signIn" signPages component={SignIn} />
         <Route path="/signUp" signPages component={SignUp} />
