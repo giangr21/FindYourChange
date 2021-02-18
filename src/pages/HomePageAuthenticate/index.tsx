@@ -136,8 +136,6 @@ const HomePageAuthenticate: React.FC = () => {
 
     return (
         <Container>
-            <Header />
-
             <HeaderMobile className="sticky home desktop" />
 
             <Content>

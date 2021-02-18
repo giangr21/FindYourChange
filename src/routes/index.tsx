@@ -12,9 +12,11 @@ import ConfigSchedulesProvider from '../pages/ConfigSchedulesProvider';
 import ConfigProductsProvider from '../pages/ConfigProductsProvider';
 import Service from '../pages/Service';
 import Provider from '../pages/Provider';
+import ProviderProfile from '../pages/ProviderProfile';
 import Marketplace from '../pages/Marketplace';
 import Product from '../pages/Product';
 import About from '../pages/About';
+import Clerk from '../pages/Clerk';
 
 const Routes: React.FC = () => (
     <Switch>
@@ -33,6 +35,9 @@ const Routes: React.FC = () => (
         <Route path="/configServicesProvider" isPrivate component={ConfigServicesProvider} />
         <Route path="/configSchedulesProvider" isPrivate component={ConfigSchedulesProvider} />
         <Route path="/configProductsProvider" isPrivate component={ConfigProductsProvider} />
+        <Route path="/providerProfile" isPrivate component={ProviderProfile} />
+        <Route path="/configProductsProvider" isPrivate component={ConfigProductsProvider} />
+        <Route path="/Clerk" isPrivate component={Clerk} />
     </Switch>
 );
 

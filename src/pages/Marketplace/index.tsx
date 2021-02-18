@@ -16,7 +16,6 @@ import {
     Product,
 } from './styles';
 import Radio from '../../components/Radio';
-import Header from '../../components/Header/ProviderAuthenticate';
 import Input from '../../components/Input/MainSearchInput';
 
 const Index: React.FC = () => {
@@ -33,7 +32,6 @@ const Index: React.FC = () => {
 
     return (
         <Container>
-            <Header />
             <Content>
                 <SearchContainer>
                     <ContentSearch ref={formRef} onSubmit={() => {}}>

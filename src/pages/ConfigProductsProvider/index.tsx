@@ -2,7 +2,6 @@ import React, { useCallback, useRef, useState } from 'react';
 import { FaPlus, FaSearch } from 'react-icons/fa';
 import { FormHandles } from '@unform/core';
 
-import Header from '../../components/Header/ProviderAuthenticate';
 import { Container, HeaderContainer, HeaderGrid, Grid } from './styles';
 import IconButton from '../../components/Button/IconButton';
 import ProductRow from './ProductRow/index';
@@ -65,7 +64,6 @@ const Index: React.FC = () => {
 
     return (
         <>
-            <Header />
             <Container>
                 <HeaderContainer>
                     <IconButton

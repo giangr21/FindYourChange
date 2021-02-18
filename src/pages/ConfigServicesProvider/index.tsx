@@ -65,7 +65,6 @@ const Index: React.FC = () => {
 
     return (
         <>
-            <Header />
             <Container>
                 <HeaderContainer>
                     <IconButton

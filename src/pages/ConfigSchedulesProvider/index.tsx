@@ -1,25 +1,32 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FaPlus, FaSearch } from 'react-icons/fa';
 import { FormHandles } from '@unform/core';
 
-import Header from '../../components/Header/ProviderAuthenticate';
 import { Container, HeaderContainer, HeaderGrid, Grid } from './styles';
 import IconButton from '../../components/Button/IconButton';
 import ScheduleRow from './ScheduleRow/index';
 import ModalScheduleProvider from './ModalScheduleProvider';
+import api from '../../services/api';
 
 const Index: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
     const [modalOpen, setModalOpen] = useState(false);
+    const [schedules, setSchedule] = useState([]);
     const [modalViewOpen, setModalViewOpen] = useState(false);
     const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [idProvider, setIdProvider] = useState('');
 
-    const schedules: any = [
-        { id: '1', dayOfWeek: 'Segunda', hourStart: '11:00', hourEnd: '18:00', active: true },
-        { id: '1', dayOfWeek: 'Terca', hourStart: '10:00', hourEnd: '17:00', active: false },
-    ];
+    const getSchedules = useCallback(async () => {
+        await api.get('/schedule').then((response) => {
+            const { data } = response;
+            setSchedule(data);
+        });
+    }, []);
+
+    useEffect(() => {
+        getSchedules();
+    }, []);
 
     const toggleModal = useCallback((): void => {
         setModalOpen((prevState) => !prevState);
@@ -65,7 +72,6 @@ const Index: React.FC = () => {
 
     return (
         <>
-            <Header />
             <Container>
                 <HeaderContainer>
                     <IconButton

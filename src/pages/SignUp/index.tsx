@@ -60,77 +60,78 @@ const SignUp: React.FC = () => {
 
     const history = useHistory();
 
-    const handleSubmitUser = useCallback(async (data: SignUpUserData) => {
-        try {
-            formRef.current?.setErrors({});
-            const schema = Yup.object().shape({
-                name: Yup.string().required('Nome obrigatório'),
-                lastName: Yup.string().required('Sobrenome obrigatório'),
-                email: Yup.string()
-                    .required('E-mail obrigatório')
-                    .email('Digite um e-mail válido'),
-                password: Yup.string().min(4, 'No mínimo 4 digitos'),
-            });
+    const handleSubmitUser = useCallback(
+        async (data: SignUpUserData) => {
+            try {
+                formRef.current?.setErrors({});
+                const schema = Yup.object().shape({
+                    name: Yup.string().required('Nome obrigatório'),
+                    lastName: Yup.string().required('Sobrenome obrigatório'),
+                    email: Yup.string().required('E-mail obrigatório').email('Digite um e-mail válido'),
+                    password: Yup.string().min(4, 'No mínimo 4 digitos'),
+                });
 
-            await schema.validate(data, {
-                abortEarly: false,
-            });
+                await schema.validate(data, {
+                    abortEarly: false,
+                });
 
-            if (data.phone && data.phone !== '') {
-                data.phone = data.phone.replace(/[^\d]/g, '');
+                if (data.phone && data.phone !== '') {
+                    data.phone = data.phone.replace(/[^\d]/g, '');
+                }
+
+                await api.post('user', data);
+                history.push('/');
+                toast.success('Usuario criado com sucesso!');
+            } catch (err) {
+                if (err instanceof Yup.ValidationError) {
+                    const errors = getValidationErrors(err);
+                    formRef.current?.setErrors(errors);
+                    return;
+                }
             }
+        },
+        [history],
+    );
 
-            await api.post('user', data);
-            history.push('/');
-            toast.success('Usuario criado com sucesso!')
-        } catch (err) {
-            if (err instanceof Yup.ValidationError) {
-                const errors = getValidationErrors(err);
-                formRef.current?.setErrors(errors);
-                return;
+    const handleSubmitProvider = useCallback(
+        async (data: SignUpProviderData) => {
+            try {
+                formRef.current?.setErrors({});
+                const schema = Yup.object().shape({
+                    name: Yup.string().required('Nome obrigatório'),
+                    lastName: Yup.string().required('Sobrenome obrigatório'),
+                    email: Yup.string().required('E-mail obrigatório').email('Digite um e-mail válido'),
+                    password: Yup.string().min(4, 'No mínimo 4 digitos'),
+                    addressStreet: Yup.string().required('Rua obrigatório'),
+                    addressNumber: Yup.string().required('Numero obrigatório'),
+                    addressArea: Yup.string().required('Bairro obrigatório'),
+                    addressCity: Yup.string().required('Cidade obrigatório'),
+                    addressState: Yup.string().required('Estado obrigatório'),
+                });
+
+                await schema.validate(data, {
+                    abortEarly: false,
+                });
+
+                if (data.phone && data.phone !== '') {
+                    data.phone = data.phone.replace(/[^\d]/g, '');
+                }
+
+                data.isBarber = isBarber;
+                data.isTattoo = isTattoo;
+                data.isPiercing = isPiercing;
+                await api.post('provider', data);
+                history.push('/');
+            } catch (err) {
+                if (err instanceof Yup.ValidationError) {
+                    const errors = getValidationErrors(err);
+                    formRef.current?.setErrors(errors);
+                    return;
+                }
             }
-        }
-    }, [history]);
-
-    const handleSubmitProvider = useCallback(async (data: SignUpProviderData) => {
-        try {
-            formRef.current?.setErrors({});
-            const schema = Yup.object().shape({
-                name: Yup.string().required('Nome obrigatório'),
-                lastName: Yup.string().required('Sobrenome obrigatório'),
-                email: Yup.string()
-                    .required('E-mail obrigatório')
-                    .email('Digite um e-mail válido'),
-                password: Yup.string().min(4, 'No mínimo 4 digitos'),
-                addressStreet: Yup.string().required('Rua obrigatório'),
-                addressNumber: Yup.string().required('Numero obrigatório'),
-                addressArea: Yup.string().required('Bairro obrigatório'),
-                addressCity: Yup.string().required('Cidade obrigatório'),
-                addressState: Yup.string().required('Estado obrigatório'),
-                addressCountry: Yup.string().required('Pais obrigatório'),
-            });
-
-            await schema.validate(data, {
-                abortEarly: false,
-            });
-
-            if (data.phone && data.phone !== '') {
-                data.phone = data.phone.replace(/[^\d]/g, '');
-            }
-
-            data.isBarber = isBarber;
-            data.isTattoo = isTattoo;
-            data.isPiercing = isPiercing;
-            await api.post('provider', data);
-            history.push('/');
-        } catch (err) {
-            if (err instanceof Yup.ValidationError) {
-                const errors = getValidationErrors(err);
-                formRef.current?.setErrors(errors);
-                return;
-            }
-        }
-    }, [isBarber, isTattoo, isPiercing]);
+        },
+        [isBarber, isTattoo, isPiercing, history],
+    );
 
     useEffect(() => {
         setTimeout(() => {
@@ -169,40 +170,40 @@ const SignUp: React.FC = () => {
     }, []);
 
     const getCep = useCallback(async () => {
-            let cep = formRef.current?.getFieldValue('addressZipCode');
-            cep = cep.replace(/[^\d]/g, '');
-            if (cep === '' || cep.length < 8) {
-                toast.error('Digite um cep valido.');
-            } else {
-                await api
-                    .get(`https://olog-api.jclan.com.br/street/${cep}`)
-                    .then((response) => {
-                        if (response.data !== '') {
-                            formRef.current?.setFieldValue('addressArea', `${response.data.area.clearName}`);
-                            formRef.current?.setFieldValue('addressCity', `${response.data.city.clearName}`);
-                            formRef.current?.setFieldValue('addressCountry', 'Brasil');
-                            formRef.current?.setFieldValue('addressStreet', `${response.data.clearPublicPlace}`);
-                            formRef.current?.setFieldValue('addressState', `${response.data.stateId}`);
+        let cep = formRef.current?.getFieldValue('addressZipCode');
+        cep = cep.replace(/[^\d]/g, '');
+        if (cep === '' || cep.length < 8) {
+            toast.error('Digite um cep valido.');
+        } else {
+            await api
+                .get(`https://olog-api.jclan.com.br/street/${cep}`)
+                .then((response) => {
+                    if (response.data !== '') {
+                        formRef.current?.setFieldValue('addressArea', `${response.data.area.clearName}`);
+                        formRef.current?.setFieldValue('addressCity', `${response.data.city.clearName}`);
+                        formRef.current?.setFieldValue('addressCountry', 'Brasil');
+                        formRef.current?.setFieldValue('addressStreet', `${response.data.clearPublicPlace}`);
+                        formRef.current?.setFieldValue('addressState', `${response.data.stateId}`);
 
-                            const inputNumber = formRef.current?.getFieldRef('addressNumber');
-                            if (inputNumber) {
-                                inputNumber.focus();
-                            }
-                        } else {
-                            toast.error('Digite um cep valido.');
+                        const inputNumber = formRef.current?.getFieldRef('addressNumber');
+                        if (inputNumber) {
+                            inputNumber.focus();
                         }
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        toast.error('Falha ao buscar cep');
-                    });
-            }
+                    } else {
+                        toast.error('Digite um cep valido.');
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    toast.error('Falha ao buscar cep');
+                });
+        }
     }, []);
 
     const handleKeyPress = useCallback((event) => {
-            if (event.key === 'Enter') {
-                getCep();
-            }
+        if (event.key === 'Enter') {
+            getCep();
+        }
     }, []);
 
     const toggleBarber = useCallback(() => {
@@ -280,27 +281,15 @@ const SignUp: React.FC = () => {
                                 <Row>
                                     <Column>
                                         <Column>
-                                            <Input
-                                                name="addressStreet"
-                                                placeholder="Rua"
-                                                icon={FaMapSigns}
-                                            />
-                                            <Input
-                                                name="addressArea"
-                                                placeholder="Bairro"
-                                                icon={FaMapSigns}
-                                            />
+                                            <Input name="addressStreet" placeholder="Rua" icon={FaMapSigns} />
+                                            <Input name="addressArea" placeholder="Bairro" icon={FaMapSigns} />
                                         </Column>
                                     </Column>
                                 </Row>
                                 <Row>
                                     <Column>
                                         <Input name="addressNumber" placeholder="Numero" icon={FaMapSigns} />
-                                        <Input
-                                            name="addressCity"
-                                            placeholder="Cidade"
-                                            icon={FaMapSigns}
-                                        />
+                                        <Input name="addressCity" placeholder="Cidade" icon={FaMapSigns} />
                                     </Column>
                                 </Row>
                                 <Row>
@@ -500,7 +489,9 @@ const SignUp: React.FC = () => {
                             </>
                         )}
 
-                        <Button type="submit">Finalizar Cadastro</Button>
+                        <Button type="button" onClick={() => formRef.current?.submitForm()}>
+                            Finalizar Cadastro
+                        </Button>
                     </Form>
 
                     <Link to="/">

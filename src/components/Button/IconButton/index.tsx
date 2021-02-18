@@ -6,7 +6,7 @@ import { Button, Container } from './styles';
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     title?: string;
     icon?: React.ComponentType<IconBaseProps>;
-    action: () => void;
+    action: () => any;
     background: string;
     justIcon?: boolean;
     badge?: number;
