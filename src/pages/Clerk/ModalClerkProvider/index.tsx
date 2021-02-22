@@ -14,6 +14,7 @@ import api from '../../../services/api';
 import getValidationErrors from '../../../util/getValidationErrors';
 import InputMask from '../../../components/Input/InputModalMask';
 import Loading from '../../../components/Loading';
+import { borderColor } from 'polished';
 
 interface ModalProps {
     isOpen: boolean;
@@ -36,12 +37,19 @@ const ModalClerkProvider: React.FC<ModalProps> = ({ setIsOpen, reloadClerk, cler
     const [loading, setLoading] = useState(true);
     const [clerkData, setClerkData] = useState<any>(null);
     const [statusImgLogo, setStatusImgLogo] = useState<any>(null);
+    const [imgPhotoMin, setImgPhotoMin] = useState<any>(null);
+    const [changeImg, setChangeImg] = useState(false);
     const [clerkAvatar, setClerkAvatar] = useState<string | null>(null);
 
     const getClerk = useCallback(async (): Promise<void> => {
         await api
             .get(`/clerk/${clerkId}`)
-            .then((response) => {
+            .then(async (response) => {
+                console.log(response.data);
+                if (response.data.image) {
+                    const imgNamePhotoData = await api.get(`storage/base64/min/${response.data.image}`);
+                    setImgPhotoMin(imgNamePhotoData.data);
+                }
                 setClerkData(response.data);
                 setLoading(false);
             })
@@ -135,8 +143,21 @@ const ModalClerkProvider: React.FC<ModalProps> = ({ setIsOpen, reloadClerk, cler
         [clerkAvatar, clerkId, edit, reloadClerk, setIsOpen],
     );
 
+    const clickImg = useCallback(async (imgName: string) => {
+        await api.get(`storage/base64/${imgName}`).then((response) => {
+            const w = window.open('about:blank');
+            const image = new Image();
+            image.src = `data:image/png;base64,${response.data}`;
+            setTimeout(function () {
+                if (w) {
+                    w.document.write(image.outerHTML);
+                }
+            }, 0);
+        });
+    }, []);
+
     return (
-        <Modal width="420px" height="400px" isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Modal width="420px" height="460px" isOpen={isOpen} setIsOpen={setIsOpen}>
             <Form ref={formRef} initialData={clerkData} onSubmit={submitClerk}>
                 <Header>
                     {edit ? <h1>Editar Atendente</h1> : <h1>Novo Atendente</h1>}
@@ -172,40 +193,87 @@ const ModalClerkProvider: React.FC<ModalProps> = ({ setIsOpen, reloadClerk, cler
                                     <InputMask mask="(99)99999-9999" name="phone" placeholder="Telefone" />
                                 </div>
                             </Container>
-                            <Container>
+                            {(changeImg || !clerkData.image) && (
+                                <Container>
+                                    <div
+                                        className="img"
+                                        style={{
+                                            padding: '2px',
+                                            marginTop: '15px',
+                                            width: '100%',
+                                        }}
+                                    >
+                                        Foto Atendente:
+                                        {statusImgLogo === null && (
+                                            <label htmlFor="avatar">
+                                                <FiCamera />
+                                                <input
+                                                    accept=".jpg, .jpeg, .png"
+                                                    onChange={handleLogoChange}
+                                                    type="file"
+                                                    id="avatar"
+                                                />
+                                            </label>
+                                        )}
+                                        {statusImgLogo === true && <span>Carregando...</span>}
+                                        {statusImgLogo === false && (
+                                            <BsCheckAll
+                                                style={{
+                                                    marginLeft: '15px',
+                                                }}
+                                                className="check"
+                                                size={25}
+                                                color="#2e656a"
+                                            />
+                                        )}
+                                    </div>
+                                </Container>
+                            )}
+                            {edit && clerkData.image && !changeImg && (
                                 <div
-                                    className="img"
                                     style={{
-                                        padding: '2px',
-                                        marginTop: '15px',
-                                        width: '100%',
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        margin: '15px 0px',
+                                        cursor: 'pointer',
+                                    }}
+                                    onClick={() => clickImg(clerkData.image)}
+                                >
+                                    Preview Imagem: {' '}
+                                    <img
+                                        style={{
+                                            marginLeft: '10px',
+                                            width: '56px',
+                                            height: '56px',
+                                            borderRadius: '50%',
+                                            borderColor: '#ff9000',
+                                        }}
+                                        src={`data:image/png;base64,${imgPhotoMin}`}
+                                        onClick={() => clickImg(clerkData.image)}
+                                        alt=""
+                                    />
+                                </div>
+                            )}
+                            {edit && !changeImg && clerkData.image && (
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
                                     }}
                                 >
-                                    Foto Atendente:
-                                    {statusImgLogo === null && (
-                                        <label htmlFor="avatar">
-                                            <FiCamera />
-                                            <input
-                                                accept=".jpg, .jpeg, .png"
-                                                onChange={handleLogoChange}
-                                                type="file"
-                                                id="avatar"
-                                            />
-                                        </label>
-                                    )}
-                                    {statusImgLogo === true && <span>Carregando...</span>}
-                                    {statusImgLogo === false && (
-                                        <BsCheckAll
-                                            style={{
-                                                marginLeft: '15px',
-                                            }}
-                                            className="check"
-                                            size={25}
-                                            color="#2e656a"
-                                        />
-                                    )}
+                                    <IconButton
+                                        type="button"
+                                        icon={FiCamera}
+                                        title={'Alterar Imagem'}
+                                        background="#2e656a"
+                                        action={() => setChangeImg(true)}
+                                    />
                                 </div>
-                            </Container>
+                            )}
                         </>
                     )}
                 </Content>
