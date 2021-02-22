@@ -17,28 +17,26 @@ import getValidationErrors from '../../util/getValidationErrors';
 import { Container, Content, AvatarInput, Row, Col } from './styles';
 import { useAuth } from '../../hooks/Auth';
 import InputMask from '../../components/Input/InputMask';
-
-interface ProfileFormData {
-    name: string;
-    email: string;
-    old_password: string;
-    password: string;
-    password_confirmation: string;
-}
+import Loading from '../../components/Loading';
 
 const Profile: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
     const history = useHistory();
-    const { user } = useAuth();
+    const { user, updateUser } = useAuth();
     const [isBarber, setIsBarber] = useState(false);
     const [isTattoo, setIsTattoo] = useState(false);
     const [isPiercing, setIsPiercing] = useState(false);
     const [profileInfo, setProfileInfo] = useState(undefined);
+    const [loading, setLoading] = useState(true);
+    const [profileAvatar, setProfileAvatar] = useState(null);
 
     const getProfileInfo = useCallback(async () => {
         await api.get(`/provider/${user.id}`).then((response) => {
-            console.log(response.data);
             setProfileInfo(response.data);
+            setLoading(false);
+            setIsBarber(response.data.isBarber)
+            setIsTattoo(response.data.isTattoo)
+            setIsPiercing(response.data.isPiercing)
         });
     }, [user.id]);
 
@@ -47,70 +45,89 @@ const Profile: React.FC = () => {
     }, []);
 
     const handleSubmit = useCallback(
-        async (data: ProfileFormData) => {
+        async (data: any) => {
             try {
                 formRef.current?.setErrors({});
-                // const schema = Yup.object().shape({
-                //   name: Yup.string().required('Nome obrigatório'),
-                //   email: Yup.string()
-                //     .required('E-mail obrigatório')
-                //     .email('Digite um e-mail válido'),
-                //   old_password: Yup.string(),
-                //   password: Yup.string().when('old_password', {
-                //     is: (val) => !!val.length,
-                //     then: Yup.string().required('Campo obrigatorio!!'),
-                //     otherwise: Yup.string(),
-                //   }),
-                //   password_confirmation: Yup.string()
-                //     .when('old_password', {
-                //       is: (val) => !!val.length,
-                //       then: Yup.string().required('Campo obrigatorio!!'),
-                //       otherwise: Yup.string(),
-                //     })
-                //     .oneOf([Yup.ref('password'), null], 'Confirmaçao incorreta'),
-                // });
+                const schema = Yup.object().shape({
+                  oldPassword: Yup.string(),
+                  password: Yup.string().when('oldPassword', {
+                    is: (val) => !!val.length,
+                    then: Yup.string().required('Campo obrigatorio!!'),
+                    otherwise: Yup.string(),
+                  }),
+                  passwordConfirmation: Yup.string()
+                    .when('oldPassword', {
+                      is: (val) => !!val.length,
+                      then: Yup.string().required('Campo obrigatorio!!'),
+                      otherwise: Yup.string(),
+                    })
+                    .oneOf([Yup.ref('password'), undefined], 'Confirmaçao incorreta'),
+                });
 
-                // await schema.validate(data, {
-                //     abortEarly: false,
-                // });
+                await schema.validate(data, {
+                    abortEarly: false,
+                });
 
-                const { name, email, old_password, password, password_confirmation } = data;
+                if (data.oldPassword === '') {
+                    delete data.oldPassword;
+                    delete data.password;
+                    delete data.passwordConfirmation;
+                }
 
-                const formData = {
-                    name,
-                    email,
-                    ...(data.old_password
-                        ? {
-                              old_password,
-                              password,
-                              password_confirmation,
-                          }
-                        : {}),
-                };
+                data.id = user.id;
 
-                const response = await api.put('/profile', formData);
+                data.isBarber = isBarber;
+                data.isTattoo = isTattoo;
+                data.isPiercing = isPiercing;
 
-                // updateUser(response.data);
+                console.log(data);
 
-                history.push('/dashboard');
+                await api.put('/provider', data);
+
+                updateUser({
+                   name: data.name,
+                   lastName: data.lastName,
+                   email: data.email,
+                   phone: data.phone,
+                   avatar: data.avatar,
+                   id: data.id,
+                });
+
+                toast.success('Perfil atualizado com sucesso!');
+
+                history.push('/home');
             } catch (err) {
                 if (err instanceof Yup.ValidationError) {
                     const errors = getValidationErrors(err);
                     formRef.current?.setErrors(errors);
                     return;
                 }
+                toast.error('Houve um erro! Tente novamente.');
             }
         },
-        [history],
+        [history, isBarber, isTattoo, isPiercing],
     );
 
-    const handleAvatarChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const handleAvatarChange = useCallback(async (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const data = new FormData();
-            data.append('avatar', e.target.files[0]);
-            api.patch('/users/avatar', data).then((response) => {
-                // updateUser(response.data);
-            });
+            data.append('image', e.target.files[0]);
+
+            const maxAllowedSize = 30 * 1024 * 1024;
+            if (e.target.files[0].size > maxAllowedSize) {
+                toast.error('Falha ao inserir imagem, limite de tamanho excedido');
+            } else {
+                await api
+                    .post('/storage/img', data)
+                    .then((response) => {
+                        setProfileAvatar(response.data);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        toast.error('Falha ao inserir imagem');
+                        setProfileAvatar(null);
+                    });
+            }
         }
     }, []);
 
@@ -163,235 +180,251 @@ const Profile: React.FC = () => {
 
     return (
         <Container>
-            <header>
-                <div>
-                    <Link to="/home">
-                        <FiArrowLeft />
-                    </Link>
-                </div>
-            </header>
+            {loading ? (
+                <Loading />
+            ) : (
+                <>
+                    <header>
+                        <div>
+                            <Link to="/home">
+                                <FiArrowLeft />
+                            </Link>
+                        </div>
+                    </header>
 
-            <Content>
-                <Form initialData={profileInfo} ref={formRef} onSubmit={handleSubmit}>
-                    <AvatarInput>
-                        <img
-                            src={
-                                user.avatar
-                                    ? user.avatar
-                                    : 'https://pickaface.net/gallery/avatar/20140501_004912_2217_comm.png'
-                            }
-                            alt={user.name}
-                        />
-                        <label htmlFor="avatar">
-                            <FiCamera />
-                            <input type="file" id="avatar" onChange={handleAvatarChange} />
-                        </label>
-                    </AvatarInput>
+                    <Content>
+                        <Form initialData={profileInfo} ref={formRef} onSubmit={handleSubmit}>
+                            <AvatarInput>
+                                <img
+                                    src={
+                                        user.avatar
+                                            ? user.avatar
+                                            : 'https://pickaface.net/gallery/avatar/20140501_004912_2217_comm.png'
+                                    }
+                                    alt={user.name}
+                                />
+                                <label htmlFor="avatar">
+                                    <FiCamera />
+                                    <input type="file" id="avatar" onChange={handleAvatarChange} />
+                                </label>
+                            </AvatarInput>
 
-                    <h1>Meu Perfil</h1>
+                            <h1>Meu Perfil</h1>
 
-                    <Row>
-                        <Col xs={12} sm={4} md={4} lg={4}>
-                            <Input name="name" icon={FiUser} placeholder="Nome" />
-                        </Col>
-                        <Col xs={12} sm={4} md={4} lg={4}>
-                            <Input name="lastName" icon={FiUser} placeholder="Sobrenome" />
-                        </Col>
-                        <Col xs={12} sm={4} md={4} lg={4}>
-                            <Input name="email" icon={FiMail} placeholder="E-mail" />
-                        </Col>
-                    </Row>
+                            <Row>
+                                <Col xs={12} sm={4} md={4} lg={4}>
+                                    <Input name="name" icon={FiUser} placeholder="Nome" />
+                                </Col>
+                                <Col xs={12} sm={4} md={4} lg={4}>
+                                    <Input name="lastName" icon={FiUser} placeholder="Sobrenome" />
+                                </Col>
+                                <Col xs={12} sm={4} md={4} lg={4}>
+                                    <Input name="email" icon={FiMail} placeholder="E-mail" />
+                                </Col>
+                            </Row>
 
-                    <Row>
-                        <Col xs={12} sm={4} md={4} lg={4}>
-                            <Input name="old_password" icon={FiLock} type="password" placeholder="Senha atual" />
-                        </Col>
-                        <Col xs={12} sm={4} md={4} lg={4}>
-                            <Input name="password" icon={FiLock} type="password" placeholder="Nova senha" />
-                        </Col>
-                        <Col xs={12} sm={4} md={4} lg={4}>
-                            <Input
-                                name="password_confirmation"
-                                icon={FiLock}
-                                type="password"
-                                placeholder="Confirmar senha"
-                            />
-                        </Col>
-                    </Row>
+                            <Row>
+                                <Col xs={12} sm={4} md={4} lg={4}>
+                                    <Input
+                                        name="oldPassword"
+                                        icon={FiLock}
+                                        type="password"
+                                        placeholder="Senha atual"
+                                    />
+                                </Col>
+                                <Col xs={12} sm={4} md={4} lg={4}>
+                                    <Input
+                                        name="password"
+                                        icon={FiLock}
+                                        type="password"
+                                        placeholder="Nova senha"
+                                    />
+                                </Col>
+                                <Col xs={12} sm={4} md={4} lg={4}>
+                                    <Input
+                                        name="passwordConfirmation"
+                                        icon={FiLock}
+                                        type="password"
+                                        placeholder="Confirmar senha"
+                                    />
+                                </Col>
+                            </Row>
 
-                    <h1>Endereço</h1>
+                            <h1>Endereço</h1>
 
-                    <Row>
-                        <Col xs={12} sm={4} md={4} lg={4}>
-                            <InputMask
-                                mask="99999-999"
-                                name="addressZipCode"
-                                placeholder="CEP"
-                                cepIcon
-                                getCep={getCep}
-                                onKeyPress={handleKeyPress}
-                            />
-                        </Col>
-                        <Col xs={12} sm={4} md={4} lg={4}>
-                            <Input name="addressStreet" placeholder="Rua" icon={FaMapSigns} />
-                        </Col>
-                        <Col xs={12} sm={4} md={4} lg={4}>
-                            <Input name="addressArea" placeholder="Bairro" icon={FaMapSigns} />
-                        </Col>
-                    </Row>
+                            <Row>
+                                <Col xs={12} sm={4} md={4} lg={4}>
+                                    <InputMask
+                                        mask="99999-999"
+                                        name="addressZipCode"
+                                        placeholder="CEP"
+                                        cepIcon
+                                        getCep={getCep}
+                                        onKeyPress={handleKeyPress}
+                                    />
+                                </Col>
+                                <Col xs={12} sm={4} md={4} lg={4}>
+                                    <Input name="addressStreet" placeholder="Rua" icon={FaMapSigns} />
+                                </Col>
+                                <Col xs={12} sm={4} md={4} lg={4}>
+                                    <Input name="addressArea" placeholder="Bairro" icon={FaMapSigns} />
+                                </Col>
+                            </Row>
 
-                    <Row>
-                        <Col xs={12} sm={3} md={3} lg={3}>
-                            <Input name="addressNumber" placeholder="Numero" icon={FaMapSigns} />
-                        </Col>
-                        <Col xs={12} sm={3} md={3} lg={3}>
-                            <Input name="addressCity" placeholder="Cidade" icon={FaMapSigns} />
-                        </Col>
-                        <Col xs={12} sm={3} md={3} lg={3}>
-                            <Input name="addressState" placeholder="Estado" icon={FaMapSigns} />
-                        </Col>
-                        <Col xs={12} sm={3} md={3} lg={3}>
-                            <Input name="addressComplement" placeholder="Complemento" icon={FaMapSigns} />
-                        </Col>
-                    </Row>
+                            <Row>
+                                <Col xs={12} sm={3} md={3} lg={3}>
+                                    <Input name="addressNumber" placeholder="Numero" icon={FaMapSigns} />
+                                </Col>
+                                <Col xs={12} sm={3} md={3} lg={3}>
+                                    <Input name="addressCity" placeholder="Cidade" icon={FaMapSigns} />
+                                </Col>
+                                <Col xs={12} sm={3} md={3} lg={3}>
+                                    <Input name="addressState" placeholder="Estado" icon={FaMapSigns} />
+                                </Col>
+                                <Col xs={12} sm={3} md={3} lg={3}>
+                                    <Input name="addressComplement" placeholder="Complemento" icon={FaMapSigns} />
+                                </Col>
+                            </Row>
 
-                    <h1>Serviços</h1>
+                            <h1>Serviços</h1>
 
-                    <Row>
-                        <Col xs={12} sm={4} md={4} lg={4}>
-                            <span
-                                style={{
-                                    marginRight: '7px',
-                                }}
-                            >
-                                Barbearia:
-                            </span>
-                            <Switch
-                                onChange={toggleBarber}
-                                checked={isBarber}
-                                uncheckedIcon={
-                                    <div
+                            <Row>
+                                <Col xs={12} sm={4} md={4} lg={4}>
+                                    <span
                                         style={{
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            height: '100%',
-                                            fontSize: 19,
+                                            marginRight: '7px',
                                         }}
                                     >
-                                        <MdClose />
-                                    </div>
-                                }
-                                checkedIcon={
-                                    <div
+                                        Barbearia:
+                                    </span>
+                                    <Switch
+                                        onChange={toggleBarber}
+                                        checked={isBarber}
+                                        uncheckedIcon={
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    height: '100%',
+                                                    fontSize: 19,
+                                                }}
+                                            >
+                                                <MdClose />
+                                            </div>
+                                        }
+                                        checkedIcon={
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    height: '100%',
+                                                    fontSize: 19,
+                                                }}
+                                            >
+                                                <MdCheck />
+                                            </div>
+                                        }
+                                        height={23}
+                                        width={55}
+                                        onColor="#2e656a"
+                                        offColor="#c53030"
+                                    />
+                                </Col>
+                                <Col xs={12} sm={4} md={4} lg={4}>
+                                    <span
                                         style={{
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            height: '100%',
-                                            fontSize: 19,
+                                            marginRight: '7px',
                                         }}
                                     >
-                                        <MdCheck />
-                                    </div>
-                                }
-                                height={23}
-                                width={55}
-                                onColor="#2e656a"
-                                offColor="#c53030"
-                            />
-                        </Col>
-                        <Col xs={12} sm={4} md={4} lg={4}>
-                            <span
-                                style={{
-                                    marginRight: '7px',
-                                }}
-                            >
-                                Tatuagem:
-                            </span>
-                            <Switch
-                                onChange={toggleTattoo}
-                                checked={isTattoo}
-                                uncheckedIcon={
-                                    <div
+                                        Tatuagem:
+                                    </span>
+                                    <Switch
+                                        onChange={toggleTattoo}
+                                        checked={isTattoo}
+                                        uncheckedIcon={
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    height: '100%',
+                                                    fontSize: 19,
+                                                }}
+                                            >
+                                                <MdClose />
+                                            </div>
+                                        }
+                                        checkedIcon={
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    height: '100%',
+                                                    fontSize: 19,
+                                                }}
+                                            >
+                                                <MdCheck />
+                                            </div>
+                                        }
+                                        height={23}
+                                        width={55}
+                                        onColor="#2e656a"
+                                        offColor="#c53030"
+                                    />
+                                </Col>
+                                <Col xs={12} sm={4} md={4} lg={4}>
+                                    <span
                                         style={{
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            height: '100%',
-                                            fontSize: 19,
+                                            marginRight: '7px',
                                         }}
                                     >
-                                        <MdClose />
-                                    </div>
-                                }
-                                checkedIcon={
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            height: '100%',
-                                            fontSize: 19,
-                                        }}
-                                    >
-                                        <MdCheck />
-                                    </div>
-                                }
-                                height={23}
-                                width={55}
-                                onColor="#2e656a"
-                                offColor="#c53030"
-                            />
-                        </Col>
-                        <Col xs={12} sm={4} md={4} lg={4}>
-                            <span
-                                style={{
-                                    marginRight: '7px',
-                                }}
-                            >
-                                Piercing:
-                            </span>
-                            <Switch
-                                onChange={togglePiercing}
-                                checked={isPiercing}
-                                uncheckedIcon={
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            height: '100%',
-                                            fontSize: 19,
-                                        }}
-                                    >
-                                        <MdClose />
-                                    </div>
-                                }
-                                checkedIcon={
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            height: '100%',
-                                            fontSize: 19,
-                                        }}
-                                    >
-                                        <MdCheck />
-                                    </div>
-                                }
-                                height={23}
-                                width={55}
-                                onColor="#2e656a"
-                                offColor="#c53030"
-                            />
-                        </Col>
-                    </Row>
+                                        Piercing:
+                                    </span>
+                                    <Switch
+                                        onChange={togglePiercing}
+                                        checked={isPiercing}
+                                        uncheckedIcon={
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    height: '100%',
+                                                    fontSize: 19,
+                                                }}
+                                            >
+                                                <MdClose />
+                                            </div>
+                                        }
+                                        checkedIcon={
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    height: '100%',
+                                                    fontSize: 19,
+                                                }}
+                                            >
+                                                <MdCheck />
+                                            </div>
+                                        }
+                                        height={23}
+                                        width={55}
+                                        onColor="#2e656a"
+                                        offColor="#c53030"
+                                    />
+                                </Col>
+                            </Row>
 
-                    <Button type="submit">Confirmar mudanças</Button>
-                </Form>
-            </Content>
+                            <Button type="submit">Confirmar mudanças</Button>
+                        </Form>
+                    </Content>
+                </>
+            )}
         </Container>
     );
 };
