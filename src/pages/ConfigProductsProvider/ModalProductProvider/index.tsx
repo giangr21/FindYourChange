@@ -99,12 +99,12 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
         async (data: ProductData) => {
             try {
                 formRef.current?.setErrors({});
-
-                formRef.current?.setErrors({});
                 const schema = Yup.object().shape({
-                    name: Yup.string().required('Nome obrigatório'),
-                    email: Yup.string().required('E-mail obrigatório').email('Digite um e-mail válido'),
-                    phone: Yup.string().required('Telefone obrigatório').max(14, 'Digite um telefone valido'),
+                    name: Yup.string().required('Nome obrigatório').max(60, 'Digite um nome válido'),
+                    value: Yup.string().required('Valor obrigatório'),
+                    category: Yup.string().required('Categoria obrigatória').max(40, 'Digite uma categoria válida'),
+                    quantity: Yup.string().required('Quantidade obrigatória'),
+                    description: Yup.string().required('Descrição obrigatória').max(240, 'Digite uma descrição válida')
                 });
                 await schema.validate(data, {
                     abortEarly: false,
@@ -116,9 +116,9 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
 
                 if (edit) {
                     data.id = productId;
-                    await api.put('product', data);
+                    await api.put('products', data);
                 } else {
-                    await api.post('product', data);
+                    await api.post('products', data);
                 }
 
                 toast.success(`Produto ${edit ? 'editado' : 'inserido'} com sucesso!`);
@@ -200,7 +200,7 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                                         marginBottom: '5px',
                                     }}
                                 >
-                                    <Input name="name" placeholder="Descricao" />
+                                    <Input name="description" placeholder="Descricao" />
                                 </div>
                             </Container>
                             <Container>
@@ -234,6 +234,7 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                         }}
                     >
                         <IconButton
+                            type="button"
                             icon={FiCheckSquare}
                             title={edit ? 'Editar Produto' : 'Adicionar Produto'}
                             background="#2e656a"

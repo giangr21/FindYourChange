@@ -22,13 +22,10 @@ export interface ProductData {
 
 const Index: React.FC = () => {
     const [loading, setLoading] = useState(true);
-    const formRef = useRef<FormHandles>(null);
     const [modalOpen, setModalOpen] = useState(false);
     const [products, setProducts] = useState<ProductData[]>([]);
-    const [modalViewOpen, setModalViewOpen] = useState(false);
     const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
     const [isEdit, setIsEdit] = useState<boolean>(false);
-    const [idProvider, setIdProvider] = useState('');
     const [idProduct, setIdProduct] = useState('');
 
     const getProducts = useCallback(async () => {
@@ -53,24 +50,20 @@ const Index: React.FC = () => {
         setModalOpen((prevState) => !prevState);
         if (isEdit) {
             setIsEdit(false);
-            setIdProvider('');
+            setIdProduct('');
         }
     }, [isEdit]);
 
-    const toggleModalInfo = useCallback((): void => {
-        setModalViewOpen((prevState) => !prevState);
-    }, []);
-
     const toggleModalDelete = useCallback((id?: string): void => {
         if (id) {
-            setIdProvider(id);
+            setIdProduct(id);
         }
         setModalDeleteOpen((prevState) => !prevState);
     }, []);
 
     const handleDelete = useCallback(async (): Promise<void> => {
         try {
-            await api.delete(`/product/${idProduct}`);
+            await api.delete(`/products/${idProduct}`);
             const filterProducts = products.filter((product) => product.id !== idProduct);
             setProducts(filterProducts);
             toast.success('Produto apagado com sucesso!');
@@ -84,11 +77,6 @@ const Index: React.FC = () => {
         setModalOpen((prevState) => !prevState);
         setIdProduct(id);
         setIsEdit(true);
-    }, []);
-
-    const handleView = useCallback((id: string) => {
-        setModalViewOpen((prevState) => !prevState);
-        setIdProvider(id);
     }, []);
 
     return (
