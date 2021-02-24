@@ -2,9 +2,7 @@ import React, { useRef, useCallback, useState, useEffect, ChangeEvent } from 're
 import { FormHandles } from '@unform/core';
 import { FiCamera, FiCheckSquare } from 'react-icons/fi';
 import { FaWindowClose } from 'react-icons/fa';
-import TimePicker from 'rc-time-picker';
 import 'rc-time-picker/assets/index.css';
-import moment from 'moment';
 
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
@@ -16,6 +14,7 @@ import IconButton from '../../../components/Button/IconButton';
 import api from '../../../services/api';
 import getValidationErrors from '../../../util/getValidationErrors';
 import Loading from '../../../components/Loading';
+import Select from '../../../components/Select/MainSearchSelect';
 
 interface ModalProps {
     isOpen: boolean;
@@ -102,9 +101,13 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                 const schema = Yup.object().shape({
                     name: Yup.string().required('Nome obrigatório').max(60, 'Digite um nome válido'),
                     value: Yup.string().required('Valor obrigatório'),
-                    category: Yup.string().required('Categoria obrigatória').max(40, 'Digite uma categoria válida'),
+                    category: Yup.string()
+                        .required('Categoria obrigatória')
+                        .max(40, 'Digite uma categoria válida'),
                     quantity: Yup.string().required('Quantidade obrigatória'),
-                    description: Yup.string().required('Descrição obrigatória').max(240, 'Digite uma descrição válida')
+                    description: Yup.string()
+                        .required('Descrição obrigatória')
+                        .max(240, 'Digite uma descrição válida'),
                 });
                 await schema.validate(data, {
                     abortEarly: false,
@@ -189,7 +192,16 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                                         marginBottom: '15px',
                                     }}
                                 >
-                                    <Input name="category" placeholder="Categoria" />
+                                    <Select
+                                        name="category"
+                                        placeholder="Categoria"
+                                        options={[
+                                            { value: 'Barbearia', label: 'Barbearia' },
+                                            { value: 'Tatuagem', label: 'Tatuagem' },
+                                            { value: 'BodyPiercing', label: 'Body Piercing' },
+                                        ]}
+                                        defaultValue={{ value: 'Barbearia', label: 'Barbearia' }}
+                                    />
                                 </div>
                             </Container>
                             <Container>
