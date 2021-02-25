@@ -5,6 +5,16 @@ export const Container = styled.div`
     height: 100%;
     max-width: 1120px;
     margin: 10px auto;
+    display: flex;
+    flex-direction: row;
+    overflow-x: hidden;
+`;
+
+export const Content = styled.div`
+    display: flex;
+    width: 100%;
+    transition: all ease 0.5s;
+    flex-direction: column;
 `;
 
 export const HeaderContainer = styled.div`

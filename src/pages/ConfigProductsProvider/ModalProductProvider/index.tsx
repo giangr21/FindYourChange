@@ -15,6 +15,7 @@ import api from '../../../services/api';
 import getValidationErrors from '../../../util/getValidationErrors';
 import Loading from '../../../components/Loading';
 import Select from '../../../components/Select/MainSearchSelect';
+import { useAuth } from '../../../hooks/Auth';
 
 interface ModalProps {
     isOpen: boolean;
@@ -32,9 +33,11 @@ interface ProductData {
     category: string;
     description: string;
     productImage: string;
+    provider: string;
 }
 
 const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, productId, isOpen, edit }) => {
+    const { user } = useAuth();
     const formRef = useRef<FormHandles>(null);
     const [loading, setLoading] = useState(true);
     const [productData, setProductData] = useState<any>(null);
@@ -121,6 +124,7 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                     data.id = productId;
                     await api.put('products', data);
                 } else {
+                    data.provider = user.id;
                     await api.post('products', data);
                 }
 
@@ -136,7 +140,7 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                 toast.error(`Houve uma falha ao ${edit ? 'editar' : 'inserir'} os dados`);
             }
         },
-        [productImage, productId, edit, reloadProduct, setIsOpen],
+        [productImage, edit, setIsOpen, reloadProduct, productId, user.id],
     );
 
     return (

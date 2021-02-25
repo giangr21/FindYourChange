@@ -45,7 +45,7 @@ const AuthProvider: React.FC = ({ children }) => {
         const response = await api.post('sessions', {
             email,
             password,
-            isProvider
+            isProvider,
         });
         const { token, user } = response.data;
         localStorage.setItem('@FYC:token', token);
@@ -62,15 +62,15 @@ const AuthProvider: React.FC = ({ children }) => {
 
     const updateUser = useCallback(
         (user: User) => {
-          localStorage.setItem('@FYC:user', JSON.stringify(user));
+            localStorage.setItem('@FYC:user', JSON.stringify(user));
 
-          setData({
-            token: data.token,
-            user,
-          });
+            setData({
+                token: data.token,
+                user,
+            });
         },
         [data.token, setData],
-      );
+    );
 
     return (
         <AuthContext.Provider

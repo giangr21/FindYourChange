@@ -6,6 +6,7 @@ import { FaWindowClose } from 'react-icons/fa';
 import { BsCheckAll } from 'react-icons/bs';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
+import { borderColor } from 'polished';
 import { Form, Container, Header, Footer, Content } from './styles';
 import Input from '../../../components/Input/InputModal';
 import Modal from '../../../components/Modal';
@@ -14,7 +15,6 @@ import api from '../../../services/api';
 import getValidationErrors from '../../../util/getValidationErrors';
 import InputMask from '../../../components/Input/InputModalMask';
 import Loading from '../../../components/Loading';
-import { borderColor } from 'polished';
 
 interface ModalProps {
     isOpen: boolean;
@@ -241,7 +241,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({ setIsOpen, reloadClerk, cler
                                     }}
                                     onClick={() => clickImg(clerkData.image)}
                                 >
-                                    Preview Imagem: {' '}
+                                    Preview Imagem:{' '}
                                     <img
                                         style={{
                                             marginLeft: '10px',
@@ -268,7 +268,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({ setIsOpen, reloadClerk, cler
                                     <IconButton
                                         type="button"
                                         icon={FiCamera}
-                                        title={'Alterar Imagem'}
+                                        title="Alterar Imagem"
                                         background="#2e656a"
                                         action={() => setChangeImg(true)}
                                     />
