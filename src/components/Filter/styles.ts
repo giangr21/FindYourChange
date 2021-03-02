@@ -9,7 +9,7 @@ export const Container = styled.div<FilterProps>`
     display: flex;
     flex-direction: column;
     width: ${(props) => (props.showFilter ? '20%' : '0%')};
-    margin: ${(props) => (props.showFilter ? '5px 0px' : '0')};
+    /* margin: ${(props) => (props.showFilter ? '5px 0px' : '0')}; */
     border-radius: 8px;
     border: 1px solid #777777;
     transition: all ease 0.5s;
@@ -34,7 +34,7 @@ export const HeaderFilter = styled.div`
     padding: 5px 10px;
 
     strong {
-        color: #666;
+        color: #ff9000;
         font-weight: bold;
     }
 `;

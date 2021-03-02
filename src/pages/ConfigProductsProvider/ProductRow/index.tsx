@@ -2,8 +2,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useCallback } from 'react';
 import { MdEdit, MdDeleteForever } from 'react-icons/md';
+import { StyledBodyCell } from '../styles';
 
-import { Container, MoreContainer } from './styles';
+import { MoreContainer } from './styles';
 
 interface ProductRow {
     handleDelete: (id: string) => void;
@@ -21,21 +22,22 @@ const ProductRow: React.FC<ProductRow> = ({ data, handleDelete, handleEdit }) =>
     }, [data.id, handleEdit]);
 
     return (
-        <Container>
-            <small onClick={editRow}>{data.name}</small>
-            <small onClick={editRow}>{data.value}</small>
-            <small onClick={editRow}>{data.quantity}</small>
-            <small onClick={editRow}>{data.category}</small>
-
-            <MoreContainer>
-                <button onClick={editRow} type="button">
-                    <MdEdit color="#ffa048" size={20} />
-                </button>
-                <button onClick={deleteRow} type="button">
-                    <MdDeleteForever color="#DE3B3B" size={20} />
-                </button>
-            </MoreContainer>
-        </Container>
+        <React.Fragment key={data.id}>
+            <StyledBodyCell>{data.name}</StyledBodyCell>
+            <StyledBodyCell>{data.value}</StyledBodyCell>
+            <StyledBodyCell>{data.quantity}</StyledBodyCell>
+            <StyledBodyCell>{data.category}</StyledBodyCell>
+            <StyledBodyCell>
+                <MoreContainer>
+                    <button onClick={editRow} type="button">
+                        <MdEdit color="#ffa048" size={20} />
+                    </button>
+                    <button onClick={deleteRow} type="button">
+                        <MdDeleteForever color="#DE3B3B" size={20} />
+                    </button>
+                </MoreContainer>
+            </StyledBodyCell>
+        </React.Fragment>
     );
 };
 

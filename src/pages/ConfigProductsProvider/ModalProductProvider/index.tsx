@@ -14,7 +14,7 @@ import IconButton from '../../../components/Button/IconButton';
 import api from '../../../services/api';
 import getValidationErrors from '../../../util/getValidationErrors';
 import Loading from '../../../components/Loading';
-import Select from '../../../components/Select/MainSearchSelect';
+import Select from '../../../components/Select';
 import { useAuth } from '../../../hooks/Auth';
 
 interface ModalProps {
@@ -48,6 +48,15 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
         await api
             .get(`/products/${productId}`)
             .then((response) => {
+                if (response.data.category === 'Barbearia') {
+                    response.data.category = { value: 'Barbearia', label: 'Barbearia' };
+                }
+                if (response.data.category === 'Tatuagem') {
+                    response.data.category = { value: 'Tatuagem', label: 'Tatuagem' };
+                }
+                if (response.data.category === 'BodyPiercing') {
+                    response.data.category = { value: 'BodyPiercing', label: 'Body Piercing' };
+                }
                 setProductData(response.data);
                 setLoading(false);
             })
@@ -198,13 +207,16 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                                 >
                                     <Select
                                         name="category"
-                                        placeholder="Categoria"
+                                        fieldValue="value"
+                                        fieldLabel="label"
+                                        label="Categoria"
+                                        className="react-select-container"
+                                        defaultValue={{ value: 'Barbearia', label: 'Barbearia' }}
                                         options={[
                                             { value: 'Barbearia', label: 'Barbearia' },
                                             { value: 'Tatuagem', label: 'Tatuagem' },
                                             { value: 'BodyPiercing', label: 'Body Piercing' },
                                         ]}
-                                        defaultValue={{ value: 'Barbearia', label: 'Barbearia' }}
                                     />
                                 </div>
                             </Container>

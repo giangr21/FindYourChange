@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useRef, useCallback, useState, useEffect, ChangeEvent } from 'react';
 import { FormHandles } from '@unform/core';
 import { FiCamera, FiCheckSquare } from 'react-icons/fi';
@@ -6,7 +9,6 @@ import { FaWindowClose } from 'react-icons/fa';
 import { BsCheckAll } from 'react-icons/bs';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import { borderColor } from 'polished';
 import { Form, Container, Header, Footer, Content } from './styles';
 import Input from '../../../components/Input/InputModal';
 import Modal from '../../../components/Modal';
@@ -193,7 +195,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({ setIsOpen, reloadClerk, cler
                                     <InputMask mask="(99)99999-9999" name="phone" placeholder="Telefone" />
                                 </div>
                             </Container>
-                            {(changeImg || !clerkData.image) && (
+                            {(!edit || changeImg || !clerkData.image) && (
                                 <Container>
                                     <div
                                         className="img"

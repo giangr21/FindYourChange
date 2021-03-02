@@ -1,21 +1,34 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { Client as Styletron } from 'styletron-engine-atomic';
+import { Provider as StyletronProvider } from 'styletron-react';
+import { BaseProvider } from 'baseui';
 import { ToastContainer } from 'react-toastify';
+
 import AppProvider from './hooks';
 import './components/Scrollbar/scrollbar.css';
 
 import Routes from './routes';
 import GlobalStyle from './styles/global';
+import { theme } from './theme';
 
-const App: React.FC = () => (
-    <Router>
-        <AppProvider>
-            <Routes />
-        </AppProvider>
+const App: React.FC = () => {
+    const engine = new Styletron();
 
-        <GlobalStyle />
-        <ToastContainer autoClose={3000} />
-    </Router>
-);
+    return (
+        <StyletronProvider value={engine}>
+            <BaseProvider theme={theme}>
+                <Router>
+                    <AppProvider>
+                        <Routes />
+                    </AppProvider>
+
+                    <GlobalStyle />
+                    <ToastContainer autoClose={3000} />
+                </Router>
+            </BaseProvider>
+        </StyletronProvider>
+    );
+};
 
 export default App;

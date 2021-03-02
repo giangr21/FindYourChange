@@ -1,10 +1,16 @@
-import { Form as Unform } from '@unform/web';
 import styled from 'styled-components';
+import { withStyle } from 'baseui';
+import {
+    StyledTable as BaseStyledTable,
+    StyledHeadCell as BaseStyledHeadCell,
+    StyledBodyCell as BaseStyledCell,
+} from 'baseui/table-grid';
 
 export const Container = styled.div`
     height: 100%;
     max-width: 1120px;
-    margin: 10px auto;
+    margin: 0px auto;
+    padding: 10px 0px;
     display: flex;
     flex-direction: row;
     overflow-x: hidden;
@@ -31,39 +37,30 @@ export const Recommendation = styled.div`
     background-color: black;
 `;
 
-export const HeaderGrid = styled.section`
-    display: grid;
-    padding: 0px 6px 0px 5px;
-    margin: 5px 10px;
+export const StyledTable = withStyle(BaseStyledTable, () => ({
+    borderTopLeftRadius: '7px !important',
+    borderTopRightRadius: '7px !important',
+    borderBottomLeftRadius: '7px !important',
+    borderBottomRightRadius: '7px !important',
+    alignContent: 'start',
+}));
+export const StyledHeadCell = withStyle(BaseStyledHeadCell, () => ({
+    // fontFamily: "'Lato', sans-serif",
+    fontWeight: 700,
+    color: '#28262e !important',
+    alignItems: 'center',
+    boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px',
+    borderTopColor: 'rgba(0, 0, 0, 0.12)',
+    borderRightColor: 'rgba(0, 0, 0, 0.12)',
+    borderBottomColor: 'rgba(0, 0, 0, 0.12)',
+    borderLeftColor: 'rgba(0, 0, 0, 0.12)',
+    alignSelf: 'start',
+}));
 
-    grid-template-columns: repeat(5, 1fr);
-
-    strong:last-child {
-        text-align: right;
-    }
-
-    strong {
-        font-size: 16px;
-        font-weight: 500;
-        color: #fff;
-    }
-
-    .pl5 {
-        padding-left: 10px;
-    }
-
-    .pl20 {
-        padding-left: 20px;
-    }
-`;
-
-export const Grid = styled.div`
-    border-radius: 8px;
-    margin: 5px 10px;
-    flex: auto;
-    overflow: auto;
-
-    > div + div {
-        margin-top: 2px;
-    }
-`;
+export const StyledBodyCell = withStyle(BaseStyledCell, () => ({
+    // fontFamily: "'Lato', sans-serif",
+    fontWeight: 400,
+    color: '#28262e !important',
+    alignSelf: 'center',
+    // cursor: 'pointer',
+}));

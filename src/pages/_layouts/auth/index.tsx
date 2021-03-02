@@ -6,8 +6,10 @@ import { Wrapper } from './styles';
 const AuthLayout: React.FC = ({ children }) => {
     return (
         <Wrapper>
-            <Header />
-            {children}
+            <div className="header">
+                <Header />
+            </div>
+            <div className="content">{children}</div>
         </Wrapper>
     );
 };

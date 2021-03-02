@@ -1,8 +1,7 @@
-import React, { useCallback, useRef, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { FaPlus, FaSearch } from 'react-icons/fa';
-import { FormHandles } from '@unform/core';
 import { toast } from 'react-toastify';
-import { Container, HeaderContainer, HeaderGrid, Grid, Content } from './styles';
+import { Container, HeaderContainer, Content, StyledTable, StyledHeadCell } from './styles';
 import IconButton from '../../components/Button/IconButton';
 import ProductRow from './ProductRow/index';
 import ModalProductProvider from './ModalProductProvider';
@@ -11,7 +10,7 @@ import Loading from '../../components/Loading';
 import ModalDeleteProduct from '../../components/Modal/DeleteModal';
 import Filter from '../../components/Filter';
 import Input from '../../components/Input/InputModal';
-import Select from '../../components/Select/MainSearchSelect';
+import Select from '../../components/Select';
 import { useAuth } from '../../hooks/Auth';
 
 export interface ProductData {
@@ -110,38 +109,35 @@ const Index: React.FC = () => {
                 ) : (
                     <>
                         <HeaderContainer>
-                            <IconButton
-                                // style={{ marginTop: 19 }}
-                                icon={FaPlus}
-                                title="Novo"
-                                background="#2e656a"
-                                action={toggleModal}
-                            />
-                            <IconButton
-                                // badge={badge}
-                                icon={FaSearch}
-                                background="#777777"
-                                justIcon
-                                action={handleFilter}
-                            />
+                            <IconButton icon={FaPlus} title="Novo" background="#2e656a" action={toggleModal} />
+                            <IconButton icon={FaSearch} background="#777777" justIcon action={handleFilter} />
                         </HeaderContainer>
-                        <HeaderGrid>
-                            <strong>Nome</strong>
-                            <strong>Valor</strong>
-                            <strong>Quantidade</strong>
-                            <strong>Categoria</strong>
-                            <strong>Ações</strong>
-                        </HeaderGrid>
-                        <Grid>
-                            {products.map((product: any) => (
-                                <ProductRow
-                                    key={product.id}
-                                    data={product}
-                                    handleDelete={toggleModalDelete}
-                                    handleEdit={handleEdit}
-                                />
-                            ))}
-                        </Grid>
+
+                        <div style={{ boxShadow: '0 0 5px rgba(0, 0 , 0, 0.05)' }}>
+                            <div
+                                style={{
+                                    width: '100%',
+                                    padding: '0px 10px',
+                                }}
+                            >
+                                <StyledTable $gridTemplateColumns="minmax(150px, auto) minmax(150px, auto) minmax(150px, auto) minmax(150px, auto) minmax(150px, auto)">
+                                    <StyledHeadCell>Nome</StyledHeadCell>
+                                    <StyledHeadCell>Valor</StyledHeadCell>
+                                    <StyledHeadCell>Quantidade</StyledHeadCell>
+                                    <StyledHeadCell>Categoria</StyledHeadCell>
+                                    <StyledHeadCell>Ações</StyledHeadCell>
+
+                                    {products.map((product: any) => (
+                                        <ProductRow
+                                            key={product.id}
+                                            data={product}
+                                            handleDelete={toggleModalDelete}
+                                            handleEdit={handleEdit}
+                                        />
+                                    ))}
+                                </StyledTable>
+                            </div>
+                        </div>
 
                         {modalOpen && (
                             <ModalProductProvider
@@ -173,13 +169,16 @@ const Index: React.FC = () => {
                 <div className="space">
                     <Select
                         name="category"
-                        placeholder="Categoria"
+                        fieldValue="value"
+                        fieldLabel="label"
+                        label="Categoria"
+                        className="react-select-container"
+                        defaultValue={{ value: 'Barbearia', label: 'Barbearia' }}
                         options={[
                             { value: 'Barbearia', label: 'Barbearia' },
                             { value: 'Tatuagem', label: 'Tatuagem' },
                             { value: 'BodyPiercing', label: 'Body Piercing' },
                         ]}
-                        defaultValue={{ value: 'Barbearia', label: 'Barbearia' }}
                     />
                 </div>
             </Filter>

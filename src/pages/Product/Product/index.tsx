@@ -4,14 +4,12 @@ import React from 'react';
 
 import ProductAction from '../ProductAction';
 import SellerInfo from '../SellerInfo';
-import Header from '../../../components/Header/ProviderAuthenticate';
 
 import { Container, Row, Panel, Column, Gallery, Section, Description } from './styles';
 
 const Product: React.FC = () => {
     return (
         <Container>
-            <Header />
             <Panel>
                 <Column>
                     <Gallery>
