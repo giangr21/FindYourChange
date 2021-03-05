@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { FaPlus, FaSearch } from 'react-icons/fa';
-import { FormHandles } from '@unform/core';
+import React, { useCallback, useEffect, useState } from 'react';
+import { FaPlus } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 import { Container, HeaderContainer, Content } from './styles';
@@ -18,7 +17,6 @@ const Index: React.FC = () => {
     const { user } = useAuth();
     const [modalOpen, setModalOpen] = useState(false);
     const [schedules, setSchedule] = useState([]);
-    const [modalViewOpen, setModalViewOpen] = useState(false);
     const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [idSchedule, setIdSchedule] = useState('');
@@ -49,10 +47,6 @@ const Index: React.FC = () => {
         }
     }, [isEdit]);
 
-    const toggleModalInfo = useCallback((): void => {
-        setModalViewOpen((prevState) => !prevState);
-    }, []);
-
     const toggleModalDelete = useCallback((id?: string): void => {
         if (id) {
             setIdSchedule(id);
@@ -76,11 +70,6 @@ const Index: React.FC = () => {
         setModalOpen((prevState) => !prevState);
         setIdSchedule(id);
         setIsEdit(true);
-    }, []);
-
-    const handleView = useCallback((id: string) => {
-        setModalViewOpen((prevState) => !prevState);
-        setIdSchedule(id);
     }, []);
 
     return (
@@ -120,7 +109,6 @@ const Index: React.FC = () => {
                                             data={schedule}
                                             handleDelete={toggleModalDelete}
                                             handleEdit={handleEdit}
-                                            handleView={handleView}
                                         />
                                     ))}
                                 </StyledTable>

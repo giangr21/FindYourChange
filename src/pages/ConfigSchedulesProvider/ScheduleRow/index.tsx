@@ -9,11 +9,10 @@ import { StyledBodyCell, MoreContainer } from '../../../components/Table/styles'
 interface ProviderRow {
     handleDelete: (id: string) => void;
     handleEdit: (id: string) => void;
-    handleView: (id: string) => void;
     data: any;
 }
 
-const ProviderRow: React.FC<ProviderRow> = ({ data, handleDelete, handleEdit, handleView }) => {
+const ProviderRow: React.FC<ProviderRow> = ({ data, handleDelete, handleEdit }) => {
     const deleteRow = useCallback(() => {
         handleDelete(data.id);
     }, [data.id, handleDelete]);
