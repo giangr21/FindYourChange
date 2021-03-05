@@ -1,12 +1,31 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { FaPlus, FaSearch } from 'react-icons/fa';
 import { FormHandles } from '@unform/core';
+import { withStyle } from 'baseui';
+import { Row as Rows, Col as Column } from '../../components/FlexBox/FlexBox';
 
 import Header from '../../components/Header/ProviderAuthenticate';
 import { Container, HeaderContainer, HeaderGrid, Grid } from './styles';
 import IconButton from '../../components/Button/IconButton';
 import ProviderRow from './ProviderRow/index';
 import ModalProvider from './ModalServiceProvider';
+import ProductCard from '../../components/ServiceCard';
+
+export const Col = withStyle(Column, () => ({
+    '@media only screen and (max-width: 767px)': {
+        marginBottom: '20px',
+
+        ':last-child': {
+            marginBottom: 0,
+        },
+    },
+}));
+
+const Row = withStyle(Rows, () => ({
+    '@media only screen and (min-width: 768px) and (max-width: 991px)': {
+        alignItems: 'center',
+    },
+}));
 
 const Index: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
@@ -18,6 +37,12 @@ const Index: React.FC = () => {
 
     const providers: any = [
         { id: '1', title: 'Corte de cabelo X', value: 'R$ 40,00', description: 'Corte de cabelo padrao' },
+        { id: '1', title: 'Corte de cabelo Y', value: 'R$ 50,00', description: 'Corte de cabelo moaicano' },
+        { id: '1', title: 'Corte de cabelo Y', value: 'R$ 50,00', description: 'Corte de cabelo moaicano' },
+        { id: '1', title: 'Corte de cabelo Y', value: 'R$ 50,00', description: 'Corte de cabelo moaicano' },
+        { id: '1', title: 'Corte de cabelo Y', value: 'R$ 50,00', description: 'Corte de cabelo moaicano' },
+        { id: '1', title: 'Corte de cabelo Y', value: 'R$ 50,00', description: 'Corte de cabelo moaicano' },
+        { id: '1', title: 'Corte de cabelo Y', value: 'R$ 50,00', description: 'Corte de cabelo moaicano' },
         { id: '1', title: 'Corte de cabelo Y', value: 'R$ 50,00', description: 'Corte de cabelo moaicano' },
     ];
 
@@ -75,7 +100,25 @@ const Index: React.FC = () => {
                         action={toggleModal}
                     />
                 </HeaderContainer>
-                <HeaderGrid>
+
+                <Row>
+                    {providers.map((item: any, index: number) => (
+                        <Col md={4} lg={3} sm={6} xs={12} key={index} style={{ margin: '15px 0' }}>
+                            <ProductCard
+                                title="a"
+                                weight="a"
+                                image="a"
+                                currency="a"
+                                price={5}
+                                salePrice={5}
+                                discountInPercent={5}
+                                data="a"
+                            />
+                        </Col>
+                    ))}
+                </Row>
+
+                {/* <HeaderGrid>
                     <strong>Titulo</strong>
                     <strong>Valor</strong>
                     <strong>Descrição</strong>
@@ -91,7 +134,7 @@ const Index: React.FC = () => {
                             handleView={handleView}
                         />
                     ))}
-                </Grid>
+                </Grid> */}
 
                 {modalOpen && <ModalProvider isOpen={modalOpen} setIsOpen={toggleModal} edit={isEdit} />}
             </Container>

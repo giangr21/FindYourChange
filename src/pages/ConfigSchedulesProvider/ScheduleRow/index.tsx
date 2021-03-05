@@ -2,9 +2,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useCallback } from 'react';
 import { BsCheckAll, BsX } from 'react-icons/bs';
-import { MdEdit, MdDeleteForever, MdRemoveRedEye } from 'react-icons/md';
+import { MdEdit, MdDeleteForever } from 'react-icons/md';
 
-import { Container, MoreContainer } from './styles';
+import { StyledBodyCell, MoreContainer } from '../../../components/Table/styles';
 
 interface ProviderRow {
     handleDelete: (id: string) => void;
@@ -22,23 +22,16 @@ const ProviderRow: React.FC<ProviderRow> = ({ data, handleDelete, handleEdit, ha
         handleEdit(data.id);
     }, [data.id, handleEdit]);
 
-    const viewRow = useCallback(() => {
-        handleView(data.id);
-    }, [data.id, handleView]);
-
     return (
-        <Container>
-            <small onClick={viewRow}>{data.dayOfWeek}</small>
-            <small onClick={viewRow}>{data.hourStart}</small>
-            <small onClick={viewRow}>{data.hourEnd}</small>
-            <small onClick={viewRow}>
+        <React.Fragment key={data.id}>
+            <StyledBodyCell>{data.dayOfWeek}</StyledBodyCell>
+            <StyledBodyCell>{data.hourStart}</StyledBodyCell>
+            <StyledBodyCell>{data.hourEnd}</StyledBodyCell>
+            <StyledBodyCell>
                 {data.active ? <BsCheckAll size={26} color="#00a57c" /> : <BsX size={26} color="#DE3B3B" />}
-            </small>
+            </StyledBodyCell>
 
             <MoreContainer>
-                <button onClick={viewRow} type="button">
-                    <MdRemoveRedEye color="#8E5BE8" size={20} />
-                </button>
                 <button onClick={editRow} type="button">
                     <MdEdit color="#ffa048" size={20} />
                 </button>
@@ -46,7 +39,7 @@ const ProviderRow: React.FC<ProviderRow> = ({ data, handleDelete, handleEdit, ha
                     <MdDeleteForever color="#DE3B3B" size={20} />
                 </button>
             </MoreContainer>
-        </Container>
+        </React.Fragment>
     );
 };
 

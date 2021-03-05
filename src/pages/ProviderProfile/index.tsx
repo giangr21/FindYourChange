@@ -34,9 +34,9 @@ const Profile: React.FC = () => {
         await api.get(`/provider/${user.id}`).then((response) => {
             setProfileInfo(response.data);
             setLoading(false);
-            setIsBarber(response.data.isBarber)
-            setIsTattoo(response.data.isTattoo)
-            setIsPiercing(response.data.isPiercing)
+            setIsBarber(response.data.isBarber);
+            setIsTattoo(response.data.isTattoo);
+            setIsPiercing(response.data.isPiercing);
         });
     }, [user.id]);
 
@@ -49,19 +49,19 @@ const Profile: React.FC = () => {
             try {
                 formRef.current?.setErrors({});
                 const schema = Yup.object().shape({
-                  oldPassword: Yup.string(),
-                  password: Yup.string().when('oldPassword', {
-                    is: (val) => !!val.length,
-                    then: Yup.string().required('Campo obrigatorio!!'),
-                    otherwise: Yup.string(),
-                  }),
-                  passwordConfirmation: Yup.string()
-                    .when('oldPassword', {
-                      is: (val) => !!val.length,
-                      then: Yup.string().required('Campo obrigatorio!!'),
-                      otherwise: Yup.string(),
-                    })
-                    .oneOf([Yup.ref('password'), undefined], 'Confirmaçao incorreta'),
+                    oldPassword: Yup.string(),
+                    password: Yup.string().when('oldPassword', {
+                        is: (val) => !!val.length,
+                        then: Yup.string().required('Campo obrigatorio!!'),
+                        otherwise: Yup.string(),
+                    }),
+                    passwordConfirmation: Yup.string()
+                        .when('oldPassword', {
+                            is: (val) => !!val.length,
+                            then: Yup.string().required('Campo obrigatorio!!'),
+                            otherwise: Yup.string(),
+                        })
+                        .oneOf([Yup.ref('password'), undefined], 'Confirmaçao incorreta'),
                 });
 
                 await schema.validate(data, {
@@ -85,12 +85,12 @@ const Profile: React.FC = () => {
                 await api.put('/provider', data);
 
                 updateUser({
-                   name: data.name,
-                   lastName: data.lastName,
-                   email: data.email,
-                   phone: data.phone,
-                   avatar: data.avatar,
-                   id: data.id,
+                    name: data.name,
+                    lastName: data.lastName,
+                    email: data.email,
+                    phone: data.phone,
+                    avatar: data.avatar,
+                    id: data.id,
                 });
 
                 toast.success('Perfil atualizado com sucesso!');
