@@ -101,44 +101,143 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                     abortEarly: false,
                 });
 
+                // Necessario escolher horarios
                 if (hourStart) {
                     scheduleData.hourStart = moment(hourStart).format('HH:mm');
                 } else {
                     return toast.error(`Necessario escolher uma hora inicial `);
                 }
 
+                // Necessario escolher horarios
                 if (hourLunchStart) {
                     scheduleData.hourLunchStart = moment(hourLunchStart).format('HH:mm');
                 } else {
                     return toast.error(`Necessario escolher uma hora inicial de almoco `);
                 }
 
+                // Necessario escolher horarios
                 if (hourEnd) {
                     scheduleData.hourEnd = moment(hourEnd).format('HH:mm');
                 } else {
                     return toast.error(`Necessario escolher uma hora final `);
                 }
 
+                // Necessario escolher horarios
                 if (hourLunchEnd) {
                     scheduleData.hourLunchEnd = moment(hourLunchEnd).format('HH:mm');
                 } else {
                     return toast.error(`Necessario escolher uma hora final de almoco `);
                 }
 
-                const isAvailable = await api.post('schedule/isDayOfWeekAvailable', {
-                    dayOfWeek: scheduleData.dayOfWeek,
-                    providerId: user.id,
-                });
+                console.log(scheduleData.hourStart);
+                console.log(scheduleData.hourLunchStart);
 
-                if (!isAvailable.data) {
-                    return toast.error(`Já existe um horario cadastrado nesse dia !!`);
+                if (
+                    moment(hourStart).format('YYYY-MM-DD HH:mm:ss ZZ') >
+                    moment(hourLunchStart).format('YYYY-MM-DD HH:mm:ss ZZ')
+                ) {
+                    return toast.error(`Horario Inicio Invalido!`);
                 }
+
+                if (
+                    moment(hourStart).format('YYYY-MM-DD HH:mm:ss ZZ') >
+                    moment(hourLunchEnd).format('YYYY-MM-DD HH:mm:ss ZZ')
+                ) {
+                    return toast.error(`Horario Inicio Invalido!`);
+                }
+
+                if (
+                    moment(hourStart).format('YYYY-MM-DD HH:mm:ss ZZ') >
+                    moment(hourEnd).format('YYYY-MM-DD HH:mm:ss ZZ')
+                ) {
+                    return toast.error(`Horario Inicio Invalido!`);
+                }
+
+                //
+
+                if (
+                    moment(hourLunchStart).format('YYYY-MM-DD HH:mm:ss ZZ') >
+                    moment(hourLunchEnd).format('YYYY-MM-DD HH:mm:ss ZZ')
+                ) {
+                    return toast.error(`Horario Inicio Almoco Invalida!`);
+                }
+
+                if (
+                    moment(hourLunchStart).format('YYYY-MM-DD HH:mm:ss ZZ') >
+                    moment(hourEnd).format('YYYY-MM-DD HH:mm:ss ZZ')
+                ) {
+                    return toast.error(`Horario Inicio Almoco Invalida!`);
+                }
+
+                if (
+                    moment(hourLunchStart).format('YYYY-MM-DD HH:mm:ss ZZ') <
+                    moment(hourStart).format('YYYY-MM-DD HH:mm:ss ZZ')
+                ) {
+                    return toast.error(`Horario Inicio Almoco Invalida!`);
+                }
+
+                //
+
+                if (
+                    moment(hourLunchEnd).format('YYYY-MM-DD HH:mm:ss ZZ') >
+                    moment(hourEnd).format('YYYY-MM-DD HH:mm:ss ZZ')
+                ) {
+                    return toast.error(`Horario Fim Almoco Invalida!`);
+                }
+
+                if (
+                    moment(hourLunchEnd).format('YYYY-MM-DD HH:mm:ss ZZ') <
+                    moment(hourLunchStart).format('YYYY-MM-DD HH:mm:ss ZZ')
+                ) {
+                    return toast.error(`Horario Fim Almoco Invalida!`);
+                }
+
+                if (
+                    moment(hourLunchEnd).format('YYYY-MM-DD HH:mm:ss ZZ') <
+                    moment(hourStart).format('YYYY-MM-DD HH:mm:ss ZZ')
+                ) {
+                    return toast.error(`Horario Fim Almoco Invalida!`);
+                }
+
+                //
+
+                if (
+                    moment(hourEnd).format('YYYY-MM-DD HH:mm:ss ZZ') <
+                    moment(hourStart).format('YYYY-MM-DD HH:mm:ss ZZ')
+                ) {
+                    return toast.error(`Horario Fim Invalida!`);
+                }
+
+                if (
+                    moment(hourEnd).format('YYYY-MM-DD HH:mm:ss ZZ') <
+                    moment(hourLunchStart).format('YYYY-MM-DD HH:mm:ss ZZ')
+                ) {
+                    return toast.error(`Horario Fim Invalida!`);
+                }
+
+                if (
+                    moment(hourEnd).format('YYYY-MM-DD HH:mm:ss ZZ') <
+                    moment(hourLunchEnd).format('YYYY-MM-DD HH:mm:ss ZZ')
+                ) {
+                    return toast.error(`Horario Fim Invalida!`);
+                }
+
+                scheduleData.provider = user.id;
 
                 if (edit) {
                     scheduleData.id = scheduleId;
                     await api.put('schedule', scheduleData);
                 } else {
-                    scheduleData.provider = user.id;
+                    const isAvailable = await api.post('schedule/isDayOfWeekAvailable', {
+                        dayOfWeek: scheduleData.dayOfWeek,
+                        providerId: user.id,
+                        isEdit: !!edit,
+                    });
+
+                    if (!isAvailable.data) {
+                        return toast.error(`Já existe um horario cadastrado nesse dia`);
+                    }
+
                     await api.post('schedule', scheduleData);
                 }
 
@@ -151,6 +250,13 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                     formRef.current?.setErrors(errors);
                     return;
                 }
+
+                if (err.response && err.response.data && err.response.data.message) {
+                    return toast.error(err.response.data.message.message, {
+                        autoClose: 5000,
+                    });
+                }
+
                 toast.error(`Houve uma falha ao ${edit ? 'editar' : 'inserir'} os dados`);
             }
         },
