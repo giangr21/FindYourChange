@@ -6,7 +6,6 @@ import { BaseProvider } from 'baseui';
 import { ToastContainer } from 'react-toastify';
 
 import AppProvider from './hooks';
-import './components/Scrollbar/scrollbar.css';
 
 import Routes from './routes';
 import GlobalStyle from './styles/global';

@@ -1,5 +1,3 @@
-import { Form as Unform } from '@unform/web';
-import { shade } from 'polished';
 import styled from 'styled-components';
 
 export const Header = styled.header`

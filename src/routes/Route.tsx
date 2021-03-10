@@ -5,40 +5,57 @@ import DefaultLayout from '../pages/_layouts/default';
 import AuthLayout from '../pages/_layouts/auth';
 
 interface RouteProps extends ReactDOMRouteProps {
-    isPrivate?: boolean;
+    privatePages?: boolean;
     signPages?: boolean;
     component: React.ComponentType;
 }
 
-const Route: React.FC<RouteProps> = ({ isPrivate = false, signPages = false, component: Component }, ...rest) => {
-    const { user } = useAuth();
+const Route: React.FC<RouteProps> = (
+    { privatePages = false, signPages = false, component: Component },
+    ...rest
+) => {
+    const { isAuthenticated } = useAuth();
     let Layout: any;
+    let shouldRedirect = false;
+
+    if (!isAuthenticated) {
+        if (privatePages) {
+            shouldRedirect = true;
+        }
+    }
+
     if (signPages) {
         Layout = null;
+    } else if (privatePages && isAuthenticated) {
+        Layout = AuthLayout;
     } else {
-        Layout = user ? AuthLayout : DefaultLayout;
+        Layout = DefaultLayout;
     }
 
     return (
         <ReactDOMRoute
             {...rest}
-            render={({ location }) => {
-                if (Layout) {
-                    return isPrivate === !!user ? (
-                        <Layout>
-                            <Component />
-                        </Layout>
-                    ) : (
+            render={() => {
+                if (shouldRedirect) {
+                    return (
                         <Layout>
                             <Redirect
                                 to={{
-                                    pathname: isPrivate ? '/' : '/home',
-                                    state: { from: location },
+                                    pathname: '/',
                                 }}
                             />
                         </Layout>
                     );
                 }
+
+                if (Layout) {
+                    return (
+                        <Layout>
+                            <Component />
+                        </Layout>
+                    );
+                }
+
                 return <Component />;
             }}
         />
