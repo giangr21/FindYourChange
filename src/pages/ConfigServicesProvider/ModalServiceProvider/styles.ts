@@ -60,6 +60,38 @@ export const Container = styled.div`
     display: flex;
     flex-wrap: nowrap;
     width: 100%;
+
+    .img {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        label {
+            width: 38px;
+            height: 38px;
+            background: #ff9000;
+            border-radius: 50%;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            input {
+                display: none;
+            }
+
+            svg {
+                width: 20px;
+                height: 20px;
+                color: #312e38;
+            }
+        }
+    }
 `;
 
 export const Column = styled.div`
