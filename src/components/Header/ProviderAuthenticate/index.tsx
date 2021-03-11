@@ -17,7 +17,7 @@ const Index: React.FC = () => {
                     <Link to="/marketplace">MarketPlace</Link>
                     <Link to="/configProductsProvider">Produtos</Link>
                     <Link to="/service">Navegar</Link>
-                    <Link to="/clerk">Atendentes</Link>
+                    <Link to="/configClerksProvider">Atendentes</Link>
                 </div>
                 <Profile>
                     <img src="https://pickaface.net/gallery/avatar/20140501_004912_2217_comm.png" alt="asd" />

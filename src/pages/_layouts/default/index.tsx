@@ -6,6 +6,8 @@ import Footer from '../../../components/Footer';
 import { Content } from './styles';
 
 const DefaultLayout: React.FC = ({ children }) => {
+    // const { isAuthenticated } = useAuth();
+
     return (
         <Content>
             <Header />

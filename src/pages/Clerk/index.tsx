@@ -2,13 +2,14 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { FaPlus } from 'react-icons/fa';
 
 import { toast } from 'react-toastify';
-import { Container, HeaderContainer, HeaderGrid, Grid } from './styles';
+import { Container, HeaderContainer } from './styles';
 import IconButton from '../../components/Button/IconButton';
 import ModalDeleteClerk from '../../components/Modal/DeleteModal';
 import ClerkRow from './ClerkRow/index';
 import ModalClerkProvider from './ModalClerkProvider';
 import api from '../../services/api';
 import Loading from '../../components/Loading';
+import { StyledHeadCell, StyledTable } from '../../components/Table/styles';
 
 export interface ClerkData {
     id: string;
@@ -91,22 +92,30 @@ const Index: React.FC = () => {
                             action={toggleModal}
                         />
                     </HeaderContainer>
-                    <HeaderGrid>
-                        <strong>Atendente</strong>
-                        <strong>E-mail</strong>
-                        <strong>Telefone</strong>
-                        <strong>Ações</strong>
-                    </HeaderGrid>
-                    <Grid>
-                        {clerks.map((clerk: any) => (
-                            <ClerkRow
-                                key={clerk.id}
-                                data={clerk}
-                                handleDelete={toggleModalDelete}
-                                handleEdit={handleEdit}
-                            />
-                        ))}
-                    </Grid>
+                    <div style={{ boxShadow: '0 0 5px rgba(0, 0 , 0, 0.05)' }}>
+                        <div
+                            style={{
+                                width: '100%',
+                                padding: '0px 10px',
+                            }}
+                        >
+                            <StyledTable $gridTemplateColumns="minmax(150px, auto) minmax(150px, auto) minmax(150px, auto) minmax(150px, auto)">
+                                <StyledHeadCell>Atendente</StyledHeadCell>
+                                <StyledHeadCell>E-mail</StyledHeadCell>
+                                <StyledHeadCell>Telefone</StyledHeadCell>
+                                <StyledHeadCell>Ações</StyledHeadCell>
+
+                                {clerks.map((clerk: any) => (
+                                    <ClerkRow
+                                        key={clerk.id}
+                                        data={clerk}
+                                        handleDelete={toggleModalDelete}
+                                        handleEdit={handleEdit}
+                                    />
+                                ))}
+                            </StyledTable>
+                        </div>
+                    </div>
 
                     {modalOpen && (
                         <ModalClerkProvider
