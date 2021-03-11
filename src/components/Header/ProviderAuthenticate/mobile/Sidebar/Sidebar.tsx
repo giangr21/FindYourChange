@@ -13,62 +13,52 @@ import { withRouter } from 'react-router-dom';
 // import { PencilIcon } from 'assets/icons/PencilIcon';
 import { SidebarWrapper, NavLink, MenuWrapper, Svg, LogoutBtn } from './Sidebar.style';
 import { useAuth } from '../../../../../hooks/Auth';
+import { LogoutIcon } from '../Icons/LogoutIcon';
+import { DashboardIcon } from '../Icons/DashboardIcon';
 
 const sidebarMenus = [
     {
         name: 'Dashboard',
+        path: '/home',
+        exact: false,
+        icon: <DashboardIcon />,
+    },
+    {
+        name: 'Horarios',
+        path: '/configSchedulesProvider',
+        exact: false,
+        icon: <DashboardIcon />,
+    },
+    {
+        name: 'Serviços',
+        path: '/configServicesProvider',
+        exact: false,
+        icon: <DashboardIcon />,
+    },
+    {
+        name: 'Produtos',
+        path: '/configProductsProvider',
+        exact: false,
+        icon: <DashboardIcon />,
+    },
+    {
+        name: 'Atendentes',
+        path: '/configClerksProvider',
+        exact: false,
+        icon: <DashboardIcon />,
+    },
+    {
+        name: 'MarketPlace',
+        path: '/marketplace',
+        exact: false,
+        icon: <DashboardIcon />,
+    },
+    {
+        name: 'Home Sistema',
         path: '/',
         exact: true,
-        // icon: <DashboardIcon />,
+        icon: <DashboardIcon />,
     },
-    // {
-    //     name: 'Produtos',
-    //     path: PRODUCTS,
-    //     exact: false,
-    //     icon: <ProductIcon />,
-    // },
-    // {
-    //     name: 'Categorias',
-    //     path: CATEGORY,
-    //     exact: false,
-    //     icon: <SidebarCategoryIcon />,
-    // },
-    // {
-    //     name: 'Pedidos',
-    //     path: ORDERS,
-    //     exact: false,
-    //     icon: <OrderIcon />,
-    // },
-    // {
-    //     name: 'Banners',
-    //     path: BANNERS,
-    //     exact: false,
-    //     icon: <PencilIcon />,
-    // },
-    // {
-    //     name: 'Clientes',
-    //     path: CLIENTS,
-    //     exact: false,
-    //     icon: <BookIcon />,
-    // },
-    // {
-    //     name: 'Funcionários',
-    //     path: STAFF_MEMBERS,
-    //     exact: false,
-    //     icon: <CustomerIcon />,
-    // },
-    // {
-    //     name: 'Cupons',
-    //     path: COUPONS,
-    //     exact: false,
-    //     icon: <CouponIcon />,
-    // },
-    // {
-    //     name: 'Configurações ',
-    //     path: SETTINGS,
-    //     exact: false,
-    //     icon: <SettingIcon />,
-    // },
 ];
 
 export default withRouter(function Sidebar({ refs, style, onMenuItemClick }: any) {
@@ -83,7 +73,7 @@ export default withRouter(function Sidebar({ refs, style, onMenuItemClick }: any
                         key={index}
                         exact={menu.exact}
                         activeStyle={{
-                            color: '#00C58D',
+                            color: '#ff9000',
                             backgroundColor: '#f7f7f7',
                             borderRadius: '50px 0 0 50px',
                         }}
@@ -96,7 +86,9 @@ export default withRouter(function Sidebar({ refs, style, onMenuItemClick }: any
             </MenuWrapper>
 
             <LogoutBtn onClick={signOut}>
-                <Svg>{/* <LogoutIcon /> */}</Svg>
+                <Svg>
+                    <LogoutIcon />
+                </Svg>
                 Sair
             </LogoutBtn>
         </SidebarWrapper>

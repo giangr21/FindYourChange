@@ -10,7 +10,6 @@ export const SidebarWrapper = styled('div', ({ $theme }): any => ({
     flexDirection: 'column',
 
     '@media only screen and (max-width: 767px)': {
-        // width: 'calc(100% - 65px)',
         width: 'auto',
         padding: '0',
         height: '100%',
@@ -28,15 +27,16 @@ export const MenuWrapper = styled('div', ({ $theme }) => ({
 
     '@media only screen and (max-width: 767px)': {
         padding: '20px 0',
-        // alignItems: 'flex-start',
     },
 }));
 
 export const NavLink = styled(NavLinks, ({ $theme }) => ({
-    // ...$theme.typography.fontBold16,
+    fontSize: '18px',
+    fontWeight: 500,
+    lineHeight: 1.5,
     width: 'calc(100% - 30px)',
     outline: '0',
-    // color: $theme.colors.textDark,
+    color: 'rgb(40, 38, 46)',
     display: 'flex',
     alignItems: 'center',
     padding: '20px 55px 20px 30px',
@@ -50,7 +50,7 @@ export const NavLink = styled(NavLinks, ({ $theme }) => ({
 
     '&.active': {
         color: $theme.colors.primary,
-        // backgroundColor: $theme.colors.backgroundF7,
+        backgroundColor: '#f7f7f7',
         borderRadius: '50px 0 0 50px',
     },
 }));
@@ -62,10 +62,12 @@ export const Svg = styled('span', ({ $theme }) => ({
     alignItems: 'center',
 }));
 export const LogoutBtn = styled('button', ({ $theme }) => ({
-    // ...$theme.typography.fontBold16,
+    fontSize: '18px',
+    fontWeight: 500,
+    lineHeight: 1.5,
     width: 'calc(100% - 30px)',
     outline: '0',
-    // color: $theme.colors.textDark,
+    color: 'rgb(40, 38, 46)',
     backgroundColor: 'transparent',
     border: '0',
     display: 'flex',

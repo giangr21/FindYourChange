@@ -5,7 +5,7 @@ export const TopbarWrapper = styled('div', () => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#fff',
+    backgroundColor: '#28262e',
     padding: '30px 60px',
     boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.06)',
     position: 'relative',

@@ -4,9 +4,10 @@ import logo from '../../../../assets/logoPrincipalMobile.png';
 
 import { DrawerWrapper, DrawerIcon, CloseButton, TopbarWrapper } from './styles';
 import Logo from '../../../Logo/logo';
-import { MenuIcon } from './MenuIcon';
-import { ArrowLeftRound } from './ArrowLeftRound';
+import { MenuIcon } from './Icons/MenuIcon';
+import { ArrowLeftRound } from './Icons/ArrowLeftRound';
 import Sidebar from './Sidebar/Sidebar';
+import NavUserImg from '../../NavUserImg';
 
 const MobileHeader: React.FC = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -71,6 +72,8 @@ const MobileHeader: React.FC = () => {
                     <Sidebar onMenuItemClick={() => setIsDrawerOpen(false)} />
                 </Drawer>
             </DrawerWrapper>
+
+            <NavUserImg />
         </TopbarWrapper>
     );
 };

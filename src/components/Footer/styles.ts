@@ -3,13 +3,34 @@ import styled from 'styled-components';
 export const Container = styled.div`
     height: 140px;
     width: 100%;
+    padding: 10px 10px;
+`;
+
+export const Up = styled.div`
+    margin: auto 0;
+
+    a {
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        color: black;
+        margin: 0px 20px;
+    }
+`;
+
+export const Down = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto 0;
 `;
 
 export const Content = styled.div`
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 20px;
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 1200px;
+    height: 100%;
 `;
 
 export const Left = styled.div`
@@ -17,7 +38,15 @@ export const Left = styled.div`
     align-items: center;
 
     p {
-        font-size: 14px;
+        font-size: 12px;
+        font-weight: 500;
+        color: black;
+    }
+
+    img {
+        height: 70px;
+        margin-right: 20px;
+        margin-left: 10px;
     }
 `;
 

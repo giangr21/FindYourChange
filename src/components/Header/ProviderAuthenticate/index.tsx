@@ -11,13 +11,13 @@ const Index: React.FC = () => {
         <Header>
             <HeaderContent>
                 <div className="links">
-                    <Link to="/home">Agendamentos</Link>
+                    <Link to="/home">Dashboard</Link>
                     <Link to="/configSchedulesProvider">Horarios</Link>
                     <Link to="/configServicesProvider">Serviços</Link>
-                    <Link to="/marketplace">MarketPlace</Link>
                     <Link to="/configProductsProvider">Produtos</Link>
-                    <Link to="/service">Navegar</Link>
                     <Link to="/configClerksProvider">Atendentes</Link>
+                    <Link to="/marketplace">MarketPlace</Link>
+                    <Link to="/">Home Sistema</Link>
                 </div>
                 <Profile>
                     <img src="https://pickaface.net/gallery/avatar/20140501_004912_2217_comm.png" alt="asd" />
