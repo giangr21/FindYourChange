@@ -24,15 +24,15 @@ export const Col = styled(Cols)`
 
 export const Container = styled.div`
     > header {
-        height: 144px;
+        height: 140px;
+        width: 100%;
         background: #28262e;
         display: flex;
         align-items: center;
         div {
             width: 100%;
-            max-width: 1120px;
-            margin: 0 auto;
             svg {
+                margin-left: 40px;
                 color: #999591;
                 width: 24px;
                 height: 24px;

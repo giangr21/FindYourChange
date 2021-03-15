@@ -102,9 +102,13 @@ export const Container = styled.div`
             padding: 12px;
             width: 100%;
             border: 1px solid #c8c8c8;
-            color: #232129 !important;
+            color: #232129;
             font-size: 16px;
         }
+    }
+
+    span {
+        width: 100%;
     }
 `;
 

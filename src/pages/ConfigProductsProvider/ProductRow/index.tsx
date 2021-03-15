@@ -2,9 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useCallback } from 'react';
 import { MdEdit, MdDeleteForever } from 'react-icons/md';
-import { StyledBodyCell } from '../styles';
-
-import { MoreContainer } from './styles';
+import { StyledBodyCell, MoreContainer } from '../../../components/Table/styles';
 
 interface ProductRow {
     handleDelete: (id: string) => void;

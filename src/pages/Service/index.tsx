@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import { FormHandles } from '@unform/core';
 
@@ -24,13 +24,25 @@ import provider2 from '../../assets/provider2.png';
 import provider3 from '../../assets/provider3.png';
 import provider4 from '../../assets/provider4.png';
 import provider5 from '../../assets/provider5.png';
+import api from '../../services/api';
 
 const Index: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
     const secondFormRef = useRef<FormHandles>(null);
     const history = useHistory();
+    const [providers, setProviders] = useState({});
 
     useEffect(() => {
+        // eslint-disable-next-line func-names
+        const getProviders = async function (): Promise<void> {
+            await api.post('/provider', {}).then((result) => {
+                console.log(result);
+                setProviders(result.data);
+            });
+        };
+
+        getProviders();
+
         setTimeout(() => {
             formRef.current?.setFieldValue('neightborhoods', 'false');
             formRef.current?.setFieldValue('services', 'false');

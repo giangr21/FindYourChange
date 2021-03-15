@@ -47,7 +47,6 @@ const ModalClerkProvider: React.FC<ModalProps> = ({ setIsOpen, reloadClerk, cler
         await api
             .get(`/clerk/${clerkId}`)
             .then(async (response) => {
-                console.log(response.data);
                 if (response.data.image) {
                     const imgNamePhotoData = await api.get(`storage/base64/min/${response.data.image}`);
                     setImgPhotoMin(imgNamePhotoData.data);

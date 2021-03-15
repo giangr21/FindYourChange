@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { FaPlus, FaSearch } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { Container, HeaderContainer, Content, StyledTable, StyledHeadCell } from './styles';
+import { Container, HeaderContainer, Content } from './styles';
 import IconButton from '../../components/Button/IconButton';
 import ProductRow from './ProductRow/index';
 import ModalProductProvider from './ModalProductProvider';
@@ -12,6 +12,7 @@ import Filter from '../../components/Filter';
 import Input from '../../components/Input/InputModal';
 import Select from '../../components/Select';
 import { useAuth } from '../../hooks/Auth';
+import { StyledHeadCell, StyledTable } from '../../components/Table/styles';
 
 export interface ProductData {
     id: string;
@@ -40,7 +41,6 @@ const Index: React.FC = () => {
         await api
             .post('/products/provider', filterProduct)
             .then((response) => {
-                console.log(response);
                 const { data } = response;
                 setProducts(data);
                 setLoading(false);

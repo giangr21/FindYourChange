@@ -7,10 +7,7 @@ import ptBR from 'date-fns/locale/pt-BR';
 
 import DayPicker, { DayModifiers } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
-import { Link } from 'react-router-dom';
 import { Container, Content, Schedule, NextAppointment, Section, Appointment, Calendar } from './styles';
-import Header from '../../components/Header/ProviderAuthenticate';
-import HeaderMobile from '../../components/Header/ProviderAuthenticate/mobile/mobile-header';
 import { useAuth } from '../../hooks/Auth';
 import api from '../../services/api';
 
@@ -29,13 +26,11 @@ interface Appointment {
     };
 }
 
-const HomePageAuthenticate: React.FC = () => {
+const HomePageProvider: React.FC = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [monthAvailability, setMonthAvailability] = useState<MonthAvailability[]>([]);
     const [appointments, setAppointments] = useState<Appointment[]>([]);
-
-    const { signOut, user } = useAuth();
 
     const handleDateChange = useCallback((day: Date, modifiers: DayModifiers) => {
         if (modifiers.available && !modifiers.disabled) {
@@ -136,8 +131,6 @@ const HomePageAuthenticate: React.FC = () => {
 
     return (
         <Container>
-            <HeaderMobile className="sticky home desktop" />
-
             <Content>
                 <Schedule>
                     <h1>Horários Agendados</h1>
@@ -232,4 +225,4 @@ const HomePageAuthenticate: React.FC = () => {
     );
 };
 
-export default HomePageAuthenticate;
+export default HomePageProvider;
