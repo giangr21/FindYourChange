@@ -91,11 +91,12 @@ const Profile: React.FC = () => {
                     phone: data.phone,
                     avatar: data.avatar,
                     id: data.id,
+                    isProvider: user.isProvider,
                 });
 
                 toast.success('Perfil atualizado com sucesso!');
 
-                history.push('/home');
+                history.push('/homeProvider');
             } catch (err) {
                 if (err instanceof Yup.ValidationError) {
                     const errors = getValidationErrors(err);
@@ -186,7 +187,7 @@ const Profile: React.FC = () => {
                 <>
                     <header>
                         <div>
-                            <Link to="/home">
+                            <Link to="/homeProvider">
                                 <FiArrowLeft />
                             </Link>
                         </div>

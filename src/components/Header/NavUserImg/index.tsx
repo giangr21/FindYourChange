@@ -5,16 +5,18 @@ import imgUser from '../../../assets/user.jpg';
 import { useAuth } from '../../../hooks/Auth';
 
 const NavUserImg: React.FC = () => {
-    const { signOut } = useAuth();
+    const { signOut, user } = useAuth();
 
     return (
         <>
             <Popover
                 content={({ close }: any) => (
                     <UserDropdowItem>
-                        <NavLink to="/home" exact={false} onClick={close}>
-                            Dashboard
-                        </NavLink>
+                        {user.isProvider && (
+                            <NavLink to="/homeProvider" exact={false} onClick={close}>
+                                Dashboard
+                            </NavLink>
+                        )}
                         {/* <NavLink to={SETTINGS} exact={false} onClick={close}>
                 Configurações
             </NavLink> */}

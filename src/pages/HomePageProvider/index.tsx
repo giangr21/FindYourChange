@@ -26,13 +26,11 @@ interface Appointment {
     };
 }
 
-const HomePageAuthenticate: React.FC = () => {
+const HomePageProvider: React.FC = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [monthAvailability, setMonthAvailability] = useState<MonthAvailability[]>([]);
     const [appointments, setAppointments] = useState<Appointment[]>([]);
-
-    const { signOut, user } = useAuth();
 
     const handleDateChange = useCallback((day: Date, modifiers: DayModifiers) => {
         if (modifiers.available && !modifiers.disabled) {
@@ -227,4 +225,4 @@ const HomePageAuthenticate: React.FC = () => {
     );
 };
 
-export default HomePageAuthenticate;
+export default HomePageProvider;

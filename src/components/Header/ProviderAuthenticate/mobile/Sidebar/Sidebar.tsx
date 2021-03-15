@@ -19,7 +19,7 @@ import { DashboardIcon } from '../Icons/DashboardIcon';
 const sidebarMenus = [
     {
         name: 'Dashboard',
-        path: '/home',
+        path: '/homeProvider',
         exact: false,
         icon: <DashboardIcon />,
     },

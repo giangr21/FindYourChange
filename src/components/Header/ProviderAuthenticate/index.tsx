@@ -11,7 +11,7 @@ const Index: React.FC = () => {
         <Header>
             <HeaderContent>
                 <div className="links">
-                    <Link to="/home">Dashboard</Link>
+                    <Link to="/homeProvider">Dashboard</Link>
                     <Link to="/configSchedulesProvider">Horarios</Link>
                     <Link to="/configServicesProvider">Serviços</Link>
                     <Link to="/configProductsProvider">Produtos</Link>

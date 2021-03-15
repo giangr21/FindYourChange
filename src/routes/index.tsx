@@ -6,7 +6,7 @@ import Index from '../pages/Index';
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
 import ForgotPassword from '../pages/ForgotPassword';
-import HomePageAuthenticate from '../pages/HomePageAuthenticate';
+import HomePageProvider from '../pages/HomePageProvider';
 import ConfigServicesProvider from '../pages/ConfigServicesProvider';
 import ConfigSchedulesProvider from '../pages/ConfigSchedulesProvider';
 import ConfigProductsProvider from '../pages/ConfigProductsProvider';
@@ -29,14 +29,14 @@ const Routes: React.FC = () => (
         <Route path="/signUp" signPages component={SignUp} />
         <Route path="/forgotPassword" signPages component={ForgotPassword} />
 
+        <Route path="/homeProvider" privatePages component={HomePageProvider} />
+        <Route path="/providerProfile" privatePages component={ProviderProfile} />
         <Route path="/marketplace" privatePages component={Marketplace} />
         <Route path="/Product" privatePages component={Product} />
-        <Route path="/home" privatePages component={HomePageAuthenticate} />
         <Route path="/configServicesProvider" privatePages component={ConfigServicesProvider} />
         <Route path="/configSchedulesProvider" privatePages component={ConfigSchedulesProvider} />
         <Route path="/configProductsProvider" privatePages component={ConfigProductsProvider} />
         <Route path="/configClerksProvider" privatePages component={Clerk} />
-        <Route path="/providerProfile" privatePages component={ProviderProfile} />
     </Switch>
 );
 

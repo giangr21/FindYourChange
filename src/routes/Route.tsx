@@ -14,7 +14,7 @@ const Route: React.FC<RouteProps> = (
     { privatePages = false, signPages = false, component: Component },
     ...rest
 ) => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
     let Layout: any;
     let shouldRedirect = false;
 
@@ -22,6 +22,8 @@ const Route: React.FC<RouteProps> = (
         if (privatePages) {
             shouldRedirect = true;
         }
+    } else if (privatePages && !user.isProvider) {
+        shouldRedirect = true;
     }
 
     if (signPages) {

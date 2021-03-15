@@ -8,6 +8,7 @@ interface User {
     phone: string;
     email: string;
     avatar: string;
+    isProvider: boolean;
     lastName: string;
 }
 
@@ -60,7 +61,8 @@ const AuthProvider: React.FC = ({ children }) => {
         });
         const { token, user } = response.data;
         localStorage.setItem('@FYC:token', token);
-        localStorage.setItem('@FYC:user', JSON.stringify(user));
+        localStorage.setItem('@FYC:user', JSON.stringify({ ...user, isProvider }));
+        user.isProvider = isProvider;
 
         setData({ token, user });
         setIsAuthenticated(true);

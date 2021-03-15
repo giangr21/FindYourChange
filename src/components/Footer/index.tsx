@@ -11,9 +11,9 @@ const Index: React.FC = () => {
             <Content>
                 <Up>
                     <Link to="/home">Inicio</Link>
-                    <Link to="/home">Navegar</Link>
-                    <Link to="/home">Sobre Nos</Link>
-                    <Link to="/home">Dashboard</Link>
+                    <Link to="/service">Navegar</Link>
+                    <Link to="/aboutUs">Sobre Nos</Link>
+                    <Link to="/homeProvider">Dashboard</Link>
                 </Up>
                 <div
                     style={{
