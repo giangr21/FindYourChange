@@ -140,6 +140,7 @@ export const Product = styled.div`
     }
 
     .content {
+        height: 110px;
         display: flex;
         flex-direction: column;
         align-items: center;

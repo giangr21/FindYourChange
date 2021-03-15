@@ -120,7 +120,7 @@ const SignUp: React.FC = () => {
                 data.isBarber = isBarber;
                 data.isTattoo = isTattoo;
                 data.isPiercing = isPiercing;
-                await api.post('provider', data);
+                await api.post('provider/add', data);
                 history.push('/');
             } catch (err) {
                 if (err instanceof Yup.ValidationError) {

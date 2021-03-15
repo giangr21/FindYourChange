@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { FaArrowRight, FaSearch } from 'react-icons/fa';
 import { FormHandles } from '@unform/core';
@@ -44,16 +45,20 @@ const Index: React.FC = () => {
     const getProducts = useCallback(async (filterProduct: any) => {
         await api
             .post('/products/provider', filterProduct)
-            .then((response) => {
-                console.log(response);
+            .then(async (response) => {
                 const { data } = response;
-                const auxProducts = data.map(async (product: any) => {
+                const auxProducts: any = [];
+
+                for (let index = 0; index < data.length; index++) {
+                    const product = data[index];
                     if (product.productImage) {
                         const { data: imgBase64 } = await api.get(`storage/base64/min/${product.productImage}`);
-                        return { ...product, productImage: imgBase64 };
+                        auxProducts.push({ ...product, productImage: imgBase64 });
+                    } else {
+                        auxProducts.push({ ...product });
                     }
-                    return { ...product };
-                });
+                }
+
                 setProducts(auxProducts);
                 setLoading(false);
             })
@@ -64,7 +69,6 @@ const Index: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        console.log('filter: ', filter);
         getProducts(filter);
     }, []);
 
@@ -96,8 +100,8 @@ const Index: React.FC = () => {
                                         id: 'false',
                                         label: 'Todas',
                                     },
-                                    { id: 'true', label: 'Curitiba' },
-                                    { id: 'true', label: 'Sao Paulo' },
+                                    { id: 's', label: 'Curitiba' },
+                                    { id: 'd', label: 'Sao Paulo' },
                                     { id: 'true', label: 'Santa Catarina' },
                                 ]}
                                 onChange={() => {}}
@@ -124,9 +128,9 @@ const Index: React.FC = () => {
                                         id: 'false',
                                         label: 'Todas',
                                     },
-                                    { id: 'true', label: 'Tatuagem' },
-                                    { id: 'true', label: 'Piercing' },
-                                    { id: 'true', label: 'Barbearia' },
+                                    { id: 'd', label: 'Tatuagem' },
+                                    { id: 's', label: 'Piercing' },
+                                    { id: 'a', label: 'Barbearia' },
                                 ]}
                                 onChange={() => {}}
                             />
@@ -153,9 +157,9 @@ const Index: React.FC = () => {
                                         label: '$50 - $100',
                                     },
                                     { id: 'true', label: '$100 - $150' },
-                                    { id: 'true', label: '$150 - $200' },
-                                    { id: 'true', label: '$200 - $250' },
-                                    { id: 'true', label: '$250 +' },
+                                    { id: 'as', label: '$150 - $200' },
+                                    { id: 'ds', label: '$200 - $250' },
+                                    { id: 's', label: '$250 +' },
                                 ]}
                                 onChange={() => {}}
                             />
@@ -178,123 +182,27 @@ const Index: React.FC = () => {
                         />
                     </HeaderResults>
                     <ContentResults>
-                        {!loading && (
-                            <Product>
-                                {products.map((product: any) => {
-                                    return (
-                                        <div key={product.id}>
-                                            {console.log('productImage: ', product)}
-                                            <img src={`data:image/png;base64,${product.productImage}`} alt="" />
-                                            <div className="content">
-                                                <span>{product.name}</span>
-                                                <p>RS {product.value}</p>
-                                                <IconButton
-                                                    icon={FaArrowRight}
-                                                    title="Informações"
-                                                    background="#ff9000"
-                                                    action={() => {
-                                                        history.push('/product');
-                                                    }}
-                                                />
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </Product>
-                        )}
-                        {/* <Product>
-                            <img
-                                src="https://i5.walmartimages.com/asr/233fdac6-b334-4437-bc6f-394c4d43ceb7_1.65cf4aeab9e90eb6ace5da655ff834a6.jpeg?odnHeight=200&odnWidth=200&odnBg=ffffff"
-                                alt=""
-                            />
-                            <div className="content">
-                                <span>Navalha Profissional</span>
-                                <p>RS 200,00</p>
-                                <IconButton
-                                    icon={FaArrowRight}
-                                    title="Informações"
-                                    background="#ff9000"
-                                    action={() => {
-                                        history.push('/product');
-                                    }}
-                                />
-                            </div>
-                        </Product>
-                        <Product>
-                            <img
-                                src="https://i5.walmartimages.com/asr/fcf5365c-8e75-4b1f-9227-a43769c9ea25_1.9b72de87da47ac00436c57d62c177944.jpeg?odnHeight=200&odnWidth=200&odnBg=ffffff"
-                                alt=""
-                            />
-                            <div className="content">
-                                <span>Tesoura Profissional</span>
-                                <p>RS 150,00</p>
-                                <IconButton
-                                    icon={FaArrowRight}
-                                    title="Informações"
-                                    background="#ff9000"
-                                    action={() => {
-                                        history.push('/product');
-                                    }}
-                                />
-                            </div>
-                        </Product> */}
+                        {!loading &&
+                            products.map((product) => (
+                                <Product key={product.id}>
+                                    {product.productImage && (
+                                        <img src={`data:image/png;base64,${product.productImage}`} alt="" />
+                                    )}
+                                    <div className="content">
+                                        <span>{product.name}</span>
+                                        <p>RS {product.value}</p>
+                                        <IconButton
+                                            icon={FaArrowRight}
+                                            title="Informações"
+                                            background="#ff9000"
+                                            action={() => {
+                                                history.push('/product');
+                                            }}
+                                        />
+                                    </div>
+                                </Product>
+                            ))}
                     </ContentResults>
-                    {/* <ContentResults>
-                        <Product>
-                            <img
-                                src="https://i5.walmartimages.com/asr/46fefe2c-d05a-452e-b42a-6bf104ac1879_1.039b3f6b4c5fd6f95dacac714795fbfb.jpeg?odnHeight=200&odnWidth=200&odnBg=ffffff"
-                                alt=""
-                            />
-                            <div className="content">
-                                <span>Tinta de tatuagem</span>
-                                <p>RS 100,00</p>
-                                <IconButton
-                                    icon={FaArrowRight}
-                                    title="Informações"
-                                    background="#ff9000"
-                                    action={() => {
-                                        history.push('/product');
-                                    }}
-                                />
-                            </div>
-                        </Product>
-                        <Product>
-                            <img
-                                src="https://i5.walmartimages.com/asr/08e317bc-aaac-4c3a-870e-3bfb9ba7ff74_1.fc2fe3afcdfbdff4b52e63acaadd0bbc.jpeg?odnHeight=200&odnWidth=200&odnBg=ffffff"
-                                alt=""
-                            />
-                            <div className="content">
-                                <span>Maquina tatuagem</span>
-                                <p>RS 200,00</p>
-                                <IconButton
-                                    icon={FaArrowRight}
-                                    title="Informações"
-                                    background="#ff9000"
-                                    action={() => {
-                                        history.push('/product');
-                                    }}
-                                />
-                            </div>
-                        </Product>
-                        <Product>
-                            <img
-                                src="https://i5.walmartimages.com/asr/123679ac-4218-42f4-949e-40347a130010_1.211af7c19623454c8612434026f7d205.png?odnHeight=200&odnWidth=200&odnBg=ffffff"
-                                alt=""
-                            />
-                            <div className="content">
-                                <span>Pomada Cicatrizante</span>
-                                <p>RS 150,00</p>
-                                <IconButton
-                                    icon={FaArrowRight}
-                                    title="Informações"
-                                    background="#ff9000"
-                                    action={() => {
-                                        history.push('/product');
-                                    }}
-                                />
-                            </div>
-                        </Product>
-                    </ContentResults> */}
                 </Results>
             </Content>
         </Container>
