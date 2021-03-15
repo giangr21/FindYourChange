@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { FaArrowRight, FaSearch } from 'react-icons/fa';
 import { FormHandles } from '@unform/core';
-
+import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import IconButton from '../../components/Button/IconButton';
 import Select from '../../components/Select/MainSearchSelect';
@@ -17,8 +17,19 @@ import {
 } from './styles';
 import Radio from '../../components/Radio';
 import Input from '../../components/Input/MainSearchInput';
+import { useAuth } from '../../hooks/Auth';
+import { ProductData } from '../ConfigProductsProvider';
+import api from '../../services/api';
+import Loading from '../../components/Loading';
 
 const Index: React.FC = () => {
+    const { user } = useAuth();
+    const [loading, setLoading] = useState(true);
+    const [products, setProducts] = useState<ProductData[]>([]);
+    const [filter, setFilter] = useState<any>({
+        providerId: user.id,
+    });
+    const [showFilter, setShowFilter] = useState(false);
     const formRef = useRef<FormHandles>(null);
     const secondFormRef = useRef<FormHandles>(null);
     const history = useHistory();
@@ -28,6 +39,33 @@ const Index: React.FC = () => {
             formRef.current?.setFieldValue('neightborhoods', 'false');
             formRef.current?.setFieldValue('services', 'false');
         }, 500);
+    }, []);
+
+    const getProducts = useCallback(async (filterProduct: any) => {
+        await api
+            .post('/products/provider', filterProduct)
+            .then((response) => {
+                console.log(response);
+                const { data } = response;
+                const auxProducts = data.map(async (product: any) => {
+                    if (product.productImage) {
+                        const { data: imgBase64 } = await api.get(`storage/base64/min/${product.productImage}`);
+                        return { ...product, productImage: imgBase64 };
+                    }
+                    return { ...product };
+                });
+                setProducts(auxProducts);
+                setLoading(false);
+            })
+            .catch((e) => {
+                toast.error('Houve um erro ao buscar dados!');
+                console.log(e);
+            });
+    }, []);
+
+    useEffect(() => {
+        console.log('filter: ', filter);
+        getProducts(filter);
     }, []);
 
     return (
@@ -140,25 +178,31 @@ const Index: React.FC = () => {
                         />
                     </HeaderResults>
                     <ContentResults>
-                        <Product>
-                            <img
-                                src="https://i5.walmartimages.com/asr/9650a728-117b-4284-897f-dd5da584025d.91b0730564580778cfedd02ae8074d33.jpeg?odnHeight=200&odnWidth=200&odnBg=ffffff"
-                                alt=""
-                            />
-                            <div className="content">
-                                <span>Maquina de cortar cabelo</span>
-                                <p>RS 100,00</p>
-                                <IconButton
-                                    icon={FaArrowRight}
-                                    title="Informações"
-                                    background="#ff9000"
-                                    action={() => {
-                                        history.push('/product');
-                                    }}
-                                />
-                            </div>
-                        </Product>
-                        <Product>
+                        {!loading && (
+                            <Product>
+                                {products.map((product: any) => {
+                                    return (
+                                        <div key={product.id}>
+                                            {console.log('productImage: ', product)}
+                                            <img src={`data:image/png;base64,${product.productImage}`} alt="" />
+                                            <div className="content">
+                                                <span>{product.name}</span>
+                                                <p>RS {product.value}</p>
+                                                <IconButton
+                                                    icon={FaArrowRight}
+                                                    title="Informações"
+                                                    background="#ff9000"
+                                                    action={() => {
+                                                        history.push('/product');
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </Product>
+                        )}
+                        {/* <Product>
                             <img
                                 src="https://i5.walmartimages.com/asr/233fdac6-b334-4437-bc6f-394c4d43ceb7_1.65cf4aeab9e90eb6ace5da655ff834a6.jpeg?odnHeight=200&odnWidth=200&odnBg=ffffff"
                                 alt=""
@@ -193,9 +237,9 @@ const Index: React.FC = () => {
                                     }}
                                 />
                             </div>
-                        </Product>
+                        </Product> */}
                     </ContentResults>
-                    <ContentResults>
+                    {/* <ContentResults>
                         <Product>
                             <img
                                 src="https://i5.walmartimages.com/asr/46fefe2c-d05a-452e-b42a-6bf104ac1879_1.039b3f6b4c5fd6f95dacac714795fbfb.jpeg?odnHeight=200&odnWidth=200&odnBg=ffffff"
@@ -250,7 +294,7 @@ const Index: React.FC = () => {
                                 />
                             </div>
                         </Product>
-                    </ContentResults>
+                    </ContentResults> */}
                 </Results>
             </Content>
         </Container>

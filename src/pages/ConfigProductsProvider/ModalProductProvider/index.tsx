@@ -85,7 +85,7 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
 
             const data = new FormData();
             data.append('image', e.target.files[0]);
-
+            console.log(e.target.files[0]);
             const maxAllowedSize = 30 * 1024 * 1024;
             if (e.target.files[0].size > maxAllowedSize) {
                 toast.error('Falha ao inserir imagem, limite de tamanho excedido');
@@ -109,6 +109,7 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
     const submitProduct = useCallback(
         async (data: ProductData) => {
             try {
+                console.log(data);
                 formRef.current?.setErrors({});
                 const schema = Yup.object().shape({
                     name: Yup.string().required('Nome obrigatório').max(60, 'Digite um nome válido'),
