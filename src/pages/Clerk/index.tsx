@@ -10,6 +10,7 @@ import ModalClerkProvider from './ModalClerkProvider';
 import api from '../../services/api';
 import Loading from '../../components/Loading';
 import { StyledHeadCell, StyledTable } from '../../components/Table/styles';
+import { useAuth } from '../../hooks/Auth';
 
 export interface ClerkData {
     id: string;
@@ -19,6 +20,7 @@ export interface ClerkData {
 }
 
 const Index: React.FC = () => {
+    const { user } = useAuth();
     const [loading, setLoading] = useState(true);
     const [clerks, setClerks] = useState<ClerkData[]>([]);
     const [modalOpen, setModalOpen] = useState(false);
@@ -28,7 +30,7 @@ const Index: React.FC = () => {
 
     const getClerks = useCallback(async () => {
         await api
-            .get('/clerk')
+            .get(`/clerk/provider/${user.id}`)
             .then((response) => {
                 const { data } = response;
                 setClerks(data);

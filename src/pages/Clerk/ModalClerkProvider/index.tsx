@@ -17,6 +17,7 @@ import api from '../../../services/api';
 import getValidationErrors from '../../../util/getValidationErrors';
 import InputMask from '../../../components/Input/InputModalMask';
 import Loading from '../../../components/Loading';
+import { useAuth } from '../../../hooks/Auth';
 
 interface ModalProps {
     isOpen: boolean;
@@ -32,9 +33,11 @@ interface ClerkData {
     email: string;
     phone: string;
     image: string;
+    provider: string;
 }
 
 const ModalClerkProvider: React.FC<ModalProps> = ({ setIsOpen, reloadClerk, clerkId, isOpen, edit }) => {
+    const { user } = useAuth();
     const formRef = useRef<FormHandles>(null);
     const [loading, setLoading] = useState(true);
     const [clerkData, setClerkData] = useState<any>(null);
@@ -121,6 +124,8 @@ const ModalClerkProvider: React.FC<ModalProps> = ({ setIsOpen, reloadClerk, cler
                 if (clerkAvatar) {
                     data.image = clerkAvatar;
                 }
+
+                data.provider = user.id;
 
                 if (edit) {
                     data.id = clerkId;
