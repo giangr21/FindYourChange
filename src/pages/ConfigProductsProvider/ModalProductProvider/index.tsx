@@ -211,8 +211,8 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                                         fieldValue="value"
                                         fieldLabel="label"
                                         label="Categoria"
+                                        placeholder=""
                                         className="react-select-container"
-                                        defaultValue={{ value: 'Barbearia', label: 'Barbearia' }}
                                         options={[
                                             { value: 'Barbearia', label: 'Barbearia' },
                                             { value: 'Tatuagem', label: 'Tatuagem' },

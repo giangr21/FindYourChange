@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useRef, useCallback, useState, useEffect, ChangeEvent } from 'react';
 import { FormHandles } from '@unform/core';
-import { FiCamera, FiCheckSquare } from 'react-icons/fi';
+import { FiCamera, FiCheckSquare, FiDelete } from 'react-icons/fi';
 import { FaWindowClose } from 'react-icons/fa';
 
 import { BsCheckAll } from 'react-icons/bs';
@@ -24,6 +24,7 @@ interface ModalProps {
     setIsOpen: () => void;
     edit: boolean;
     reloadService: () => void;
+    handleDelete: () => void;
     serviceId: string;
 }
 interface ServiceData {
@@ -34,11 +35,18 @@ interface ServiceData {
     disccount: number;
     category: string;
     time: string;
-    serviceImage: string;
+    image: string;
     provider: string;
 }
 
-const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadService, serviceId, isOpen, edit }) => {
+const ModalServicesProvider: React.FC<ModalProps> = ({
+    setIsOpen,
+    reloadService,
+    handleDelete,
+    serviceId,
+    isOpen,
+    edit,
+}) => {
     const { user } = useAuth();
     const formRef = useRef<FormHandles>(null);
     const [loading, setLoading] = useState(true);
@@ -50,6 +58,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadService,
         await api
             .get(`/services/${serviceId}`)
             .then((response) => {
+                console.log(response.data);
                 if (response.data.category === 'Barbearia') {
                     response.data.category = { value: 'Barbearia', label: 'Barbearia' };
                 }
@@ -123,14 +132,16 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadService,
                 });
 
                 if (serviceImg) {
-                    data.serviceImage = serviceImg;
+                    data.image = serviceImg;
                 }
+
+                data.provider = user.id;
 
                 if (edit) {
                     data.id = serviceId;
                     await api.put('services', data);
                 } else {
-                    await api.post('services', data);
+                    await api.post('services/add', data);
                 }
 
                 toast.success(`Serviço ${edit ? 'editado' : 'criado'} com sucesso!`);
@@ -145,11 +156,11 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadService,
                 toast.error(`Houve uma falha ao ${edit ? 'editar' : 'inserir'} os dados`);
             }
         },
-        [serviceImg, edit, setIsOpen, reloadService, serviceId, user.id],
+        [serviceImg, user.id, edit, setIsOpen, reloadService, serviceId],
     );
 
     return (
-        <Modal width="420px" height="530px" isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Modal width="420px" height="630px" isOpen={isOpen} setIsOpen={setIsOpen}>
             <Form ref={formRef} initialData={serviceData} onSubmit={submitService}>
                 <Header>
                     {edit ? <h1>Editar Serviço</h1> : <h1>Novo Serviço</h1>}
@@ -188,8 +199,8 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadService,
                                         fieldValue="value"
                                         fieldLabel="label"
                                         label="Categoria"
+                                        placeholder=""
                                         className="react-select-container"
-                                        defaultValue={{ value: 'Barbearia', label: 'Barbearia' }}
                                         options={[
                                             { value: 'Barbearia', label: 'Barbearia' },
                                             { value: 'Tatuagem', label: 'Tatuagem' },
@@ -261,6 +272,15 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadService,
                             display: 'flex',
                         }}
                     >
+                        {edit && (
+                            <IconButton
+                                type="button"
+                                icon={FiDelete}
+                                title="Excluir"
+                                background="rgb(222, 59, 59)"
+                                action={handleDelete}
+                            />
+                        )}
                         <IconButton
                             type="button"
                             icon={FiCheckSquare}

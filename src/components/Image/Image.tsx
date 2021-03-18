@@ -26,7 +26,7 @@ export default function Image({
         <Img
             draggable={false}
             style={style}
-            src={url}
+            src={`data:image/png;base64,${url}`}
             alt={alt}
             loader={<Placeholder />}
             unloader={<Placeholder />}

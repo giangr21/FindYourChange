@@ -1,18 +1,20 @@
+/* eslint-disable no-await-in-loop */
 import React, { useCallback, useState, useEffect } from 'react';
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaSearch } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { withStyle } from 'baseui';
 import { Row as Rows, Col as Column } from '../../components/FlexBox/FlexBox';
 
-import { Container, HeaderContainer, HeaderGrid, Grid } from './styles';
+import { Container, HeaderContainer, Content } from './styles';
 import IconButton from '../../components/Button/IconButton';
-import ProviderRow from './ProviderRow/index';
 import ModalServiceProvider from './ModalServiceProvider';
 import ModalDeleteService from '../../components/Modal/DeleteModal';
-import ProductCard from '../../components/ServiceCard';
+import ServiceCard from '../../components/ServiceCard';
 import api from '../../services/api';
 import { useAuth } from '../../hooks/Auth';
 import Loading from '../../components/Loading';
+import Filter from '../../components/Filter';
+import Input from '../../components/Input/InputModal';
 
 export interface ServiceData {
     id?: string;
@@ -24,21 +26,21 @@ export interface ServiceData {
     time: string;
 }
 
-// export const Col = withStyle(Column, () => ({
-//     '@media only screen and (max-width: 767px)': {
-//         marginBottom: '20px',
+export const Col = withStyle(Column, () => ({
+    '@media only screen and (max-width: 767px)': {
+        marginBottom: '20px',
 
-//         ':last-child': {
-//             marginBottom: 0,
-//         },
-//     },
-// }));
+        ':last-child': {
+            marginBottom: 0,
+        },
+    },
+}));
 
-// const Row = withStyle(Rows, () => ({
-//     '@media only screen and (min-width: 768px) and (max-width: 991px)': {
-//         alignItems: 'center',
-//     },
-// }));
+const Row = withStyle(Rows, () => ({
+    '@media only screen and (min-width: 768px) and (max-width: 991px)': {
+        alignItems: 'center',
+    },
+}));
 
 const Index: React.FC = () => {
     const [loading, setLoading] = useState(true);
@@ -48,23 +50,42 @@ const Index: React.FC = () => {
     const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [idService, setIdService] = useState('');
+    const [filter, setFilter] = useState<any>({
+        providerId: user.id,
+    });
+    const [showFilter, setShowFilter] = useState(false);
 
-    const getServices = useCallback(async () => {
+    const getServices = useCallback(async (filterProduct: any) => {
         await api
-            .get(`/services`)
-            .then((response) => {
+            .post('services', filterProduct)
+            .then(async (response) => {
                 const { data } = response;
-                setServices(data);
+
+                const auxServices: any = [];
+
+                for (let index = 0; index < data.length; index++) {
+                    const service = data[index];
+                    if (service.image) {
+                        const { data: imgBase64 } = await api.get(`storage/base64/min/${service.image}`);
+                        auxServices.push({ ...service, image: imgBase64 });
+                    } else {
+                        auxServices.push({ ...service });
+                    }
+                }
+
+                console.log(data);
+
+                setServices(auxServices);
                 setLoading(false);
             })
             .catch((e) => {
                 toast.error('Houve um erro ao buscar dados!');
                 console.log(e);
             });
-    }, [user.id]);
+    }, []);
 
     useEffect(() => {
-        getServices();
+        getServices(filter);
     }, []);
 
     const toggleModal = useCallback((): void => {
@@ -89,6 +110,7 @@ const Index: React.FC = () => {
             setServices(filterServices);
             toast.success('Serviço apagado com sucesso!');
             setModalDeleteOpen(false);
+            setModalOpen(false);
         } catch (err) {
             toast.error('Houve um erro ao apagar o serviço!');
         }
@@ -100,76 +122,75 @@ const Index: React.FC = () => {
         setIsEdit(true);
     }, []);
 
+    const handleFilter = useCallback(() => {
+        setShowFilter((prevState) => !prevState);
+    }, []);
+
+    const submitFilter = useCallback(
+        (searchFilter: any) => {
+            searchFilter.providerId = user.id;
+            setFilter(searchFilter);
+            getServices(searchFilter);
+        },
+        [getServices, user.id],
+    );
+
     return (
-        <>
-            {loading ? (
-                <Loading />
-            ) : (
-                <Container>
-                    <HeaderContainer>
-                        <IconButton
-                            // style={{ marginTop: 19 }}
-                            icon={FaPlus}
-                            title="Novo"
-                            background="#2e656a"
-                            action={toggleModal}
-                        />
-                    </HeaderContainer>
-
-                    {/* <Row>
-                        {services.map((item: any, index: number) => (
-                            <Col md={4} lg={3} sm={6} xs={12} key={index} style={{ margin: '15px 0' }}>
-                                <ProductCard
-                                    title="a"
-                                    weight="a"
-                                    image="a"
-                                    currency="a"
-                                    price={5}
-                                    salePrice={5}
-                                    discountInPercent={5}
-                                    data="a"
-                                />
-                            </Col>
-                        ))}
-                    </Row> */}
-
-                    <HeaderGrid>
-                        <strong>Titulo</strong>
-                        <strong>Valor</strong>
-                        <strong>Descrição</strong>
-                        <strong>Ações</strong>
-                    </HeaderGrid>
-                    <Grid>
-                        {services.map((service: any) => (
-                            <ProviderRow
-                                key={service.id}
-                                data={service}
-                                handleDelete={toggleModalDelete}
-                                handleEdit={handleEdit}
+        <Container>
+            <Content>
+                {loading ? (
+                    <Loading />
+                ) : (
+                    <>
+                        <HeaderContainer>
+                            <IconButton
+                                // style={{ marginTop: 19 }}
+                                icon={FaPlus}
+                                title="Novo"
+                                background="#2e656a"
+                                action={toggleModal}
                             />
-                        ))}
-                    </Grid>
+                            <IconButton icon={FaSearch} background="#777777" justIcon action={handleFilter} />
+                        </HeaderContainer>
 
-                    {modalOpen && (
-                        <ModalServiceProvider
-                            reloadService={getServices}
-                            serviceId={idService}
-                            isOpen={modalOpen}
-                            setIsOpen={toggleModal}
-                            edit={isEdit}
-                        />
-                    )}
+                        <Row>
+                            {services.map((service: any) => (
+                                <Col md={4} lg={3} sm={6} xs={12} key={service.id} style={{ margin: '15px 0' }}>
+                                    <ServiceCard handleEdit={handleEdit} serviceData={service} />
+                                </Col>
+                            ))}
+                        </Row>
 
-                    {modalDeleteOpen && (
-                        <ModalDeleteService
-                            isOpen={modalDeleteOpen}
-                            setIsOpen={toggleModalDelete}
-                            handleConfirm={handleDelete}
-                        />
-                    )}
-                </Container>
-            )}
-        </>
+                        {modalOpen && (
+                            <ModalServiceProvider
+                                reloadService={() => getServices(filter)}
+                                serviceId={idService}
+                                isOpen={modalOpen}
+                                setIsOpen={toggleModal}
+                                edit={isEdit}
+                                handleDelete={toggleModalDelete}
+                            />
+                        )}
+
+                        {modalDeleteOpen && (
+                            <ModalDeleteService
+                                isOpen={modalDeleteOpen}
+                                setIsOpen={toggleModalDelete}
+                                handleConfirm={handleDelete}
+                            />
+                        )}
+                    </>
+                )}
+            </Content>
+            <Filter showFilter={showFilter} submitFilter={submitFilter}>
+                <div className="space">
+                    <Input name="name" placeholder="Nome" />
+                </div>
+                <div className="space">
+                    <Input name="value" placeholder="Preco" />
+                </div>
+            </Filter>
+        </Container>
     );
 };
 

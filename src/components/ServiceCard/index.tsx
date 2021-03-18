@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react/jsx-curly-brace-presence */
+import React, { useCallback } from 'react';
 import {
     ProductCardWrapper,
     ProductImageWrapper,
@@ -7,55 +8,67 @@ import {
     ProductTitle,
     ProductWeight,
     ProductMeta,
-    OrderID,
     ProductPriceWrapper,
     ProductPrice,
     DiscountedPrice,
+    SaleTag,
+    DiscountPercent,
 } from './styles';
 
-type ProductCardProps = {
+interface Service {
+    category: string;
+    description: string;
+    disccount: string;
+    id: string;
+    image: string;
+    time: string;
     title: string;
-    image: any;
-    weight?: string;
-    currency?: string;
-    description?: string;
-    price: number;
-    salePrice?: number;
-    orderId?: number;
-    discountInPercent?: number;
-    data: any;
+    value: string;
+}
+
+type ProductCardProps = {
+    serviceData: Service;
+    handleEdit: (id: string) => void;
 };
 
-const ProductCard: React.FC<ProductCardProps> = ({
-    title,
-    image,
-    weight,
-    price,
-    salePrice,
-    discountInPercent,
-    currency,
-    data,
-    orderId,
-    ...props
-}) => {
+const ServiceCard: React.FC<ProductCardProps> = ({ serviceData, handleEdit }) => {
     return (
         <>
-            <ProductCardWrapper {...props} className="product-card">
+            <ProductCardWrapper onClick={() => handleEdit(serviceData.id)} className="product-card">
                 <ProductImageWrapper>
-                    <Image url={image} className="product-image" />
+                    <Image url={serviceData.image} className="product-image" />
+                    {serviceData.disccount !== '' && serviceData.disccount !== '0' && (
+                        <>
+                            <SaleTag>Promoção</SaleTag>
+                            <DiscountPercent>{serviceData.disccount}% Off</DiscountPercent>
+                        </>
+                    )}
                 </ProductImageWrapper>
                 <ProductInfo>
-                    <ProductTitle>{title}</ProductTitle>
-                    <ProductWeight>{weight}</ProductWeight>
+                    <ProductTitle>{serviceData.title}</ProductTitle>
+                    <ProductWeight>{serviceData.description}</ProductWeight>
                     <ProductMeta>
                         <ProductPriceWrapper>
                             <ProductPrice>
-                                {currency}
-                                {salePrice && salePrice !== 0 ? salePrice : price}
+                                {serviceData.disccount !== '' && serviceData.disccount !== '0'
+                                    ? Intl.NumberFormat('pt-BR', {
+                                          style: 'currency',
+                                          currency: 'BRL',
+                                      }).format(Number(serviceData.value))
+                                    : Intl.NumberFormat('pt-BR', {
+                                          style: 'currency',
+                                          currency: 'BRL',
+                                      }).format(Number(serviceData.value))}
                             </ProductPrice>
+                            {serviceData.disccount !== '' && serviceData.disccount !== '0' && (
+                                <DiscountedPrice>
+                                    {Intl.NumberFormat('pt-BR', {
+                                        style: 'currency',
+                                        currency: 'BRL',
+                                    }).format(Number(serviceData.value))}
+                                </DiscountedPrice>
+                            )}
                         </ProductPriceWrapper>
-
-                        <OrderID>{orderId}</OrderID>
                     </ProductMeta>
                 </ProductInfo>
             </ProductCardWrapper>
@@ -63,4 +76,4 @@ const ProductCard: React.FC<ProductCardProps> = ({
     );
 };
 
-export default ProductCard;
+export default ServiceCard;

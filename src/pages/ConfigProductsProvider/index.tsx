@@ -185,41 +185,5 @@ const Index: React.FC = () => {
         </Container>
     );
 };
-//     return (
-//         <>
-//             <Container>
-//                 <HeaderContainer>
-//                     <IconButton
-//                         // style={{ marginTop: 19 }}
-//                         icon={FaPlus}
-//                         title="Novo"
-//                         background="#2e656a"
-//                         action={toggleModal}
-//                     />
-//                 </HeaderContainer>
-//                 <HeaderGrid>
-//                     <strong>Nome</strong>
-//                     <strong>Valor</strong>
-//                     <strong>Quantidade</strong>
-//                     <strong>Categoria</strong>
-//                     <strong>Ações</strong>
-//                 </HeaderGrid>
-//                 <Grid>
-//                     {products.map((product: any) => (
-//                         <ProductRow
-//                             key={product.id}
-//                             data={product}
-//                             handleDelete={toggleModalDelete}
-//                             handleEdit={handleEdit}
-//                             handleView={handleView}
-//                         />
-//                     ))}
-//                 </Grid>
-
-//                 {modalOpen && <ModalProductProvider isOpen={modalOpen} setIsOpen={toggleModal} edit={isEdit} />}
-//             </Container>
-//         </>
-//     );
-// };
 
 export default Index;
