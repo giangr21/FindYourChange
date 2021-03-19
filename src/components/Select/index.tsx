@@ -69,7 +69,7 @@ const Select: React.FC<Props> = ({
             }),
             control: (base: any) => ({
                 ...base,
-                border: '1px solid #ff9000',
+                // border: '1px solid #ff9000',
                 borderRadius: '10px',
                 marginRight: '0px',
                 padding: '5px 0px',

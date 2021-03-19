@@ -18,6 +18,7 @@ import api from '../../../services/api';
 import getValidationErrors from '../../../util/getValidationErrors';
 import Loading from '../../../components/Loading';
 import { useAuth } from '../../../hooks/Auth';
+import { useMedia } from '../../../util/use-media';
 
 interface ModalProps {
     isOpen: boolean;
@@ -47,27 +48,37 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
     isOpen,
     edit,
 }) => {
+    const mobile = useMedia('(max-width: 760px)');
     const { user } = useAuth();
     const formRef = useRef<FormHandles>(null);
     const [loading, setLoading] = useState(true);
     const [serviceData, setServiceData] = useState<any>(null);
     const [statusImgLogo, setStatusImgLogo] = useState<any>(null);
+    const [imgPhotoMin, setImgPhotoMin] = useState<any>(null);
     const [serviceImg, setServiceImg] = useState<string | null>(null);
+    const [changeImg, setChangeImg] = useState(false);
 
     const getService = useCallback(async (): Promise<void> => {
         await api
             .get(`/services/${serviceId}`)
-            .then((response) => {
-                console.log(response.data);
+            .then(async (response) => {
                 if (response.data.category === 'Barbearia') {
                     response.data.category = { value: 'Barbearia', label: 'Barbearia' };
                 }
+
                 if (response.data.category === 'Tatuagem') {
                     response.data.category = { value: 'Tatuagem', label: 'Tatuagem' };
                 }
+
                 if (response.data.category === 'BodyPiercing') {
                     response.data.category = { value: 'BodyPiercing', label: 'Body Piercing' };
                 }
+
+                if (response.data.image) {
+                    const imgNamePhotoData = await api.get(`storage/base64/min/${response.data.image}`);
+                    setImgPhotoMin(imgNamePhotoData.data);
+                }
+
                 setServiceData(response.data);
                 setLoading(false);
             })
@@ -159,8 +170,21 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
         [serviceImg, user.id, edit, setIsOpen, reloadService, serviceId],
     );
 
+    const clickImg = useCallback(async (imgName: string) => {
+        await api.get(`storage/base64/${imgName}`).then((response) => {
+            const w = window.open('about:blank');
+            const image = new Image();
+            image.src = `data:image/png;base64,${response.data}`;
+            setTimeout(function () {
+                if (w) {
+                    w.document.write(image.outerHTML);
+                }
+            }, 0);
+        });
+    }, []);
+
     return (
-        <Modal width="420px" height="630px" isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Modal width={mobile ? '100%' : '420px'} height="680px" isOpen={isOpen} setIsOpen={setIsOpen}>
             <Form ref={formRef} initialData={serviceData} onSubmit={submitService}>
                 <Header>
                     {edit ? <h1>Editar Serviço</h1> : <h1>Novo Serviço</h1>}
@@ -168,7 +192,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
                 </Header>
                 <Content>
                     {loading ? (
-                        <Loading heightLoading="25vh" />
+                        <Loading heightLoading="45vh" />
                     ) : (
                         <>
                             <Container>
@@ -242,26 +266,80 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
                                     <Input name="time" placeholder="Tempo" />
                                 </div>
                             </Container>
-                            <Container>
-                                <div className="img">
-                                    Selecione uma imagem
-                                    {statusImgLogo === null && (
-                                        <label htmlFor="serviceImg">
-                                            <FiCamera />
-                                            <input
-                                                accept=".jpg, .jpeg, .png"
-                                                onChange={handleLogoChange}
-                                                type="file"
-                                                id="serviceImg"
+                            {(!edit || changeImg || !serviceData.image) && (
+                                <Container>
+                                    <div className="img">
+                                        Foto Serviço:
+                                        {statusImgLogo === null && (
+                                            <label htmlFor="serviceImg">
+                                                <FiCamera />
+                                                <input
+                                                    accept=".jpg, .jpeg, .png"
+                                                    onChange={handleLogoChange}
+                                                    type="file"
+                                                    id="serviceImg"
+                                                />
+                                            </label>
+                                        )}
+                                        {statusImgLogo === true && <span>Carregando...</span>}
+                                        {statusImgLogo === false && (
+                                            <BsCheckAll
+                                                className="check"
+                                                style={{
+                                                    marginLeft: '15px',
+                                                }}
+                                                size={25}
+                                                color="#2e656a"
                                             />
-                                        </label>
-                                    )}
-                                    {statusImgLogo === true && <span>Carregando...</span>}
-                                    {statusImgLogo === false && (
-                                        <BsCheckAll className="check" size={25} color="#2e656a" />
-                                    )}
+                                        )}
+                                    </div>
+                                </Container>
+                            )}
+                            {edit && serviceData.image && !changeImg && (
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        margin: '15px 0px',
+                                        cursor: 'pointer',
+                                    }}
+                                    onClick={() => clickImg(serviceData.image)}
+                                >
+                                    Preview Imagem:{' '}
+                                    <img
+                                        style={{
+                                            marginLeft: '10px',
+                                            width: '56px',
+                                            height: '56px',
+                                            borderRadius: '50%',
+                                            borderColor: '#ff9000',
+                                        }}
+                                        src={`data:image/png;base64,${imgPhotoMin}`}
+                                        onClick={() => clickImg(serviceData.image)}
+                                        alt=""
+                                    />
                                 </div>
-                            </Container>
+                            )}
+                            {edit && !changeImg && serviceData.image && (
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <IconButton
+                                        type="button"
+                                        icon={FiCamera}
+                                        title="Alterar Imagem"
+                                        background="#2e656a"
+                                        action={() => setChangeImg(true)}
+                                    />
+                                </div>
+                            )}
                         </>
                     )}
                 </Content>

@@ -18,6 +18,7 @@ import getValidationErrors from '../../../util/getValidationErrors';
 import InputMask from '../../../components/Input/InputModalMask';
 import Loading from '../../../components/Loading';
 import { useAuth } from '../../../hooks/Auth';
+import { useMedia } from '../../../util/use-media';
 
 interface ModalProps {
     isOpen: boolean;
@@ -37,6 +38,7 @@ interface ClerkData {
 }
 
 const ModalClerkProvider: React.FC<ModalProps> = ({ setIsOpen, reloadClerk, clerkId, isOpen, edit }) => {
+    const mobile = useMedia('(max-width: 760px)');
     const { user } = useAuth();
     const formRef = useRef<FormHandles>(null);
     const [loading, setLoading] = useState(true);
@@ -163,7 +165,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({ setIsOpen, reloadClerk, cler
     }, []);
 
     return (
-        <Modal width="420px" height="460px" isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Modal width={mobile ? '100%' : '420px'} height="460px" isOpen={isOpen} setIsOpen={setIsOpen}>
             <Form ref={formRef} initialData={clerkData} onSubmit={submitClerk}>
                 <Header>
                     {edit ? <h1>Editar Atendente</h1> : <h1>Novo Atendente</h1>}

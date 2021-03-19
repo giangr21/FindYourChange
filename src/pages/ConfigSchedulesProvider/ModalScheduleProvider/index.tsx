@@ -17,6 +17,7 @@ import getValidationErrors from '../../../util/getValidationErrors';
 import Select from '../../../components/Select';
 import { useAuth } from '../../../hooks/Auth';
 import Loading from '../../../components/Loading';
+import { useMedia } from '../../../util/use-media';
 
 interface ModalProps {
     isOpen: boolean;
@@ -27,6 +28,7 @@ interface ModalProps {
 }
 
 const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule, isOpen, edit, scheduleId }) => {
+    const mobile = useMedia('(max-width: 760px)');
     const { user } = useAuth();
     const [loading, setLoading] = useState(true);
     const [initialScheduleData, setInitialScheduleData] = useState<any>(null);
@@ -264,7 +266,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
     );
 
     return (
-        <Modal width="420px" height="620px" isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Modal width={mobile ? '100%' : '420px'} height="620px" isOpen={isOpen} setIsOpen={setIsOpen}>
             <Form ref={formRef} initialData={initialScheduleData} onSubmit={submitSchedule}>
                 <Header>
                     {edit ? <h1>Editar Turno</h1> : <h1>Novo Turno</h1>}

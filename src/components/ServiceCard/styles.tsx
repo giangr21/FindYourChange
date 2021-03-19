@@ -34,7 +34,6 @@ export const Image = styled(Images, () => ({
 
 export const ProductInfo = styled('div', ({ $theme }) => ({
     padding: '20px 25px 30px',
-
     '@media only screen and (max-width: 767px)': {
         padding: '15px 20px',
         // minHeight: '123px',

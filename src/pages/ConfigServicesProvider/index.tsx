@@ -15,6 +15,7 @@ import { useAuth } from '../../hooks/Auth';
 import Loading from '../../components/Loading';
 import Filter from '../../components/Filter';
 import Input from '../../components/Input/InputModal';
+import { useMedia } from '../../util/use-media';
 
 export interface ServiceData {
     id?: string;
@@ -43,8 +44,9 @@ const Row = withStyle(Rows, () => ({
 }));
 
 const Index: React.FC = () => {
-    const [loading, setLoading] = useState(true);
+    const mobile = useMedia('(max-width: 768px)');
     const { user } = useAuth();
+    const [loading, setLoading] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
     const [services, setServices] = useState<ServiceData[]>([]);
     const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
@@ -65,6 +67,10 @@ const Index: React.FC = () => {
 
                 for (let index = 0; index < data.length; index++) {
                     const service = data[index];
+
+                    const valueToDiscount = service.value * (service.disccount / 100);
+                    service.totalValueWithDisccount = (service.value - valueToDiscount).toFixed(2);
+
                     if (service.image) {
                         const { data: imgBase64 } = await api.get(`storage/base64/min/${service.image}`);
                         auxServices.push({ ...service, image: imgBase64 });
@@ -72,8 +78,6 @@ const Index: React.FC = () => {
                         auxServices.push({ ...service });
                     }
                 }
-
-                console.log(data);
 
                 setServices(auxServices);
                 setLoading(false);
@@ -155,7 +159,14 @@ const Index: React.FC = () => {
 
                         <Row>
                             {services.map((service: any) => (
-                                <Col md={4} lg={3} sm={6} xs={12} key={service.id} style={{ margin: '15px 0' }}>
+                                <Col
+                                    md={4}
+                                    lg={3}
+                                    sm={6}
+                                    xs={12}
+                                    key={service.id}
+                                    style={{ margin: '15px 0', padding: mobile ? '0px 20px' : null }}
+                                >
                                     <ServiceCard handleEdit={handleEdit} serviceData={service} />
                                 </Col>
                             ))}

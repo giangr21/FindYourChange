@@ -24,6 +24,7 @@ interface Service {
     time: string;
     title: string;
     value: string;
+    totalValueWithDisccount: any;
 }
 
 type ProductCardProps = {
@@ -46,7 +47,15 @@ const ServiceCard: React.FC<ProductCardProps> = ({ serviceData, handleEdit }) =>
                 </ProductImageWrapper>
                 <ProductInfo>
                     <ProductTitle>{serviceData.title}</ProductTitle>
-                    <ProductWeight>{serviceData.description}</ProductWeight>
+                    <div
+                        style={{
+                            height: '50px',
+                            maxHeight: '50px',
+                            overflowY: 'auto',
+                        }}
+                    >
+                        <ProductWeight>{serviceData.description}</ProductWeight>
+                    </div>
                     <ProductMeta>
                         <ProductPriceWrapper>
                             <ProductPrice>
@@ -54,7 +63,7 @@ const ServiceCard: React.FC<ProductCardProps> = ({ serviceData, handleEdit }) =>
                                     ? Intl.NumberFormat('pt-BR', {
                                           style: 'currency',
                                           currency: 'BRL',
-                                      }).format(Number(serviceData.value))
+                                      }).format(Number(serviceData.totalValueWithDisccount))
                                     : Intl.NumberFormat('pt-BR', {
                                           style: 'currency',
                                           currency: 'BRL',

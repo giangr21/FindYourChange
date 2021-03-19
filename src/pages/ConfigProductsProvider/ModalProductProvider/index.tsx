@@ -16,6 +16,7 @@ import getValidationErrors from '../../../util/getValidationErrors';
 import Loading from '../../../components/Loading';
 import Select from '../../../components/Select';
 import { useAuth } from '../../../hooks/Auth';
+import { useMedia } from '../../../util/use-media';
 
 interface ModalProps {
     isOpen: boolean;
@@ -37,6 +38,7 @@ interface ProductData {
 }
 
 const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, productId, isOpen, edit }) => {
+    const mobile = useMedia('(max-width: 760px)');
     const { user } = useAuth();
     const formRef = useRef<FormHandles>(null);
     const [loading, setLoading] = useState(true);
@@ -154,7 +156,7 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
     );
 
     return (
-        <Modal width="420px" height="530px" isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Modal width={mobile ? '100%' : '420px'} height="530px" isOpen={isOpen} setIsOpen={setIsOpen}>
             <Form ref={formRef} initialData={productData} onSubmit={submitProduct}>
                 <Header>
                     {edit ? <h1>Editar Produto</h1> : <h1>Novo Produto</h1>}
