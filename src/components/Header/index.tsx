@@ -5,6 +5,7 @@ import { Container, Content, Left, Right } from './styles';
 import IconButton from '../Button/IconButton';
 import { useAuth } from '../../hooks/Auth';
 import NavUserImg from './NavUserImg';
+import logo from '../../assets/logoF.png';
 
 const Index: React.FC = () => {
     const history = useHistory();
@@ -18,7 +19,7 @@ const Index: React.FC = () => {
                         history.push('/');
                     }}
                 >
-                    <h1>Find Your Change</h1>
+                    <img src={logo} alt="logo" />
                 </Left>
                 <Right>
                     <Link to="/">Inicio</Link>

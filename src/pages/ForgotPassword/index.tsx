@@ -11,7 +11,7 @@ import Input from '../../components/Input';
 import getValidationErrors from '../../util/getValidationErrors';
 import { AnimationContainer, Wrapper, Content } from './styles';
 import api from '../../services/api';
-import logo from '../../assets/logoFYC.png';
+import logo from '../../assets/logoFMobile.png';
 
 interface ForgotPasswordFormData {
     email: string;

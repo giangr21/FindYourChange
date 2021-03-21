@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    padding: 10px 10px;
-    height: 70px;
-    max-height: 70px;
-    background-color: var(--color-primary);
+    padding: 10px 20px;
+    height: 90px;
+    max-height: 90px;
+    background-color: #ff9000;
 `;
 
 export const Content = styled.div`
@@ -12,8 +12,9 @@ export const Content = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    text-align: center;
     margin: 0 auto;
-    background-color: var(--color-primary);
+    background-color: #ff9000;
 `;
 
 export const Right = styled.div`
@@ -28,7 +29,10 @@ export const Right = styled.div`
 `;
 
 export const Left = styled.div`
-    display: flex;
-    align-items: center;
     cursor: pointer;
+
+    img {
+        width: 100%;
+        max-width: 135px;
+    }
 `;
