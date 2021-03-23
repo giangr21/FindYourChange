@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useRef, useCallback, useState, useEffect, ChangeEvent } from 'react';
 import { FormHandles } from '@unform/core';
 import { FiCamera, FiCheckSquare } from 'react-icons/fi';
@@ -45,11 +48,13 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
     const [productData, setProductData] = useState<any>(null);
     const [statusImgLogo, setStatusImgLogo] = useState<any>(null);
     const [productImage, setProductImage] = useState<string | null>(null);
+    const [changeImg, setChangeImg] = useState(false);
+    const [imgPhotoMin, setImgPhotoMin] = useState<any>(null);
 
     const getProduct = useCallback(async (): Promise<void> => {
         await api
             .get(`/products/${productId}`)
-            .then((response) => {
+            .then(async (response) => {
                 if (response.data.category === 'Barbearia') {
                     response.data.category = { value: 'Barbearia', label: 'Barbearia' };
                 }
@@ -58,6 +63,10 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                 }
                 if (response.data.category === 'BodyPiercing') {
                     response.data.category = { value: 'BodyPiercing', label: 'Body Piercing' };
+                }
+                if (response.data.productImage) {
+                    const imgNamePhotoData = await api.get(`storage/base64/min/${response.data.productImage}`);
+                    setImgPhotoMin(imgNamePhotoData.data);
                 }
                 setProductData(response.data);
                 setLoading(false);
@@ -155,8 +164,21 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
         [productImage, edit, setIsOpen, reloadProduct, productId, user.id],
     );
 
+    const clickImg = useCallback(async (imgName: string) => {
+        await api.get(`storage/base64/${imgName}`).then((response) => {
+            const w = window.open('about:blank');
+            const image = new Image();
+            image.src = `data:image/png;base64,${response.data}`;
+            setTimeout(function () {
+                if (w) {
+                    w.document.write(image.outerHTML);
+                }
+            }, 0);
+        });
+    }, []);
+
     return (
-        <Modal width={mobile ? '100%' : '420px'} height="530px" isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Modal width={mobile ? '100%' : '420px'} height="600px" isOpen={isOpen} setIsOpen={setIsOpen}>
             <Form ref={formRef} initialData={productData} onSubmit={submitProduct}>
                 <Header>
                     {edit ? <h1>Editar Produto</h1> : <h1>Novo Produto</h1>}
@@ -234,26 +256,87 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                                     <Input name="description" placeholder="Descricao" />
                                 </div>
                             </Container>
-                            <Container>
-                                <div className="img">
-                                    Selecione uma imagem
-                                    {statusImgLogo === null && (
-                                        <label htmlFor="avatar">
-                                            <FiCamera />
-                                            <input
-                                                accept=".jpg, .jpeg, .png"
-                                                onChange={handleLogoChange}
-                                                type="file"
-                                                id="avatar"
+                            {(!edit || changeImg || !productData.productImage) && (
+                                <Container>
+                                    <div
+                                        className="img"
+                                        style={{
+                                            padding: '2px',
+                                            marginTop: '15px',
+                                            width: '100%',
+                                        }}
+                                    >
+                                        Foto Produto:
+                                        {statusImgLogo === null && (
+                                            <label htmlFor="avatar">
+                                                <FiCamera />
+                                                <input
+                                                    accept=".jpg, .jpeg, .png"
+                                                    onChange={handleLogoChange}
+                                                    type="file"
+                                                    id="avatar"
+                                                />
+                                            </label>
+                                        )}
+                                        {statusImgLogo === true && <span>Carregando...</span>}
+                                        {statusImgLogo === false && (
+                                            <BsCheckAll
+                                                style={{
+                                                    marginLeft: '15px',
+                                                }}
+                                                className="check"
+                                                size={25}
+                                                color="#2e656a"
                                             />
-                                        </label>
-                                    )}
-                                    {statusImgLogo === true && <span>Carregando...</span>}
-                                    {statusImgLogo === false && (
-                                        <BsCheckAll className="check" size={25} color="#2e656a" />
-                                    )}
+                                        )}
+                                    </div>
+                                </Container>
+                            )}
+                            {edit && productData.productImage && !changeImg && (
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        margin: '15px 0px',
+                                        cursor: 'pointer',
+                                    }}
+                                    onClick={() => clickImg(productData.productImage)}
+                                >
+                                    Preview Imagem:{' '}
+                                    <img
+                                        style={{
+                                            marginLeft: '10px',
+                                            width: '56px',
+                                            height: '56px',
+                                            borderRadius: '50%',
+                                            borderColor: '#ff9000',
+                                        }}
+                                        src={`data:image/png;base64,${imgPhotoMin}`}
+                                        onClick={() => clickImg(productData.productImage)}
+                                        alt=""
+                                    />
                                 </div>
-                            </Container>
+                            )}
+                            {edit && !changeImg && productData.productImage && (
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <IconButton
+                                        type="button"
+                                        icon={FiCamera}
+                                        title="Alterar Imagem"
+                                        background="#2e656a"
+                                        action={() => setChangeImg(true)}
+                                    />
+                                </div>
+                            )}
                         </>
                     )}
                 </Content>
