@@ -17,14 +17,47 @@ export const Col = styled(Cols)`
     @media only screen and (min-width: 0em) and (max-width: 47.99em) {
         margin-bottom: 20px;
     }
-    &:last-child {
+    /* &:last-child {
         margin-bottom: 0;
+    } */
+
+    .img {
+        height: 100%;
+        margin: auto 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        label {
+            width: 38px;
+            height: 38px;
+            background: #ff9000;
+            border-radius: 50%;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            input {
+                display: none;
+            }
+
+            svg {
+                width: 20px;
+                height: 20px;
+                color: #312e38;
+            }
+        }
     }
 `;
 
 export const Container = styled.div`
     > header {
-        height: 140px;
+        height: 90px;
         width: 100%;
         background: #28262e;
         display: flex;
@@ -49,7 +82,7 @@ export const Content = styled.div`
     margin: -176px auto 0;
     width: 100%;
     form {
-        margin: 80px 0;
+        margin: 80px 0 30px;
         padding: 0px 10px;
         width: 70%;
         text-align: center;
@@ -89,6 +122,7 @@ export const Content = styled.div`
 `;
 
 export const AvatarInput = styled.div`
+    margin-top: 12px;
     margin-bottom: 32px;
     position: relative;
     align-self: center;
@@ -122,5 +156,31 @@ export const AvatarInput = styled.div`
         &:hover {
             background: ${shade(0.2, '#ff9000')};
         }
+    }
+`;
+
+export const ImgPreview = styled.div`
+    width: 100%;
+    padding: 60px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    img {
+        display: block;
+        max-width: 100%;
+        max-height: 550px;
+        height: auto;
+    }
+
+    @media (max-width: 990px) {
+        padding: 30px 40px 60px;
+    }
+    @media (max-width: 767px) {
+        flex: 0 0 100%;
+        max-width: 100%;
+        padding: 30px 25px 60px;
+        order: 0;
     }
 `;

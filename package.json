@@ -29,6 +29,7 @@
     "react-image": "^4.0.3",
     "react-input-mask": "^2.0.4",
     "react-modal": "^3.11.2",
+    "react-multi-carousel": "2.5.5",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "react-select": "^3.1.0",

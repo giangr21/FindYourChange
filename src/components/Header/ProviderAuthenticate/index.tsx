@@ -22,9 +22,9 @@ const Index: React.FC = () => {
                 <Profile>
                     <img src="https://pickaface.net/gallery/avatar/20140501_004912_2217_comm.png" alt="asd" />
                     <div>
-                        <span>Bem-vindo,</span>
+                        <span>Bem-vindo, {user.name}</span>
                         <Link to="/providerProfile">
-                            <strong>{user.name}</strong>
+                            <strong>Editar perfil</strong>
                         </Link>
                     </div>
                 </Profile>

@@ -6,7 +6,7 @@ import React, { useCallback, useRef, ChangeEvent, useState, useEffect } from 're
 import { FiLock, FiMail, FiUser, FiCamera, FiArrowLeft } from 'react-icons/fi';
 import * as Yup from 'yup';
 import { useHistory, Link } from 'react-router-dom';
-import { FaMapSigns, FaUser } from 'react-icons/fa';
+import { FaMapSigns } from 'react-icons/fa';
 import { MdCheck, MdClose } from 'react-icons/md';
 import Switch from 'react-switch';
 import { toast } from 'react-toastify';
@@ -14,10 +14,11 @@ import api from '../../services/api';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import getValidationErrors from '../../util/getValidationErrors';
-import { Container, Content, AvatarInput, Row, Col } from './styles';
+import { Container, Content, AvatarInput, Row, Col, ImgPreview } from './styles';
 import { useAuth } from '../../hooks/Auth';
 import InputMask from '../../components/Input/InputMask';
 import Loading from '../../components/Loading';
+import CarouselWithCustomDots from '../../components/multi-carousel/multi-carousel';
 
 const Profile: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
@@ -29,6 +30,7 @@ const Profile: React.FC = () => {
     const [profileInfo, setProfileInfo] = useState(undefined);
     const [loading, setLoading] = useState(true);
     const [profileAvatar, setProfileAvatar] = useState(null);
+    const [isUpdatedProfile, setIsUpdateProfile] = useState(false);
 
     const getProfileInfo = useCallback(async () => {
         await api.get(`/provider/${user.id}`).then((response) => {
@@ -80,8 +82,6 @@ const Profile: React.FC = () => {
                 data.isTattoo = isTattoo;
                 data.isPiercing = isPiercing;
 
-                console.log(data);
-
                 await api.put('/provider', data);
 
                 updateUser({
@@ -106,7 +106,7 @@ const Profile: React.FC = () => {
                 toast.error('Houve um erro! Tente novamente.');
             }
         },
-        [history, isBarber, isTattoo, isPiercing],
+        [user.id, user.isProvider, isBarber, isTattoo, isPiercing, updateUser, history],
     );
 
     const handleAvatarChange = useCallback(async (e: ChangeEvent<HTMLInputElement>) => {
@@ -179,6 +179,32 @@ const Profile: React.FC = () => {
         }
     }, []);
 
+    const handleLogoChange = useCallback(async (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            // setStatusImgLogo(true);
+            // const data = new FormData();
+            // data.append('image', e.target.files[0]);
+            // console.log(e.target.files[0]);
+            // const maxAllowedSize = 30 * 1024 * 1024;
+            // if (e.target.files[0].size > maxAllowedSize) {
+            //     toast.error('Falha ao inserir imagem, limite de tamanho excedido');
+            //     setStatusImgLogo(null);
+            // } else {
+            //     await api
+            //         .post('/storage/img', data)
+            //         .then((response) => {
+            //             setStatusImgLogo(false);
+            //             setProductImage(response.data);
+            //         })
+            //         .catch((error) => {
+            //             console.log(error);
+            //             toast.error('Falha ao inserir imagem');
+            //             setStatusImgLogo(null);
+            //         });
+            // }
+        }
+    }, []);
+
     return (
         <Container>
             {loading ? (
@@ -195,233 +221,300 @@ const Profile: React.FC = () => {
 
                     <Content>
                         <Form initialData={profileInfo} ref={formRef} onSubmit={handleSubmit}>
-                            <AvatarInput>
-                                <img
-                                    src={
-                                        user.avatar
-                                            ? user.avatar
-                                            : 'https://pickaface.net/gallery/avatar/20140501_004912_2217_comm.png'
-                                    }
-                                    alt={user.name}
-                                />
-                                <label htmlFor="avatar">
-                                    <FiCamera />
-                                    <input type="file" id="avatar" onChange={handleAvatarChange} />
-                                </label>
-                            </AvatarInput>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    width: '50%',
+                                    margin: '0px auto 35px',
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                <Button
+                                    style={{
+                                        marginRight: '10px',
+                                    }}
+                                    type="button"
+                                    onClick={() => setIsUpdateProfile(true)}
+                                >
+                                    Perfil
+                                </Button>
+                                <Button type="button" onClick={() => setIsUpdateProfile(false)}>
+                                    Galeria Fotos
+                                </Button>
+                            </div>
 
-                            <h1>Meu Perfil</h1>
+                            {isUpdatedProfile ? (
+                                <>
+                                    <AvatarInput>
+                                        <img
+                                            src={
+                                                user.avatar
+                                                    ? user.avatar
+                                                    : 'https://pickaface.net/gallery/avatar/20140501_004912_2217_comm.png'
+                                            }
+                                            alt={user.name}
+                                        />
+                                        <label htmlFor="avatar">
+                                            <FiCamera />
+                                            <input type="file" id="avatar" onChange={handleAvatarChange} />
+                                        </label>
+                                    </AvatarInput>
+                                    <h1>Meu Perfil</h1>
 
-                            <Row>
-                                <Col xs={12} sm={4} md={4} lg={4}>
-                                    <Input name="name" icon={FiUser} placeholder="Nome" />
-                                </Col>
-                                <Col xs={12} sm={4} md={4} lg={4}>
-                                    <Input name="lastName" icon={FiUser} placeholder="Sobrenome" />
-                                </Col>
-                                <Col xs={12} sm={4} md={4} lg={4}>
-                                    <Input name="email" icon={FiMail} placeholder="E-mail" />
-                                </Col>
-                            </Row>
+                                    <Row>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                            <Input name="name" icon={FiUser} placeholder="Nome" />
+                                        </Col>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                            <Input name="lastName" icon={FiUser} placeholder="Sobrenome" />
+                                        </Col>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                            <Input name="email" icon={FiMail} placeholder="E-mail" />
+                                        </Col>
+                                    </Row>
 
-                            <Row>
-                                <Col xs={12} sm={4} md={4} lg={4}>
-                                    <Input
-                                        name="oldPassword"
-                                        icon={FiLock}
-                                        type="password"
-                                        placeholder="Senha atual"
-                                    />
-                                </Col>
-                                <Col xs={12} sm={4} md={4} lg={4}>
-                                    <Input
-                                        name="password"
-                                        icon={FiLock}
-                                        type="password"
-                                        placeholder="Nova senha"
-                                    />
-                                </Col>
-                                <Col xs={12} sm={4} md={4} lg={4}>
-                                    <Input
-                                        name="passwordConfirmation"
-                                        icon={FiLock}
-                                        type="password"
-                                        placeholder="Confirmar senha"
-                                    />
-                                </Col>
-                            </Row>
+                                    <Row>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                            <Input
+                                                name="oldPassword"
+                                                icon={FiLock}
+                                                type="password"
+                                                placeholder="Senha atual"
+                                            />
+                                        </Col>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                            <Input
+                                                name="password"
+                                                icon={FiLock}
+                                                type="password"
+                                                placeholder="Nova senha"
+                                            />
+                                        </Col>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                            <Input
+                                                name="passwordConfirmation"
+                                                icon={FiLock}
+                                                type="password"
+                                                placeholder="Confirmar senha"
+                                            />
+                                        </Col>
+                                    </Row>
 
-                            <h1>Endereço</h1>
+                                    <h1>Endereço</h1>
 
-                            <Row>
-                                <Col xs={12} sm={4} md={4} lg={4}>
-                                    <InputMask
-                                        mask="99999-999"
-                                        name="addressZipCode"
-                                        placeholder="CEP"
-                                        cepIcon
-                                        getCep={getCep}
-                                        onKeyPress={handleKeyPress}
-                                    />
-                                </Col>
-                                <Col xs={12} sm={4} md={4} lg={4}>
-                                    <Input name="addressStreet" placeholder="Rua" icon={FaMapSigns} />
-                                </Col>
-                                <Col xs={12} sm={4} md={4} lg={4}>
-                                    <Input name="addressArea" placeholder="Bairro" icon={FaMapSigns} />
-                                </Col>
-                            </Row>
+                                    <Row>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                            <InputMask
+                                                mask="99999-999"
+                                                name="addressZipCode"
+                                                placeholder="CEP"
+                                                cepIcon
+                                                getCep={getCep}
+                                                onKeyPress={handleKeyPress}
+                                            />
+                                        </Col>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                            <Input name="addressStreet" placeholder="Rua" icon={FaMapSigns} />
+                                        </Col>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                            <Input name="addressArea" placeholder="Bairro" icon={FaMapSigns} />
+                                        </Col>
+                                    </Row>
 
-                            <Row>
-                                <Col xs={12} sm={3} md={3} lg={3}>
-                                    <Input name="addressNumber" placeholder="Numero" icon={FaMapSigns} />
-                                </Col>
-                                <Col xs={12} sm={3} md={3} lg={3}>
-                                    <Input name="addressCity" placeholder="Cidade" icon={FaMapSigns} />
-                                </Col>
-                                <Col xs={12} sm={3} md={3} lg={3}>
-                                    <Input name="addressState" placeholder="Estado" icon={FaMapSigns} />
-                                </Col>
-                                <Col xs={12} sm={3} md={3} lg={3}>
-                                    <Input name="addressComplement" placeholder="Complemento" icon={FaMapSigns} />
-                                </Col>
-                            </Row>
+                                    <Row>
+                                        <Col xs={12} sm={3} md={3} lg={3}>
+                                            <Input name="addressNumber" placeholder="Numero" icon={FaMapSigns} />
+                                        </Col>
+                                        <Col xs={12} sm={3} md={3} lg={3}>
+                                            <Input name="addressCity" placeholder="Cidade" icon={FaMapSigns} />
+                                        </Col>
+                                        <Col xs={12} sm={3} md={3} lg={3}>
+                                            <Input name="addressState" placeholder="Estado" icon={FaMapSigns} />
+                                        </Col>
+                                        <Col xs={12} sm={3} md={3} lg={3}>
+                                            <Input
+                                                name="addressComplement"
+                                                placeholder="Complemento"
+                                                icon={FaMapSigns}
+                                            />
+                                        </Col>
+                                    </Row>
 
-                            <h1>Serviços</h1>
+                                    <h1>Serviços</h1>
 
-                            <Row>
-                                <Col xs={12} sm={4} md={4} lg={4}>
-                                    <span
-                                        style={{
-                                            marginRight: '7px',
-                                        }}
-                                    >
-                                        Barbearia:
-                                    </span>
-                                    <Switch
-                                        onChange={toggleBarber}
-                                        checked={isBarber}
-                                        uncheckedIcon={
-                                            <div
+                                    <Row>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                            <span
                                                 style={{
-                                                    display: 'flex',
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    height: '100%',
-                                                    fontSize: 19,
+                                                    marginRight: '7px',
                                                 }}
                                             >
-                                                <MdClose />
-                                            </div>
-                                        }
-                                        checkedIcon={
-                                            <div
+                                                Barbearia:
+                                            </span>
+                                            <Switch
+                                                onChange={toggleBarber}
+                                                checked={isBarber}
+                                                uncheckedIcon={
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            justifyContent: 'center',
+                                                            alignItems: 'center',
+                                                            height: '100%',
+                                                            fontSize: 19,
+                                                        }}
+                                                    >
+                                                        <MdClose />
+                                                    </div>
+                                                }
+                                                checkedIcon={
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            justifyContent: 'center',
+                                                            alignItems: 'center',
+                                                            height: '100%',
+                                                            fontSize: 19,
+                                                        }}
+                                                    >
+                                                        <MdCheck />
+                                                    </div>
+                                                }
+                                                height={23}
+                                                width={55}
+                                                onColor="#2e656a"
+                                                offColor="#c53030"
+                                            />
+                                        </Col>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                            <span
                                                 style={{
-                                                    display: 'flex',
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    height: '100%',
-                                                    fontSize: 19,
+                                                    marginRight: '7px',
                                                 }}
                                             >
-                                                <MdCheck />
-                                            </div>
-                                        }
-                                        height={23}
-                                        width={55}
-                                        onColor="#2e656a"
-                                        offColor="#c53030"
-                                    />
-                                </Col>
-                                <Col xs={12} sm={4} md={4} lg={4}>
-                                    <span
-                                        style={{
-                                            marginRight: '7px',
-                                        }}
-                                    >
-                                        Tatuagem:
-                                    </span>
-                                    <Switch
-                                        onChange={toggleTattoo}
-                                        checked={isTattoo}
-                                        uncheckedIcon={
-                                            <div
+                                                Tatuagem:
+                                            </span>
+                                            <Switch
+                                                onChange={toggleTattoo}
+                                                checked={isTattoo}
+                                                uncheckedIcon={
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            justifyContent: 'center',
+                                                            alignItems: 'center',
+                                                            height: '100%',
+                                                            fontSize: 19,
+                                                        }}
+                                                    >
+                                                        <MdClose />
+                                                    </div>
+                                                }
+                                                checkedIcon={
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            justifyContent: 'center',
+                                                            alignItems: 'center',
+                                                            height: '100%',
+                                                            fontSize: 19,
+                                                        }}
+                                                    >
+                                                        <MdCheck />
+                                                    </div>
+                                                }
+                                                height={23}
+                                                width={55}
+                                                onColor="#2e656a"
+                                                offColor="#c53030"
+                                            />
+                                        </Col>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                            <span
                                                 style={{
-                                                    display: 'flex',
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    height: '100%',
-                                                    fontSize: 19,
+                                                    marginRight: '7px',
                                                 }}
                                             >
-                                                <MdClose />
-                                            </div>
-                                        }
-                                        checkedIcon={
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    height: '100%',
-                                                    fontSize: 19,
-                                                }}
-                                            >
-                                                <MdCheck />
-                                            </div>
-                                        }
-                                        height={23}
-                                        width={55}
-                                        onColor="#2e656a"
-                                        offColor="#c53030"
-                                    />
-                                </Col>
-                                <Col xs={12} sm={4} md={4} lg={4}>
-                                    <span
-                                        style={{
-                                            marginRight: '7px',
-                                        }}
-                                    >
-                                        Piercing:
-                                    </span>
-                                    <Switch
-                                        onChange={togglePiercing}
-                                        checked={isPiercing}
-                                        uncheckedIcon={
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    height: '100%',
-                                                    fontSize: 19,
-                                                }}
-                                            >
-                                                <MdClose />
-                                            </div>
-                                        }
-                                        checkedIcon={
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    height: '100%',
-                                                    fontSize: 19,
-                                                }}
-                                            >
-                                                <MdCheck />
-                                            </div>
-                                        }
-                                        height={23}
-                                        width={55}
-                                        onColor="#2e656a"
-                                        offColor="#c53030"
-                                    />
-                                </Col>
-                            </Row>
+                                                Piercing:
+                                            </span>
+                                            <Switch
+                                                onChange={togglePiercing}
+                                                checked={isPiercing}
+                                                uncheckedIcon={
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            justifyContent: 'center',
+                                                            alignItems: 'center',
+                                                            height: '100%',
+                                                            fontSize: 19,
+                                                        }}
+                                                    >
+                                                        <MdClose />
+                                                    </div>
+                                                }
+                                                checkedIcon={
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            justifyContent: 'center',
+                                                            alignItems: 'center',
+                                                            height: '100%',
+                                                            fontSize: 19,
+                                                        }}
+                                                    >
+                                                        <MdCheck />
+                                                    </div>
+                                                }
+                                                height={23}
+                                                width={55}
+                                                onColor="#2e656a"
+                                                offColor="#c53030"
+                                            />
+                                        </Col>
+                                    </Row>
 
-                            <Button type="submit">Confirmar mudanças</Button>
+                                    <Button type="submit">Confirmar mudanças</Button>
+                                </>
+                            ) : (
+                                <>
+                                    <ImgPreview>
+                                        <CarouselWithCustomDots />
+                                    </ImgPreview>
+                                    <Row>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                            <div className="img">
+                                                Upload Imagem
+                                                {/* {statusImgLogo === null && ( */}
+                                                <label htmlFor="avatar">
+                                                    <FiCamera />
+                                                    <input
+                                                        accept=".jpg, .jpeg, .png"
+                                                        onChange={handleLogoChange}
+                                                        type="file"
+                                                        id="avatar"
+                                                    />
+                                                </label>
+                                                {/* )} */}
+                                                {/* {statusImgLogo === true && <span>Carregando...</span>} */}
+                                                {/* {statusImgLogo === false && ( */}
+                                                {/* <BsCheckAll className="check" size={25} color="#2e656a" /> */}
+                                                {/* )} */}
+                                            </div>
+                                        </Col>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                            <Button type="button" onClick={() => setIsUpdateProfile(false)}>
+                                                Excluir Imagem
+                                            </Button>
+                                        </Col>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                            <Button type="button" onClick={() => setIsUpdateProfile(false)}>
+                                                Tornar Imagem Principal
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </>
+                            )}
                         </Form>
                     </Content>
                 </>
