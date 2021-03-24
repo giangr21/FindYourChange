@@ -38,6 +38,7 @@ interface ServiceData {
     time: string;
     image: string;
     provider: string;
+    isPopularService: boolean;
 }
 
 const ModalServicesProvider: React.FC<ModalProps> = ({
@@ -72,6 +73,13 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
 
                 if (response.data.category === 'BodyPiercing') {
                     response.data.category = { value: 'BodyPiercing', label: 'Body Piercing' };
+                }
+
+                if (response.data.isPopularService === true) {
+                    response.data.isPopularService = { value: true, label: 'Sim' };
+                }
+                else{
+                    response.data.isPopularService = { value: false, label: 'Não' };
                 }
 
                 if (response.data.image) {
@@ -137,6 +145,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
                     description: Yup.string().required('Descrição obrigatória'),
                     value: Yup.string().required('Valor obrigatório'),
                     category: Yup.string().required('Categoria obrigatória'),
+                    isPopularService: Yup.boolean().required('Preenchimento obrigatório'),
                 });
                 await schema.validate(data, {
                     abortEarly: false,
@@ -264,6 +273,29 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
                                     }}
                                 >
                                     <Input name="time" placeholder="Tempo" />
+                                </div>
+                            </Container>
+                            <Container>
+                                <div
+                                    style={{
+                                        padding: '2px',
+                                        marginBottom: '15px',
+                                        marginTop: '15px',
+                                        width: '100%',
+                                    }}
+                                >
+                                    <Select
+                                        name="isPopularService"
+                                        fieldValue="value"
+                                        fieldLabel="label"
+                                        label="Serviço Popular"
+                                        placeholder=""
+                                        className="react-select-container"
+                                        options={[
+                                            { value: 'true', label: 'Sim' },
+                                            { value: 'false', label: 'Não' },
+                                        ]}
+                                    />
                                 </div>
                             </Container>
                             {(!edit || changeImg || !serviceData.image) && (

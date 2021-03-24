@@ -25,6 +25,7 @@ export interface ServiceData {
     disccount: number;
     category: string;
     time: string;
+    isPopularService: boolean;
 }
 
 export const Col = withStyle(Column, () => ({
