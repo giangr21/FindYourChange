@@ -72,6 +72,15 @@ const Index: React.FC = () => {
         getProducts(filter);
     }, []);
 
+    const handleClickProduct = useCallback(
+        (id: string) => {
+            history.push({
+                pathname: `/product/${id}`,
+            });
+        },
+        [history],
+    );
+
     return (
         <Container>
             <Content>
@@ -166,24 +175,24 @@ const Index: React.FC = () => {
                         </div>
                     </ContentSearch>
                 </SearchContainer>
-                <Results ref={secondFormRef} onSubmit={() => {}}>
-                    <HeaderResults>
-                        <span>6 produtos encontados. Exibindo resultados de 1 a 6.</span>
-                        <Select
-                            name="Search"
-                            placeholder="A"
-                            options={[
-                                { value: 'a', label: 'Relevancia' },
-                                { value: 'b', label: 'Distancia' },
-                                { value: 'c', label: 'Menor Preco' },
-                                { value: 'd', label: 'Maior Preco' },
-                            ]}
-                            defaultValue={{ value: 'a', label: 'Relevancia' }}
-                        />
-                    </HeaderResults>
-                    <ContentResults>
-                        {!loading &&
-                            products.map((product) => (
+                {!loading ? (
+                    <Results ref={secondFormRef} onSubmit={() => {}}>
+                        <HeaderResults>
+                            <span>6 produtos encontados. Exibindo resultados de 1 a 6.</span>
+                            <Select
+                                name="Search"
+                                placeholder="A"
+                                options={[
+                                    { value: 'a', label: 'Relevancia' },
+                                    { value: 'b', label: 'Distancia' },
+                                    { value: 'c', label: 'Menor Preco' },
+                                    { value: 'd', label: 'Maior Preco' },
+                                ]}
+                                defaultValue={{ value: 'a', label: 'Relevancia' }}
+                            />
+                        </HeaderResults>
+                        <ContentResults>
+                            {products.map((product) => (
                                 <Product key={product.id}>
                                     {product.productImage && (
                                         <img src={`data:image/png;base64,${product.productImage}`} alt="" />
@@ -195,15 +204,16 @@ const Index: React.FC = () => {
                                             icon={FaArrowRight}
                                             title="Informações"
                                             background="#ff9000"
-                                            action={() => {
-                                                history.push('/product');
-                                            }}
+                                            action={() => handleClickProduct(product.id)}
                                         />
                                     </div>
                                 </Product>
                             ))}
-                    </ContentResults>
-                </Results>
+                        </ContentResults>
+                    </Results>
+                ) : (
+                    <Loading />
+                )}
             </Content>
         </Container>
     );
