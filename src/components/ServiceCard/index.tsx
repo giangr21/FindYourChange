@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-curly-brace-presence */
-import React, { useCallback } from 'react';
+import React from 'react';
 import {
     ProductCardWrapper,
     ProductImageWrapper,
