@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
+import React, { useEffect } from 'react';
+import { ProductData } from '../../ConfigProductsProvider';
 
 import {
     Container,
@@ -19,13 +20,21 @@ import {
     ShieldIcon,
 } from './styles';
 
-const ProductAction: React.FC = () => {
+interface ProductActionProps {
+    productValues: ProductData | undefined;
+}
+
+const ProductAction: React.FC<ProductActionProps> = ({ productValues }) => {
+    const decimalPrice = Number(productValues?.value);
+    const centsPrice = productValues?.value.split('.')[1];
+    const installmentsNumber = decimalPrice / 3;
+
     return (
         <Container>
             <Condition>Novo</Condition>
 
             <Row>
-                <h1>Maquina de cortar cabelo</h1>
+                <h1>{productValues?.name}</h1>
                 {/* <HeartIcon /> */}
             </Row>
 
@@ -34,11 +43,11 @@ const ProductAction: React.FC = () => {
             <PriceCard>
                 <PriceRow>
                     <span className="symbol">R$</span>
-                    <span className="fraction">34</span>
-                    <span className="cents">99</span>
+                    <span className="fraction">{Math.floor(decimalPrice)}</span>
+                    <span className="cents">{centsPrice}</span>
                 </PriceRow>
 
-                <InstallmentsInfo>em 3x de R$ 11,67</InstallmentsInfo>
+                <InstallmentsInfo>em 3x de R$ {installmentsNumber.toFixed(2)}</InstallmentsInfo>
             </PriceCard>
 
             {/* <StockStatus>Estoque disponível</StockStatus> */}
