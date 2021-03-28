@@ -1,29 +1,33 @@
 import { Form as Unform } from '@unform/web';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { styled as styledBaseUi } from 'baseui';
 import Images from '../../components/Image/Image';
+
+interface FilterProps {
+    showFilter: boolean;
+}
 
 export const Content = styled.div`
     display: flex;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 10px 0px;
+    padding: 5px 0px;
     height: 100%;
 `;
 
-export const SearchContainer = styled.div`
+export const SearchContainer = styled.div<FilterProps>`
     display: flex;
     flex-direction: column;
     margin-right: 5px;
     height: 100%;
-    width: 300px;
-    max-width: 300px;
+    width: ${(props) => (props.showFilter ? '24%' : '0%')};
     background: #28262e;
     color: #f4ede8;
     border: 1px solid #f4ede8;
     border-radius: 10px;
+    transition: all ease 0.7s;
 
-    padding: 40px 30px;
+    padding: 20px 30px;
     align-items: center;
     /* justify-content: center; */
 
@@ -38,9 +42,22 @@ export const SearchContainer = styled.div`
         font-size: 15px;
         /* padding-bottom: 10px; */
     }
+
+    ${(props) =>
+        props.showFilter &&
+        css`
+            transform: translateX(0);
+        `}
+
+    ${(props) =>
+        !props.showFilter &&
+        css`
+            transform: translateX(-10000%);
+        `}
 `;
 
 export const ContentSearch = styled(Unform)`
+    flex: auto;
     .separator {
         height: 2px;
         background-color: #3a3a3a;
@@ -88,12 +105,24 @@ export const ContentSearch = styled(Unform)`
     }
 `;
 
-export const Results = styled(Unform)`
+export const FooterFilter = styled.div`
+    display: flex;
+    height: 60px;
+    padding: 5px 10px;
+    margin-top: 10px;
+    margin: 0 auto;
+
+    div + div {
+        margin-left: 10px;
+    }
+`;
+
+export const Results = styled.div`
     background: #28262e;
     color: #f4ede8;
     width: 100%;
     height: 100%;
-    padding: 15px;
+    padding: 7px 15px;
     border-radius: 10px;
 
     display: flex;
@@ -221,4 +250,11 @@ export const ProductPrice = styled.span`
         font-weight: 700;
         margin-right: 5px;
     }
+`;
+
+export const Pagination = styled.div`
+    height: 40px;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
 `;

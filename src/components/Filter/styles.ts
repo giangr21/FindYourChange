@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { Form as Unform } from '@unform/web';
 
 interface FilterProps {
-    showFilter: boolean;
+    showFilter: any;
 }
 
 export const Container = styled.div<FilterProps>`

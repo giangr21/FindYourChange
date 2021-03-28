@@ -10,6 +10,7 @@ import ProductAction from '../ProductAction';
 import SellerInfo from '../SellerInfo';
 
 import { Container, Row, Panel, Column, Gallery, Section, Description } from './styles';
+import Loading from '../../../components/Loading';
 
 const Product: React.FC = () => {
     const [product, setProduct] = useState<ProductData>();
@@ -42,46 +43,50 @@ const Product: React.FC = () => {
 
     return (
         <Container>
-            <Panel>
-                <Column>
-                    <Gallery>
-                        <img alt="T-Shirt" src={`data:image/png;base64,${imgPhotoMin}`} />
-                    </Gallery>
+            {loading ? (
+                <Loading />
+            ) : (
+                <Panel>
+                    <Column>
+                        <Gallery>
+                            <img alt="imgProduct" src={`data:image/png;base64,${imgPhotoMin}`} />
+                        </Gallery>
 
-                    <Description>
-                        <h2>Descrição</h2>
-                        <p>
-                            {product !== undefined
-                                ? product.description
-                                : 'Descrição não especificada pelo vendedor!'}
-                            <br />
-                            <br />
-                        </p>
-                    </Description>
-                </Column>
+                        <Description>
+                            <h2>Descrição</h2>
+                            <p>
+                                {product !== undefined
+                                    ? product.description
+                                    : 'Descrição não especificada pelo vendedor!'}
+                                <br />
+                                <br />
+                            </p>
+                        </Description>
+                    </Column>
 
-                <Column>
-                    <ProductAction productValues={product} />
-                    <SellerInfo />
+                    <Column>
+                        <ProductAction productValues={product} />
+                        <SellerInfo />
 
-                    <Section>
-                        <h4>Garantia</h4>
-                        <div>
-                            <span>
-                                <p className="title">Compra Garantida com o Mercado Pago</p>
-                                <p className="description">
-                                    Receba o produto que está esperando ou devolvemos seu dinheiro
-                                </p>
-                            </span>
-                            <span>
-                                <p className="title">Garantia do vendedor</p>
-                            </span>
-                        </div>
-                        {/* TODO: Se o MercadoPago tiver alguma página genérica sobre Garantia, linkar aqui  */}
-                        {/* <a href="#">Saiba mais sobre garantia</a> */}
-                    </Section>
-                </Column>
-            </Panel>
+                        <Section>
+                            <h4>Garantia</h4>
+                            <div>
+                                <span>
+                                    <p className="title">Compra Garantida com o Mercado Pago</p>
+                                    <p className="description">
+                                        Receba o produto que está esperando ou devolvemos seu dinheiro
+                                    </p>
+                                </span>
+                                <span>
+                                    <p className="title">Garantia do vendedor</p>
+                                </span>
+                            </div>
+                            {/* TODO: Se o MercadoPago tiver alguma página genérica sobre Garantia, linkar aqui  */}
+                            {/* <a href="#">Saiba mais sobre garantia</a> */}
+                        </Section>
+                    </Column>
+                </Panel>
+            )}
         </Container>
     );
 };
