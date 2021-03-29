@@ -13,6 +13,7 @@ export const Container = styled.div<FilterProps>`
     border-radius: 8px;
     border: 1px solid #777777;
     transition: all ease 0.5s;
+    margin-left: 5px;
 
     ${(props) =>
         props.showFilter &&
