@@ -77,8 +77,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
 
                 if (response.data.isPopularService === true) {
                     response.data.isPopularService = { value: true, label: 'Sim' };
-                }
-                else{
+                } else {
                     response.data.isPopularService = { value: false, label: 'Não' };
                 }
 
@@ -280,7 +279,6 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
                                     style={{
                                         padding: '2px',
                                         marginBottom: '15px',
-                                        marginTop: '15px',
                                         width: '100%',
                                     }}
                                 >

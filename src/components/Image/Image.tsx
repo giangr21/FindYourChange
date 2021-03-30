@@ -4,7 +4,15 @@ import React from 'react';
 import { Img } from 'react-image';
 import placeholder from './product-placeholder.png';
 
-const Placeholder = () => <img src={placeholder} alt="placeholder" />;
+const Placeholder = () => (
+    <img
+        src={placeholder}
+        alt="placeholder"
+        style={{
+            height: '100%',
+        }}
+    />
+);
 export default function Image({
     key,
     url,
