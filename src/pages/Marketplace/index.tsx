@@ -59,6 +59,7 @@ const Index: React.FC = () => {
     const [filter, setFilter] = useState<any>({
         providerId: user.id,
     });
+    const [cities, setCities] = useState([]);
     const [showFilter, setShowFilter] = useState(true);
     const [page, setPage] = useState(1);
     const formRef = useRef<FormHandles>(null);
@@ -97,8 +98,15 @@ const Index: React.FC = () => {
             });
     }, []);
 
+    const getCities = useCallback(async () => {
+        await api.get('/provider/cities/all').then((response) => {
+            setCities(response.data);
+        });
+    }, []);
+
     useEffect(() => {
         getProducts(filter);
+        getCities();
     }, []);
 
     const handleClickProduct = useCallback(
@@ -135,17 +143,8 @@ const Index: React.FC = () => {
                                 // alignItems: 'center',
                                 // justifyContent: 'center',
                             }}
-                            name="neightborhoods"
-                            options={[
-                                {
-                                    id: 'false',
-                                    label: 'Todas',
-                                },
-                                { id: 's', label: 'Curitiba' },
-                                { id: 'd', label: 'Sao Paulo' },
-                                { id: 'true', label: 'Santa Catarina' },
-                            ]}
-                            onChange={() => {}}
+                            name="cities"
+                            options={cities}
                         />
                     </div>
                     <div className="separator" />
