@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Popover, { PLACEMENT } from '../../Popover/Popover';
 import { NavLink, UserDropdowItem, LogoutBtn, ProfileImg, Image } from './styles';
-import imgUser from '../../../assets/user.jpg';
 import { useAuth } from '../../../hooks/Auth';
 import api from '../../../services/api';
 

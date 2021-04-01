@@ -7,7 +7,7 @@ import React, { useCallback, useRef, ChangeEvent, useState, useEffect } from 're
 import { FiLock, FiMail, FiUser, FiCamera, FiArrowLeft } from 'react-icons/fi';
 import * as Yup from 'yup';
 import { useHistory, Link } from 'react-router-dom';
-import { FaMapSigns } from 'react-icons/fa';
+import { FaMapSigns, FaPhoneAlt } from 'react-icons/fa';
 import { MdCheck, MdClose } from 'react-icons/md';
 import Switch from 'react-switch';
 import { toast } from 'react-toastify';
@@ -91,6 +91,10 @@ const Profile: React.FC = () => {
                     delete data.oldPassword;
                     delete data.password;
                     delete data.passwordConfirmation;
+                }
+
+                if (data.phone && data.phone !== '') {
+                    data.phone = data.phone.replace(/[^\d]/g, '');
                 }
 
                 data.id = user.id;
@@ -346,7 +350,15 @@ const Profile: React.FC = () => {
                                     </Row>
 
                                     <Row>
-                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                        <Col xs={12} sm={3} md={3} lg={3}>
+                                            <InputMask
+                                                icon={FaPhoneAlt}
+                                                mask="(99)99999-9999"
+                                                name="phone"
+                                                placeholder="Telefone"
+                                            />
+                                        </Col>
+                                        <Col xs={12} sm={3} md={3} lg={3}>
                                             <Input
                                                 name="oldPassword"
                                                 icon={FiLock}
@@ -354,7 +366,7 @@ const Profile: React.FC = () => {
                                                 placeholder="Senha atual"
                                             />
                                         </Col>
-                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                        <Col xs={12} sm={3} md={3} lg={3}>
                                             <Input
                                                 name="password"
                                                 icon={FiLock}
@@ -362,7 +374,7 @@ const Profile: React.FC = () => {
                                                 placeholder="Nova senha"
                                             />
                                         </Col>
-                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                        <Col xs={12} sm={3} md={3} lg={3}>
                                             <Input
                                                 name="passwordConfirmation"
                                                 icon={FiLock}
