@@ -47,18 +47,11 @@ const responsive = {
     },
 };
 
-const CarouselWithCustomDots = ({
-    items = [
-        { url: 'https://pickaface.net/gallery/avatar/20140501_004912_2217_comm.png' },
-        { url: 'https://pickaface.net/gallery/avatar/20140501_004912_2217_comm.png' },
-    ],
-    title,
-    ...rest
-}: any) => {
-    const children = items.slice(0, 6).map((item: any, index: number) => (
+export const CarouselWithCustomDots = ({ items = [], title, updatedImgInCarousel, ...rest }: any) => {
+    const children = items.slice(0, 6).map((item: any) => (
         <img
-            src={item.url}
-            key={index}
+            src={`data:image/png;base64,${item.base64Img}`}
+            key={item.id}
             alt={title}
             style={{
                 minWidth: 'auto',
@@ -70,10 +63,10 @@ const CarouselWithCustomDots = ({
         />
     ));
 
-    const images = items.map((item: any, index: number) => (
+    const images = items.map((item: any) => (
         <img
-            src={item.url}
-            key={index}
+            src={`data:image/png;base64,${item.base64Img}`}
+            key={item.id}
             alt={title}
             style={{ width: '100%', height: '100%', position: 'relative' }}
         />
@@ -89,7 +82,10 @@ const CarouselWithCustomDots = ({
             <SingleItem
                 data-index={index}
                 key={index}
-                onClick={() => onClick()}
+                onClick={() => {
+                    onClick();
+                    updatedImgInCarousel(index);
+                }}
                 className={`custom-dot ${active && 'custom-dot--active'}`}
             >
                 {React.Children.toArray(images)[index]}
@@ -111,6 +107,7 @@ const CarouselWithCustomDots = ({
             ssr
             infinite
             slidesToSlide={1}
+            keyBoardControl={false}
             containerClass="carousel-with-custom-dots"
             responsive={responsive}
             deviceType={deviceType}
@@ -123,5 +120,3 @@ const CarouselWithCustomDots = ({
         </Carousel>
     );
 };
-
-export default CarouselWithCustomDots;

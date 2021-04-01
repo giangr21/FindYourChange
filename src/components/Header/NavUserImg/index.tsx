@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Popover, { PLACEMENT } from '../../Popover/Popover';
 import { NavLink, UserDropdowItem, LogoutBtn, ProfileImg, Image } from './styles';
-import imgUser from '../../../assets/user.jpg';
 import { useAuth } from '../../../hooks/Auth';
+import api from '../../../services/api';
 
 const NavUserImg: React.FC = () => {
     const { signOut, user } = useAuth();
+    const [avatarImg, setAvatarImg] = useState('');
+
+    useEffect(() => {
+        if (user.avatar) {
+            // eslint-disable-next-line func-names
+            const getImg = async function (): Promise<void> {
+                const { data } = await api.get(`storage/base64/min/${user.avatar}`);
+                setAvatarImg(data);
+            };
+            getImg();
+        }
+    }, [user.avatar]);
 
     return (
         <>
@@ -17,9 +29,6 @@ const NavUserImg: React.FC = () => {
                                 Dashboard
                             </NavLink>
                         )}
-                        {/* <NavLink to={SETTINGS} exact={false} onClick={close}>
-                Configurações
-            </NavLink> */}
                         <LogoutBtn onClick={signOut}>Sair</LogoutBtn>
                     </UserDropdowItem>
                 )}
@@ -40,7 +49,7 @@ const NavUserImg: React.FC = () => {
                 }}
             >
                 <ProfileImg>
-                    <Image src={imgUser} alt="user" />
+                    <Image src={`data:image/png;base64,${avatarImg}`} alt="user" />
                 </ProfileImg>
             </Popover>
         </>
