@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable react/jsx-wrap-multilines */
 
 import { FormHandles } from '@unform/core';
@@ -10,6 +11,7 @@ import { FaMapSigns } from 'react-icons/fa';
 import { MdCheck, MdClose } from 'react-icons/md';
 import Switch from 'react-switch';
 import { toast } from 'react-toastify';
+import { BsCheckAll } from 'react-icons/bs';
 import api from '../../services/api';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
@@ -18,7 +20,7 @@ import { Container, Content, AvatarInput, Row, Col, ImgPreview } from './styles'
 import { useAuth } from '../../hooks/Auth';
 import InputMask from '../../components/Input/InputMask';
 import Loading from '../../components/Loading';
-import CarouselWithCustomDots from '../../components/multi-carousel/multi-carousel';
+import { CarouselWithCustomDots } from '../../components/multi-carousel/multi-carousel';
 
 const Profile: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
@@ -27,14 +29,29 @@ const Profile: React.FC = () => {
     const [isBarber, setIsBarber] = useState(false);
     const [isTattoo, setIsTattoo] = useState(false);
     const [isPiercing, setIsPiercing] = useState(false);
-    const [profileInfo, setProfileInfo] = useState(undefined);
+    const [profileInfo, setProfileInfo] = useState<any>({});
     const [loading, setLoading] = useState(true);
     const [profileAvatar, setProfileAvatar] = useState(null);
-    const [isUpdatedProfile, setIsUpdateProfile] = useState(false);
+    const [statusImgLogo, setStatusImgLogo] = useState<any>(null);
+    const [isUpdatedProfile, setIsUpdateProfile] = useState(true);
+    const [indexImgSelectedInCarousel, setIndexImgSelectedInCarousel] = useState(0);
 
     const getProfileInfo = useCallback(async () => {
-        await api.get(`/provider/${user.id}`).then((response) => {
+        await api.get(`/provider/${user.id}`).then(async (response) => {
+            if (response.data.providerImages.length > 0) {
+                const providerImagesBase64 = [];
+                for (let index = 0; index < response.data.providerImages.length; index++) {
+                    const providerImage = response.data.providerImages[index];
+                    const imgBase64 = await api.get(`storage/base64/min/${providerImage.image}`);
+                    providerImagesBase64.push({ id: providerImage.id, base64Img: imgBase64.data });
+                }
+                response.data.providerImages = providerImagesBase64;
+            }
+            const { data } = await api.get(`storage/base64/min/${response.data.avatar}`);
+            response.data.avatar = data;
+
             setProfileInfo(response.data);
+
             setLoading(false);
             setIsBarber(response.data.isBarber);
             setIsTattoo(response.data.isTattoo);
@@ -82,6 +99,10 @@ const Profile: React.FC = () => {
                 data.isTattoo = isTattoo;
                 data.isPiercing = isPiercing;
 
+                if (profileAvatar) {
+                    data.avatar = profileAvatar;
+                }
+
                 await api.put('/provider', data);
 
                 updateUser({
@@ -106,31 +127,36 @@ const Profile: React.FC = () => {
                 toast.error('Houve um erro! Tente novamente.');
             }
         },
-        [user.id, user.isProvider, isBarber, isTattoo, isPiercing, updateUser, history],
+        [user.id, user.isProvider, isBarber, isTattoo, isPiercing, updateUser, history, profileAvatar],
     );
 
-    const handleAvatarChange = useCallback(async (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            const data = new FormData();
-            data.append('image', e.target.files[0]);
+    const handleAvatarChange = useCallback(
+        async (e: ChangeEvent<HTMLInputElement>) => {
+            if (e.target.files) {
+                const data = new FormData();
+                data.append('image', e.target.files[0]);
 
-            const maxAllowedSize = 30 * 1024 * 1024;
-            if (e.target.files[0].size > maxAllowedSize) {
-                toast.error('Falha ao inserir imagem, limite de tamanho excedido');
-            } else {
-                await api
-                    .post('/storage/img', data)
-                    .then((response) => {
-                        setProfileAvatar(response.data);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        toast.error('Falha ao inserir imagem');
-                        setProfileAvatar(null);
-                    });
+                const maxAllowedSize = 30 * 1024 * 1024;
+                if (e.target.files[0].size > maxAllowedSize) {
+                    toast.error('Falha ao inserir imagem, limite de tamanho excedido');
+                } else {
+                    await api
+                        .post('/storage/img', data)
+                        .then(async (response) => {
+                            setProfileAvatar(response.data);
+                            const { data: responseImg } = await api.get(`storage/base64/min/${response.data}`);
+                            setProfileInfo({ ...profileInfo, avatar: responseImg });
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                            toast.error('Falha ao inserir imagem');
+                            setProfileAvatar(null);
+                        });
+                }
             }
-        }
-    }, []);
+        },
+        [profileInfo],
+    );
 
     const toggleBarber = useCallback(() => {
         setIsBarber((prevState) => !prevState);
@@ -179,31 +205,84 @@ const Profile: React.FC = () => {
         }
     }, []);
 
-    const handleLogoChange = useCallback(async (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            // setStatusImgLogo(true);
-            // const data = new FormData();
-            // data.append('image', e.target.files[0]);
-            // console.log(e.target.files[0]);
-            // const maxAllowedSize = 30 * 1024 * 1024;
-            // if (e.target.files[0].size > maxAllowedSize) {
-            //     toast.error('Falha ao inserir imagem, limite de tamanho excedido');
-            //     setStatusImgLogo(null);
-            // } else {
-            //     await api
-            //         .post('/storage/img', data)
-            //         .then((response) => {
-            //             setStatusImgLogo(false);
-            //             setProductImage(response.data);
-            //         })
-            //         .catch((error) => {
-            //             console.log(error);
-            //             toast.error('Falha ao inserir imagem');
-            //             setStatusImgLogo(null);
-            //         });
-            // }
+    const insertProviderImage = useCallback(
+        async (imgId: string) => {
+            try {
+                await api
+                    .post('providerImages', {
+                        provider: user.id,
+                        image: imgId,
+                        defaultImage: false,
+                    })
+                    .then(async (response) => {
+                        const { data } = await api.get(`storage/base64/min/${imgId}`);
+                        profileInfo.providerImages.push({ id: response.data, base64Img: data });
+                        toast.success('Imagem inserida com sucesso!!');
+                        setTimeout(() => {
+                            setStatusImgLogo(null);
+                        }, 3000);
+                    });
+            } catch (e) {
+                console.log(e);
+            }
+        },
+        [profileInfo, user.id],
+    );
+
+    const updateDefaultProviderImage = useCallback(async () => {
+        try {
+            const providerImage = profileInfo.providerImages[indexImgSelectedInCarousel];
+            await api.post(`providerImages/updateDefaultImage/${providerImage.id}`);
+            toast.success('Imagem Padrão atualizada com sucesso!!');
+        } catch (e) {
+            console.log(e);
         }
-    }, []);
+    }, [indexImgSelectedInCarousel, profileInfo]);
+
+    const deleteProviderImage = useCallback(async () => {
+        const providerImage = profileInfo.providerImages[indexImgSelectedInCarousel];
+        try {
+            await api.delete(`providerImages/${providerImage.id}`).then(() => {
+                const updatedProfileInfo = profileInfo.providerImages.filter(
+                    (img: any) => img.id !== providerImage.id,
+                );
+                setProfileInfo({ ...profileInfo, providerImages: updatedProfileInfo });
+                toast.success('Imagem removida com sucesso!!');
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    }, [indexImgSelectedInCarousel, profileInfo]);
+
+    const handleImageChange = useCallback(
+        async (e: ChangeEvent<HTMLInputElement>) => {
+            if (e.target.files) {
+                setStatusImgLogo(true);
+
+                const data = new FormData();
+                data.append('image', e.target.files[0]);
+
+                const maxAllowedSize = 30 * 1024 * 1024;
+                if (e.target.files[0].size > maxAllowedSize) {
+                    toast.error('Falha ao inserir imagem, limite de tamanho excedido');
+                    setStatusImgLogo(null);
+                } else {
+                    await api
+                        .post('/storage/img', data)
+                        .then(async (response) => {
+                            await insertProviderImage(response.data);
+                            setStatusImgLogo(false);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                            toast.error('Falha ao inserir imagem');
+                            setStatusImgLogo(null);
+                        });
+                }
+            }
+        },
+        [insertProviderImage],
+    );
 
     return (
         <Container>
@@ -246,14 +325,7 @@ const Profile: React.FC = () => {
                             {isUpdatedProfile ? (
                                 <>
                                     <AvatarInput>
-                                        <img
-                                            src={
-                                                user.avatar
-                                                    ? user.avatar
-                                                    : 'https://pickaface.net/gallery/avatar/20140501_004912_2217_comm.png'
-                                            }
-                                            alt={user.name}
-                                        />
+                                        <img src={`data:image/png;base64,${profileInfo.avatar}`} alt={user.name} />
                                         <label htmlFor="avatar">
                                             <FiCamera />
                                             <input type="file" id="avatar" onChange={handleAvatarChange} />
@@ -479,36 +551,41 @@ const Profile: React.FC = () => {
                             ) : (
                                 <>
                                     <ImgPreview>
-                                        <CarouselWithCustomDots />
+                                        <CarouselWithCustomDots
+                                            items={profileInfo ? profileInfo.providerImages : []}
+                                            updatedImgInCarousel={(indexImg: number) =>
+                                                setIndexImgSelectedInCarousel(indexImg)
+                                            }
+                                        />
                                     </ImgPreview>
                                     <Row>
                                         <Col xs={12} sm={4} md={4} lg={4}>
                                             <div className="img">
                                                 Upload Imagem
-                                                {/* {statusImgLogo === null && ( */}
-                                                <label htmlFor="avatar">
-                                                    <FiCamera />
-                                                    <input
-                                                        accept=".jpg, .jpeg, .png"
-                                                        onChange={handleLogoChange}
-                                                        type="file"
-                                                        id="avatar"
-                                                    />
-                                                </label>
-                                                {/* )} */}
-                                                {/* {statusImgLogo === true && <span>Carregando...</span>} */}
-                                                {/* {statusImgLogo === false && ( */}
-                                                {/* <BsCheckAll className="check" size={25} color="#2e656a" /> */}
-                                                {/* )} */}
+                                                {statusImgLogo === null && (
+                                                    <label htmlFor="avatar">
+                                                        <FiCamera />
+                                                        <input
+                                                            accept=".jpg, .jpeg, .png"
+                                                            onChange={handleImageChange}
+                                                            type="file"
+                                                            id="avatar"
+                                                        />
+                                                    </label>
+                                                )}
+                                                {statusImgLogo === true && <span>Carregando...</span>}
+                                                {statusImgLogo === false && (
+                                                    <BsCheckAll className="check" size={25} color="#2e656a" />
+                                                )}
                                             </div>
                                         </Col>
                                         <Col xs={12} sm={4} md={4} lg={4}>
-                                            <Button type="button" onClick={() => setIsUpdateProfile(false)}>
+                                            <Button type="button" onClick={deleteProviderImage}>
                                                 Excluir Imagem
                                             </Button>
                                         </Col>
                                         <Col xs={12} sm={4} md={4} lg={4}>
-                                            <Button type="button" onClick={() => setIsUpdateProfile(false)}>
+                                            <Button type="button" onClick={updateDefaultProviderImage}>
                                                 Tornar Imagem Principal
                                             </Button>
                                         </Col>

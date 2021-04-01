@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FiPower } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { Header, HeaderContent, Profile } from './styles';
 import { useAuth } from '../../../hooks/Auth';
+import api from '../../../services/api';
 
 const Index: React.FC = () => {
     const { signOut, user } = useAuth();
+    const [avatarImg, setAvatarImg] = useState('');
+
+    useEffect(() => {
+        if (user.avatar) {
+            // eslint-disable-next-line func-names
+            const getImg = async function (): Promise<void> {
+                const { data } = await api.get(`storage/base64/min/${user.avatar}`);
+                setAvatarImg(data);
+            };
+            getImg();
+        }
+    }, [user.avatar]);
 
     return (
         <Header>
@@ -20,7 +33,7 @@ const Index: React.FC = () => {
                     <Link to="/">Home Sistema</Link>
                 </div>
                 <Profile>
-                    <img src="https://pickaface.net/gallery/avatar/20140501_004912_2217_comm.png" alt="asd" />
+                    <img src={`data:image/png;base64,${avatarImg}`} alt="asd" />
                     <div>
                         <span>Bem-vindo, {user.name}</span>
                         <Link to="/providerProfile">
