@@ -20,14 +20,14 @@ interface SignInFormData {
 
 const SignIn: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
-    const [isProvider, setIsProvider] = useState(false);
+    const [isProvider, setIsProvider] = useState(true);
     const { signIn } = useAuth();
     const history = useHistory();
 
     useEffect(() => {
         setTimeout(() => {
-            formRef.current?.setFieldValue('isProvider', 'false');
-        }, 500);
+            formRef.current?.setFieldValue('isProvider', 'true');
+        }, 300);
     }, []);
 
     const handleSubmit = useCallback(

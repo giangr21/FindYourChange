@@ -256,6 +256,11 @@ const SignUp: React.FC = () => {
                                 </Row>
                                 <Row>
                                     <Column>
+                                        <Input name="legalName" icon={FiUser} placeholder="Nome Fantasia" />
+                                    </Column>
+                                </Row>
+                                <Row>
+                                    <Column>
                                         <Input name="email" icon={FiMail} placeholder="E-mail" />
                                         <InputMask
                                             icon={FaPhoneAlt}
