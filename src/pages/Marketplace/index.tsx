@@ -56,25 +56,42 @@ const Index: React.FC = () => {
     const { user } = useAuth();
     const [loading, setLoading] = useState(true);
     const [products, setProducts] = useState<ProductData[]>([]);
-    const [filter, setFilter] = useState<any>({
-        providerId: user.id,
-    });
     const [cities, setCities] = useState([]);
     const [showFilter, setShowFilter] = useState(true);
     const [page, setPage] = useState(1);
     const formRef = useRef<FormHandles>(null);
     const history = useHistory();
 
-    useEffect(() => {
-        setTimeout(() => {
-            formRef.current?.setFieldValue('neightborhoods', 'false');
-            formRef.current?.setFieldValue('services', 'false');
-        }, 500);
+    const formFilterSubmit = useCallback(async (filterT: any) => {
+        try {
+            await api.post('/products/provider/filter', filterT).then(async (response) => {
+                const { data } = response;
+                const auxProducts: any = [];
+
+                for (let index = 0; index < data.length; index++) {
+                    const product = data[index];
+                    if (product.productImage) {
+                        const { data: imgBase64 } = await api.get(`storage/base64/min/${product.productImage}`);
+                        auxProducts.push({ ...product, productImage: imgBase64 });
+                    } else {
+                        auxProducts.push({ ...product });
+                    }
+                }
+
+                setProducts(auxProducts);
+                setLoading(false);
+            });
+        } catch (err) {
+            if (err) {
+                toast.error(`Houve uma falha ao filtrar`);
+                console.log(err);
+            }
+        }
     }, []);
 
-    const getProducts = useCallback(async (filterProduct: any) => {
+    const getProducts = useCallback(async () => {
         await api
-            .post('/products/provider', filterProduct)
+            .get('/products/marketplace/all')
             .then(async (response) => {
                 const { data } = response;
                 const auxProducts: any = [];
@@ -98,6 +115,14 @@ const Index: React.FC = () => {
             });
     }, []);
 
+    const clearFilter = useCallback(() => {
+        formRef.current?.reset();
+
+        setTimeout(() => {
+            getProducts();
+        }, 300);
+    }, []);
+
     const getCities = useCallback(async () => {
         await api.get('/provider/cities/all').then((response) => {
             setCities(response.data);
@@ -105,7 +130,7 @@ const Index: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        getProducts(filter);
+        getProducts();
         getCities();
     }, []);
 
@@ -125,9 +150,9 @@ const Index: React.FC = () => {
     return (
         <Content>
             <SearchContainer showFilter={showFilter}>
-                <ContentSearch ref={formRef} onSubmit={() => {}}>
+                <ContentSearch ref={formRef} onSubmit={formFilterSubmit}>
                     <p>Filtro MarketPlace</p>
-                    <Input name="email" icon={FaSearch} placeholder="Pesquisar Marketplace" />
+                    <Input name="name" icon={FaSearch} placeholder="Pesquisar Marketplace" />
                     <div className="separator" />
                     <span>Cidades: </span>
                     <div
@@ -160,17 +185,16 @@ const Index: React.FC = () => {
                                 display: 'flex',
                                 flexDirection: 'column',
                             }}
-                            name="services"
+                            name="category"
                             options={[
                                 {
-                                    id: 'false',
+                                    id: 'Todas',
                                     label: 'Todas',
                                 },
-                                { id: 'd', label: 'Tatuagem' },
-                                { id: 's', label: 'Piercing' },
-                                { id: 'a', label: 'Barbearia' },
+                                { id: 'Tatuagem', label: 'Tatuagem' },
+                                { id: 'BodyPiercing', label: 'Piercing' },
+                                { id: 'Barbearia', label: 'Barbearia' },
                             ]}
-                            onChange={() => {}}
                         />
                     </div>
                     <div className="separator" />
@@ -186,23 +210,23 @@ const Index: React.FC = () => {
                                 display: 'flex',
                                 flexDirection: 'column',
                             }}
-                            name="services"
+                            name="price"
                             options={[
                                 {
-                                    id: 'false',
-                                    label: '$50 - $100',
+                                    id: 'Todos',
+                                    label: 'Todos',
                                 },
-                                { id: 'true', label: '$100 - $150' },
-                                { id: 'as', label: '$150 - $200' },
-                                { id: 'ds', label: '$200 - $250' },
-                                { id: 's', label: '$250 +' },
+                                { id: '50-100', label: '$50 - $100' },
+                                { id: '100-150', label: '$100 - $150' },
+                                { id: '150-200', label: '$150 - $200' },
+                                { id: '200-250', label: '$200 - $250' },
+                                { id: '250+', label: '$250 +' },
                             ]}
-                            onChange={() => {}}
                         />
                     </div>
                 </ContentSearch>
                 <FooterFilter>
-                    <IconButton icon={MdDeleteForever} title="Limpar" background="#777777" action={() => {}} />
+                    <IconButton icon={MdDeleteForever} title="Limpar" background="#777777" action={clearFilter} />
                     <IconButton
                         icon={FaCheck}
                         title="Aplicar"

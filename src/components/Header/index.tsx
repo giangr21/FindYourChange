@@ -23,7 +23,7 @@ const Index: React.FC = () => {
                 </Left>
                 <Right>
                     <Link to="/">Inicio</Link>
-                    <Link to="/service">Navegar</Link>
+                    <Link to="/allServicesProvider">Navegar</Link>
                     <Link to="/about">Sobre nós</Link>
                     {isAuthenticated ? (
                         <NavUserImg />

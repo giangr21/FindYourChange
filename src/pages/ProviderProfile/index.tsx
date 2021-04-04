@@ -117,6 +117,10 @@ const Profile: React.FC = () => {
                     avatar: data.avatar,
                     id: data.id,
                     isProvider: user.isProvider,
+                    isBarber,
+                    isPiercing,
+                    isTattoo,
+                    legalName: data.legalName,
                 });
 
                 toast.success('Perfil atualizado com sucesso!');
@@ -350,7 +354,7 @@ const Profile: React.FC = () => {
                                     </Row>
 
                                     <Row>
-                                        <Col xs={12} sm={3} md={3} lg={3}>
+                                        <Col xs={12} sm={6} md={6} lg={6}>
                                             <InputMask
                                                 icon={FaPhoneAlt}
                                                 mask="(99)99999-9999"
@@ -358,7 +362,18 @@ const Profile: React.FC = () => {
                                                 placeholder="Telefone"
                                             />
                                         </Col>
-                                        <Col xs={12} sm={3} md={3} lg={3}>
+                                        <Col xs={12} sm={6} md={6} lg={6}>
+                                            <Input
+                                                name="legalName"
+                                                icon={FiUser}
+                                                type="text"
+                                                placeholder="Nome Fantasia"
+                                            />
+                                        </Col>
+                                    </Row>
+
+                                    <Row>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
                                             <Input
                                                 name="oldPassword"
                                                 icon={FiLock}
@@ -366,7 +381,7 @@ const Profile: React.FC = () => {
                                                 placeholder="Senha atual"
                                             />
                                         </Col>
-                                        <Col xs={12} sm={3} md={3} lg={3}>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
                                             <Input
                                                 name="password"
                                                 icon={FiLock}
@@ -374,7 +389,7 @@ const Profile: React.FC = () => {
                                                 placeholder="Nova senha"
                                             />
                                         </Col>
-                                        <Col xs={12} sm={3} md={3} lg={3}>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
                                             <Input
                                                 name="passwordConfirmation"
                                                 icon={FiLock}

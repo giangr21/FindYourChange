@@ -5,11 +5,15 @@ import api from '../services/api';
 interface User {
     id: string;
     name: string;
+    lastName: string;
+    legalName: string;
     phone: string;
     email: string;
     avatar: string;
     isProvider: boolean;
-    lastName: string;
+    isTattoo: boolean;
+    isPiercing: boolean;
+    isBarber: boolean;
 }
 
 interface AuthState {
@@ -60,8 +64,26 @@ const AuthProvider: React.FC = ({ children }) => {
             isProvider,
         });
         const { token, user } = response.data;
+
+        if (isProvider) {
+            const userProvider = {
+                id: user.id,
+                avatar: user.avatar,
+                email: user.email,
+                isBarber: user.isBarber,
+                isPiercing: user.isPiercing,
+                isTattoo: user.isTattoo,
+                name: user.name,
+                lastName: user.lastName,
+                legalName: user.legalName,
+                phone: user.phone,
+            };
+            localStorage.setItem('@FYC:user', JSON.stringify({ ...userProvider, isProvider }));
+        } else {
+            localStorage.setItem('@FYC:user', JSON.stringify({ ...user, isProvider }));
+        }
+
         localStorage.setItem('@FYC:token', token);
-        localStorage.setItem('@FYC:user', JSON.stringify({ ...user, isProvider }));
         user.isProvider = isProvider;
 
         setData({ token, user });

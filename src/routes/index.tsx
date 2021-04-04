@@ -10,7 +10,7 @@ import HomePageProvider from '../pages/HomePageProvider';
 import ConfigServicesProvider from '../pages/ConfigServicesProvider';
 import ConfigSchedulesProvider from '../pages/ConfigSchedulesProvider';
 import ConfigProductsProvider from '../pages/ConfigProductsProvider';
-import Service from '../pages/Service';
+import ServicesProvider from '../pages/ServicesProvider';
 import Provider from '../pages/Provider';
 import ProviderProfile from '../pages/ProviderProfile';
 import Marketplace from '../pages/Marketplace';
@@ -21,7 +21,7 @@ import Clerk from '../pages/Clerk';
 const Routes: React.FC = () => (
     <Switch>
         <Route path="/" exact component={Index} />
-        <Route path="/service" component={Service} />
+        <Route path="/allServicesProvider" component={ServicesProvider} />
         <Route path="/provider" component={Provider} />
         <Route path="/About" component={About} />
 
