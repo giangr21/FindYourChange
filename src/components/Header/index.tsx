@@ -6,10 +6,12 @@ import IconButton from '../Button/IconButton';
 import { useAuth } from '../../hooks/Auth';
 import NavUserImg from './NavUserImg';
 import logo from '../../assets/logoF.png';
+import { useMedia } from '../../util/use-media';
 
 const Index: React.FC = () => {
     const history = useHistory();
     const { isAuthenticated } = useAuth();
+    const mobile = useMedia('(max-width: 990px)');
 
     return (
         <Container>
@@ -22,9 +24,13 @@ const Index: React.FC = () => {
                     <img src={logo} alt="logo" />
                 </Left>
                 <Right>
-                    <Link to="/">Inicio</Link>
-                    <Link to="/allServicesProvider">Navegar</Link>
-                    <Link to="/about">Sobre nós</Link>
+                    {!mobile && (
+                        <>
+                            <Link to="/">Inicio</Link>
+                            <Link to="/allServicesProvider">Navegar</Link>
+                            <Link to="/about">Sobre nós</Link>
+                        </>
+                    )}
                     {isAuthenticated ? (
                         <NavUserImg />
                     ) : (

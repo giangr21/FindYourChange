@@ -10,7 +10,6 @@ export const Container = styled.div`
 
 export const Button = styled.button<ButtonProps>`
     width: 50%;
-    padding: 0 16px;
     margin: 0 auto;
     height: 36px;
 

@@ -3,9 +3,11 @@ import Popover, { PLACEMENT } from '../../Popover/Popover';
 import { NavLink, UserDropdowItem, LogoutBtn, ProfileImg, Image } from './styles';
 import { useAuth } from '../../../hooks/Auth';
 import api from '../../../services/api';
+import { useMedia } from '../../../util/use-media';
 
 const NavUserImg: React.FC = () => {
     const { signOut, user } = useAuth();
+    const mobile = useMedia('(max-width: 990px)');
     const [avatarImg, setAvatarImg] = useState('');
 
     useEffect(() => {
@@ -24,11 +26,25 @@ const NavUserImg: React.FC = () => {
             <Popover
                 content={({ close }: any) => (
                     <UserDropdowItem>
+                        {mobile && (
+                            <>
+                                <NavLink to="/" exact={false} onClick={close}>
+                                    Inicio
+                                </NavLink>
+                                <NavLink to="/allServicesProvider" exact={false} onClick={close}>
+                                    Navegar
+                                </NavLink>
+                                <NavLink to="/about" exact={false} onClick={close}>
+                                    Sobre nós
+                                </NavLink>
+                            </>
+                        )}
                         {user.isProvider && (
                             <NavLink to="/homeProvider" exact={false} onClick={close}>
                                 Dashboard
                             </NavLink>
                         )}
+
                         <LogoutBtn onClick={signOut}>Sair</LogoutBtn>
                     </UserDropdowItem>
                 )}
