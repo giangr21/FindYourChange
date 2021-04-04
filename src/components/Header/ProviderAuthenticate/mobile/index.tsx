@@ -47,16 +47,17 @@ const MobileHeader: React.FC = () => {
                             style: {
                                 marginRight: '0',
                                 marginLeft: '0',
-                                '@media only screen and (max-width: 767px)': {
-                                    marginLeft: '30px',
+                                '@media only screen and (max-width: 989px)': {
+                                    marginLeft: '15px',
+                                    marginRight: '15px',
                                 },
                             },
                         },
                         DrawerContainer: {
                             style: {
                                 width: '270px',
-                                '@media only screen and (max-width: 767px)': {
-                                    width: '80%',
+                                '@media only screen and (max-width: 989px)': {
+                                    width: '75%',
                                 },
                             },
                         },

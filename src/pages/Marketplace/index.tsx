@@ -9,9 +9,6 @@ import { MdDeleteForever } from 'react-icons/md';
 import IconButton from '../../components/Button/IconButton';
 import {
     Content,
-    SearchContainer,
-    FooterFilter,
-    ContentSearch,
     Results,
     ContentResults,
     HeaderResults,
@@ -25,15 +22,19 @@ import {
     ProductPriceWrapper,
     ProductPrice,
     Pagination,
+    SearchContainer,
+    ContentSearch,
+    FooterFilter,
 } from './styles';
 import Radio from '../../components/Radio';
 import Input from '../../components/Input/MainSearchInput';
-import { useAuth } from '../../hooks/Auth';
 import { ProductData } from '../ConfigProductsProvider';
 import api from '../../services/api';
 import Loading from '../../components/Loading';
 import { Row as Rows, Col as Column } from '../../components/FlexBox/FlexBox';
 import PaginationButton from '../../components/Button/PaginationButton';
+import FilterMobile from '../../components/Filter/MobileMarketPlace';
+import { useMedia } from '../../util/use-media';
 
 export const Col = withStyle(Column, () => ({
     marginBottom: '20px',
@@ -53,41 +54,50 @@ const Row = withStyle(Rows, () => ({
 }));
 
 const Index: React.FC = () => {
-    const { user } = useAuth();
+    const mobile = useMedia('(max-width: 990px)');
     const [loading, setLoading] = useState(true);
     const [products, setProducts] = useState<ProductData[]>([]);
     const [cities, setCities] = useState([]);
-    const [showFilter, setShowFilter] = useState(true);
+    const [showFilter, setShowFilter] = useState(!mobile);
     const [page, setPage] = useState(1);
     const formRef = useRef<FormHandles>(null);
     const history = useHistory();
 
-    const formFilterSubmit = useCallback(async (filterT: any) => {
-        try {
-            await api.post('/products/provider/filter', filterT).then(async (response) => {
-                const { data } = response;
-                const auxProducts: any = [];
+    const formFilterSubmit = useCallback(
+        async (filterT: any) => {
+            setLoading(true);
+            try {
+                await api.post('/products/provider/filter', filterT).then(async (response) => {
+                    const { data } = response;
+                    const auxProducts: any = [];
 
-                for (let index = 0; index < data.length; index++) {
-                    const product = data[index];
-                    if (product.productImage) {
-                        const { data: imgBase64 } = await api.get(`storage/base64/min/${product.productImage}`);
-                        auxProducts.push({ ...product, productImage: imgBase64 });
-                    } else {
-                        auxProducts.push({ ...product });
+                    for (let index = 0; index < data.length; index++) {
+                        const product = data[index];
+                        if (product.productImage) {
+                            const { data: imgBase64 } = await api.get(
+                                `storage/base64/min/${product.productImage}`,
+                            );
+                            auxProducts.push({ ...product, productImage: imgBase64 });
+                        } else {
+                            auxProducts.push({ ...product });
+                        }
                     }
-                }
 
-                setProducts(auxProducts);
-                setLoading(false);
-            });
-        } catch (err) {
-            if (err) {
-                toast.error(`Houve uma falha ao filtrar`);
-                console.log(err);
+                    setProducts(auxProducts);
+                    setLoading(false);
+                });
+            } catch (err) {
+                if (err) {
+                    toast.error(`Houve uma falha ao filtrar`);
+                    console.log(err);
+                }
             }
-        }
-    }, []);
+            if (mobile) {
+                setShowFilter((prevState) => !prevState);
+            }
+        },
+        [mobile],
+    );
 
     const getProducts = useCallback(async () => {
         await api
@@ -106,6 +116,10 @@ const Index: React.FC = () => {
                     }
                 }
 
+                formRef.current?.setFieldValue('category', 'Todas');
+                formRef.current?.setFieldValue('cities', 'Todas');
+                formRef.current?.setFieldValue('price', 'Todos');
+
                 setProducts(auxProducts);
                 setLoading(false);
             })
@@ -121,7 +135,10 @@ const Index: React.FC = () => {
         setTimeout(() => {
             getProducts();
         }, 300);
-    }, []);
+        if (mobile) {
+            setShowFilter((prevState) => !prevState);
+        }
+    }, [getProducts, mobile]);
 
     const getCities = useCallback(async () => {
         await api.get('/provider/cities/all').then((response) => {
@@ -130,8 +147,8 @@ const Index: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        getProducts();
         getCities();
+        getProducts();
     }, []);
 
     const handleClickProduct = useCallback(
@@ -149,92 +166,108 @@ const Index: React.FC = () => {
 
     return (
         <Content>
-            <SearchContainer showFilter={showFilter}>
-                <ContentSearch ref={formRef} onSubmit={formFilterSubmit}>
-                    <p>Filtro MarketPlace</p>
-                    <Input name="name" icon={FaSearch} placeholder="Pesquisar Marketplace" />
-                    <div className="separator" />
-                    <span>Cidades: </span>
-                    <div
-                        style={{
-                            marginTop: '5px',
-                        }}
-                    >
-                        <Radio
+            {mobile ? (
+                <FilterMobile
+                    isDrawerOpen={showFilter}
+                    toggleFilter={handleFilter}
+                    cities={cities}
+                    formRef={formRef}
+                    clearFilter={clearFilter}
+                    formFilterSubmit={formFilterSubmit}
+                />
+            ) : (
+                <SearchContainer showFilter={showFilter}>
+                    <ContentSearch ref={formRef} onSubmit={formFilterSubmit}>
+                        <p>Filtro MarketPlace</p>
+                        <Input name="name" icon={FaSearch} placeholder="Pesquisar Marketplace" />
+                        <div className="separator" />
+                        <span>Cidades: </span>
+                        <div
                             style={{
-                                width: '100%',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                // alignItems: 'center',
-                                // justifyContent: 'center',
+                                marginTop: '5px',
                             }}
-                            name="cities"
-                            options={cities}
-                        />
-                    </div>
-                    <div className="separator" />
-                    <span>Categoria: </span>
-                    <div
-                        style={{
-                            marginTop: '5px',
-                        }}
-                    >
-                        <Radio
+                        >
+                            <Radio
+                                style={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    // alignItems: 'center',
+                                    // justifyContent: 'center',
+                                }}
+                                name="cities"
+                                options={cities}
+                            />
+                        </div>
+                        <div className="separator" />
+                        <span>Categoria: </span>
+                        <div
                             style={{
-                                width: '100%',
-                                display: 'flex',
-                                flexDirection: 'column',
+                                marginTop: '5px',
                             }}
-                            name="category"
-                            options={[
-                                {
-                                    id: 'Todas',
-                                    label: 'Todas',
-                                },
-                                { id: 'Tatuagem', label: 'Tatuagem' },
-                                { id: 'BodyPiercing', label: 'Piercing' },
-                                { id: 'Barbearia', label: 'Barbearia' },
-                            ]}
-                        />
-                    </div>
-                    <div className="separator" />
-                    <span>Preço: </span>
-                    <div
-                        style={{
-                            marginTop: '5px',
-                        }}
-                    >
-                        <Radio
+                        >
+                            <Radio
+                                style={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}
+                                name="category"
+                                options={[
+                                    {
+                                        id: 'Todas',
+                                        label: 'Todas',
+                                    },
+                                    { id: 'Tatuagem', label: 'Tatuagem' },
+                                    { id: 'BodyPiercing', label: 'Piercing' },
+                                    { id: 'Barbearia', label: 'Barbearia' },
+                                ]}
+                            />
+                        </div>
+                        <div className="separator" />
+                        <span>Preço: </span>
+                        <div
                             style={{
-                                width: '100%',
-                                display: 'flex',
-                                flexDirection: 'column',
+                                marginTop: '5px',
                             }}
-                            name="price"
-                            options={[
-                                {
-                                    id: 'Todos',
-                                    label: 'Todos',
-                                },
-                                { id: '50-100', label: '$50 - $100' },
-                                { id: '100-150', label: '$100 - $150' },
-                                { id: '150-200', label: '$150 - $200' },
-                                { id: '200-250', label: '$200 - $250' },
-                                { id: '250+', label: '$250 +' },
-                            ]}
+                        >
+                            <Radio
+                                style={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}
+                                name="price"
+                                options={[
+                                    {
+                                        id: 'Todos',
+                                        label: 'Todos',
+                                    },
+                                    { id: '50-100', label: '$50 - $100' },
+                                    { id: '100-150', label: '$100 - $150' },
+                                    { id: '150-200', label: '$150 - $200' },
+                                    { id: '200-250', label: '$200 - $250' },
+                                    { id: '250+', label: '$250 +' },
+                                ]}
+                            />
+                        </div>
+                    </ContentSearch>
+                    <FooterFilter>
+                        <IconButton
+                            icon={MdDeleteForever}
+                            title="Limpar"
+                            background="#777777"
+                            action={clearFilter}
                         />
-                    </div>
-                </ContentSearch>
-                <FooterFilter>
-                    <IconButton icon={MdDeleteForever} title="Limpar" background="#777777" action={clearFilter} />
-                    <IconButton
-                        icon={FaCheck}
-                        title="Aplicar"
-                        background="#00A57C"
-                        action={() => formRef.current?.submitForm()}
-                    />
-                </FooterFilter>
-            </SearchContainer>
+                        <IconButton
+                            icon={FaCheck}
+                            title="Aplicar"
+                            background="#00A57C"
+                            action={() => formRef.current?.submitForm()}
+                        />
+                    </FooterFilter>
+                </SearchContainer>
+            )}
 
             {!loading ? (
                 <Results>
