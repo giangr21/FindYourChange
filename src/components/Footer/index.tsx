@@ -4,12 +4,15 @@ import { FaFacebookF, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { Container, Up, Down, Content, Left, Right } from './styles';
 import logo from '../../assets/logoPrincipalMobile.png';
+import { useMedia } from '../../util/use-media';
 
 const Index: React.FC = () => {
+    const mobile = useMedia('(max-width: 990px)');
+
     return (
         <Container>
             <Content>
-                <Up>
+                <Up mobile={mobile}>
                     <Link to="/home">Inicio</Link>
                     <Link to="/allServicesProvider">Navegar</Link>
                     <Link to="/aboutUs">Sobre Nos</Link>
@@ -24,11 +27,11 @@ const Index: React.FC = () => {
                     }}
                 />
                 <Down>
-                    <Left>
+                    <Left mobile={mobile}>
                         <img src={logo} alt="" />
                         <p>2021 Find Your Change - Todos os direitos reservados</p>
                     </Left>
-                    <Right>
+                    <Right mobile={mobile}>
                         <div className="img">
                             <label htmlFor="avatar">
                                 <FaInstagram />

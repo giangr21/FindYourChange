@@ -43,6 +43,10 @@ export const SearchContainer = styled.div`
         font-size: 15px;
         /* padding-bottom: 10px; */
     }
+
+    @media (max-width: 990px) {
+        display: none;
+    }
 `;
 
 export const ContentSearch = styled(Unform)`

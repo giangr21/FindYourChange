@@ -1,20 +1,24 @@
 import styled from 'styled-components';
 
+interface IsMobile {
+    mobile: boolean;
+}
+
 export const Container = styled.div`
     height: 140px;
     width: 100%;
     padding: 10px 10px;
 `;
 
-export const Up = styled.div`
-    margin: auto 0;
+export const Up = styled.div<IsMobile>`
+    margin: auto;
 
     a {
         text-decoration: none;
         font-size: 13px;
         font-weight: 500;
         color: black;
-        margin: 0px 20px;
+        margin: ${(props) => (props.mobile ? '0px 10px' : '0px 20px')};
     }
 `;
 
@@ -33,35 +37,36 @@ export const Content = styled.div`
     height: 100%;
 `;
 
-export const Left = styled.div`
+export const Left = styled.div<IsMobile>`
     display: flex;
     align-items: center;
 
     p {
-        font-size: 12px;
+        font-size: ${(props) => (props.mobile ? '10px' : '12px')};
         font-weight: 500;
         color: black;
+        text-align: center;
     }
 
     img {
-        height: 70px;
+        height: ${(props) => (props.mobile ? '50px' : '70px')};
         margin-right: 20px;
         margin-left: 10px;
     }
 `;
 
-export const Right = styled.div`
+export const Right = styled.div<IsMobile>`
     display: flex;
+    margin: auto 0;
 
     .img {
-        margin-top: 10px;
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: center;
         label {
-            width: 38px;
-            height: 38px;
+            width: ${(props) => (props.mobile ? '28px' : '38px')};
+            height: ${(props) => (props.mobile ? '28px' : '38px')};
             background: #ff9000;
             border-radius: 50%;
             margin-left: 10px;
