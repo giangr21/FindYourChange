@@ -1,6 +1,6 @@
-import { Form as Unform } from '@unform/web';
 import styled, { css } from 'styled-components';
 import { styled as styledBaseUi } from 'baseui';
+import { Form as Unform } from '@unform/web';
 import Images from '../../components/Image/Image';
 
 interface FilterProps {
@@ -13,108 +13,6 @@ export const Content = styled.div`
     margin: 0 auto;
     padding: 5px 0px;
     height: 100%;
-`;
-
-export const SearchContainer = styled.div<FilterProps>`
-    display: flex;
-    flex-direction: column;
-    margin-right: 5px;
-    height: 100%;
-    width: ${(props) => (props.showFilter ? '24%' : '0%')};
-    background: #28262e;
-    color: #f4ede8;
-    border: 1px solid #f4ede8;
-    border-radius: 10px;
-    transition: all ease 0.7s;
-
-    padding: 20px 30px;
-    align-items: center;
-    /* justify-content: center; */
-
-    p {
-        color: #f4ede8;
-        font-size: 18px;
-        font-weight: 500;
-        margin-bottom: 20px;
-    }
-
-    span {
-        font-size: 15px;
-        /* padding-bottom: 10px; */
-    }
-
-    ${(props) =>
-        props.showFilter &&
-        css`
-            transform: translateX(0);
-        `}
-
-    ${(props) =>
-        !props.showFilter &&
-        css`
-            transform: translateX(-10000%);
-        `}
-`;
-
-export const ContentSearch = styled(Unform)`
-    flex: auto;
-    .separator {
-        height: 2px;
-        background-color: #3a3a3a;
-        margin: 15px 0px;
-    }
-
-    input[type='radio'] {
-        cursor: pointer;
-    }
-
-    .radioButton span {
-        color: #f4ede8 !important;
-        cursor: pointer !important;
-        margin-left: 10px !important;
-        margin-right: 20px !important;
-        font-weight: 400;
-    }
-
-    input[type='radio']:after {
-        width: 10px;
-        height: 10px;
-        border-radius: 10px;
-        top: -2px;
-        left: -1px;
-        position: relative;
-        background-color: #d1d3d1;
-        content: '';
-        display: inline-block;
-        visibility: visible;
-        border: 2px solid white;
-    }
-
-    input[type='radio']:checked:after {
-        width: 10px;
-        height: 10px;
-        border-radius: 10px;
-        top: -2px;
-        left: -1px;
-        position: relative;
-        background-color: #ff9000;
-        content: '';
-        display: inline-block;
-        visibility: visible;
-        border: 2px solid white;
-    }
-`;
-
-export const FooterFilter = styled.div`
-    display: flex;
-    height: 60px;
-    padding: 5px 10px;
-    margin-top: 10px;
-    margin: 0 auto;
-
-    div + div {
-        margin-left: 10px;
-    }
 `;
 
 export const Results = styled.div`
@@ -257,4 +155,108 @@ export const Pagination = styled.div`
     display: flex;
     justify-content: flex-end;
     margin-top: 5px;
+`;
+
+export const SearchContainer = styled.div<FilterProps>`
+    display: flex;
+    flex-direction: column;
+    margin-right: 5px;
+    height: 100%;
+    width: ${(props) => (props.showFilter ? '24%' : '0%')};
+    background: #28262e;
+    color: #f4ede8;
+    border: 1px solid #f4ede8;
+    border-radius: 10px;
+    transition: all ease 0.7s;
+
+    padding: 20px 30px;
+    align-items: center;
+
+    p {
+        color: #f4ede8;
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 20px;
+    }
+
+    span {
+        font-size: 15px;
+    }
+
+    ${(props) =>
+        props.showFilter &&
+        css`
+            transform: translateX(0);
+        `}
+
+    ${(props) =>
+        !props.showFilter &&
+        css`
+            transform: translateX(-10000%);
+        `}
+
+    @media (max-width: 990px) {
+        display: none;
+    }
+`;
+
+export const ContentSearch = styled(Unform)`
+    flex: auto;
+    .separator {
+        height: 2px;
+        background-color: #3a3a3a;
+        margin: 15px 0px;
+    }
+
+    input[type='radio'] {
+        cursor: pointer;
+    }
+
+    .radioButton span {
+        color: #f4ede8 !important;
+        cursor: pointer !important;
+        margin-left: 10px !important;
+        margin-right: 20px !important;
+        font-weight: 400;
+    }
+
+    input[type='radio']:after {
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+        top: -2px;
+        left: -1px;
+        position: relative;
+        background-color: #d1d3d1;
+        content: '';
+        display: inline-block;
+        visibility: visible;
+        border: 2px solid white;
+    }
+
+    input[type='radio']:checked:after {
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+        top: -2px;
+        left: -1px;
+        position: relative;
+        background-color: #ff9000;
+        content: '';
+        display: inline-block;
+        visibility: visible;
+        border: 2px solid white;
+    }
+`;
+
+export const FooterFilter = styled.div`
+    display: flex;
+    height: 60px;
+    padding: 5px 10px;
+    margin-top: 10px;
+    margin: 0 auto;
+
+    div + div {
+        margin-left: 10px;
+    }
 `;

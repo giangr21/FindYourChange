@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.div`
+interface WrapperProps {
+    mobile: boolean;
+}
+
+export const Wrapper = styled.div<WrapperProps>`
     height: 100vh;
 
     .header {
@@ -16,6 +20,6 @@ export const Wrapper = styled.div`
     }
 
     .content {
-        height: calc(100% - 104px);
+        height: ${(props) => (props.mobile ? 'calc(100% - 80px)' : 'calc(100% - 104px)')};
     }
 `;

@@ -1,10 +1,12 @@
 /* eslint-disable no-await-in-loop */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { FaAngleDoubleRight, FaArrowLeft, FaArrowRight, FaSearch } from 'react-icons/fa';
+import { FaAngleDoubleRight, FaArrowLeft, FaArrowRight, FaCheck, FaSearch } from 'react-icons/fa';
 import { FormHandles } from '@unform/core';
 import { useHistory } from 'react-router-dom';
 import { withStyle } from 'baseui';
 import { BsDot } from 'react-icons/bs';
+import { toast } from 'react-toastify';
+import { MdDeleteForever } from 'react-icons/md';
 import { Row as Rows, Col as Column } from '../../components/FlexBox/FlexBox';
 import IconButton from '../../components/Button/IconButton';
 import IconButtonProvider from '../../components/Button/IconButtonProvider';
@@ -29,6 +31,7 @@ import Radio from '../../components/Radio';
 
 import api from '../../services/api';
 import PaginationButton from '../../components/Button/PaginationButton';
+import { FooterFilter } from '../../components/Filter/styles';
 
 export const Col = withStyle(Column, () => ({
     marginBottom: '3px',
@@ -49,44 +52,78 @@ const Row = withStyle(Rows, () => ({
 
 const Index: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
-    const secondFormRef = useRef<FormHandles>(null);
     const history = useHistory();
     const [providers, setProviders] = useState([]);
     const [showFilter, setShowFilter] = useState(true);
     const [page, setPage] = useState(1);
+    const [cities, setCities] = useState([]);
+
+    const getCities = useCallback(async () => {
+        await api.get('/provider/cities/all').then((response) => {
+            const { data } = response;
+            setCities(data);
+        });
+    }, []);
+
+    const renderEstablishmentsList = useCallback(async (establishmentsList: any) => {
+        for (let index = 0; index < establishmentsList.data.length; index++) {
+            const provider = establishmentsList.data[index];
+
+            for (let i = 0; i < provider.services.length; i++) {
+                const service = provider.services[i];
+                const valueToDiscount = service.value * (service.disccount / 100);
+                service.totalValueWithDisccount = (service.value - valueToDiscount).toFixed(2);
+            }
+
+            if (provider.providerImages.length > 0) {
+                const { data: imgBase64 } = await api.get(
+                    `storage/base64/min/${provider.providerImages[0].image}`,
+                );
+
+                provider.defaultImg = imgBase64;
+            }
+        }
+
+        setProviders(establishmentsList.data);
+    }, []);
+
+    const formFilterSubmit = useCallback(async (filter: any) => {
+        try {
+            await api.post('/provider', filter).then(async (response) => {
+                await renderEstablishmentsList(response);
+            });
+        } catch (err) {
+            if (err) {
+                toast.error(`Houve uma falha ao filtrar`);
+                console.log(err);
+            }
+        }
+    }, []);
+
+    const clearFilter = useCallback(() => {
+        formRef.current?.reset();
+        formRef.current?.setFieldValue('cities', 'Todas');
+        formRef.current?.setFieldValue('category', 'Todos');
+        formRef.current?.setFieldValue('price', 'Todos');
+
+        setTimeout(() => {
+            // clearFilter
+        }, 300);
+    }, []);
 
     useEffect(() => {
         async function getProviders(): Promise<void> {
             await api.post('/provider', {}).then(async (result) => {
-                console.log(result);
-
-                for (let index = 0; index < result.data.length; index++) {
-                    const provider = result.data[index];
-
-                    for (let i = 0; i < provider.services.length; i++) {
-                        const service = provider.services[i];
-                        const valueToDiscount = service.value * (service.disccount / 100);
-                        service.totalValueWithDisccount = (service.value - valueToDiscount).toFixed(2);
-                    }
-
-                    if (provider.providerImages.length > 0) {
-                        const { data: imgBase64 } = await api.get(
-                            `storage/base64/min/${provider.providerImages[0].image}`,
-                        );
-
-                        provider.defaultImg = imgBase64;
-                    }
-                }
-
-                setProviders(result.data);
+                await renderEstablishmentsList(result);
             });
         }
-
+        getCities();
         getProviders();
 
         setTimeout(() => {
-            formRef.current?.setFieldValue('neightborhoods', 'false');
-            formRef.current?.setFieldValue('services', 'false');
+            formRef.current?.setFieldValue('cities', 'Todas');
+            formRef.current?.setFieldValue('category', 'Todos');
+            formRef.current?.setFieldValue('price', 'Todos');
         }, 500);
     }, []);
 
@@ -97,8 +134,8 @@ const Index: React.FC = () => {
     return (
         <Container>
             <Content>
-                <SearchContainer>
-                    <ContentSearch ref={formRef} onSubmit={() => {}}>
+                <SearchContainer showFilter={showFilter}>
+                    <ContentSearch ref={formRef} onSubmit={formFilterSubmit}>
                         <p>Filtrar Resultado</p>
                         <span>Disponibilidade: </span>
                         <div
@@ -106,19 +143,27 @@ const Index: React.FC = () => {
                                 marginTop: '5px',
                             }}
                         >
-                            <DatePicker name="dateReleaseEnd" placeholderText="Qualquer data" />
+                            <DatePicker name="availability" placeholderText="Qualquer data" />
                         </div>
                         <div className="separator" />
-                        <span>Localidade: </span>
+                        <span>Cidades: </span>
                         <div
                             style={{
                                 marginTop: '5px',
                             }}
                         >
-                            <DatePicker name="dateReleaseEnd" placeholderText="Curitiba" />
+                            <Radio
+                                style={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}
+                                name="cities"
+                                options={cities}
+                            />
                         </div>
                         <div className="separator" />
-                        <span>Bairros: </span>
+                        <span>Tipo de estabelecimento: </span>
                         <div
                             style={{
                                 marginTop: '5px',
@@ -132,21 +177,20 @@ const Index: React.FC = () => {
                                     // alignItems: 'center',
                                     // justifyContent: 'center',
                                 }}
-                                name="neightborhoods"
+                                name="category"
                                 options={[
                                     {
-                                        id: 'false',
+                                        id: 'Todos',
                                         label: 'Todos',
                                     },
-                                    { id: 'true', label: 'Xaxim' },
-                                    { id: 'true', label: 'Centro' },
-                                    { id: 'true', label: 'Hauer' },
+                                    { id: 'Tatuagem', label: 'Tatuagem' },
+                                    { id: 'BodyPiercing', label: 'Piercing' },
+                                    { id: 'Barbearia', label: 'Barbearia' },
                                 ]}
-                                onChange={() => {}}
                             />
                         </div>
                         <div className="separator" />
-                        <span>Tipos de serviços: </span>
+                        <span>Preço: </span>
                         <div
                             style={{
                                 marginTop: '5px',
@@ -157,26 +201,39 @@ const Index: React.FC = () => {
                                     width: '100%',
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    // alignItems: 'center',
-                                    // justifyContent: 'center',
                                 }}
-                                name="services"
+                                name="price"
                                 options={[
                                     {
-                                        id: 'false',
+                                        id: 'Todos',
                                         label: 'Todos',
                                     },
-                                    { id: 'true', label: 'Tatuagem' },
-                                    { id: 'true', label: 'Piercing' },
-                                    { id: 'true', label: 'Barbearia' },
+                                    { id: '0-100', label: 'Até R$100' },
+                                    { id: '100-150', label: 'R$100 - R$150' },
+                                    { id: '150-200', label: 'R$150 - R$200' },
+                                    { id: '200-250', label: 'R$200 - R$250' },
+                                    { id: '250+', label: '$250 +' },
                                 ]}
-                                onChange={() => {}}
                             />
                         </div>
                         <div className="separator" />
+                        <FooterFilter>
+                            <IconButton
+                                icon={MdDeleteForever}
+                                title="Limpar"
+                                background="#777777"
+                                action={clearFilter}
+                            />
+                            <IconButton
+                                icon={FaCheck}
+                                title="Aplicar"
+                                background="#00A57C"
+                                action={() => formRef.current?.submitForm()}
+                            />
+                        </FooterFilter>
                     </ContentSearch>
                 </SearchContainer>
-                <Results ref={secondFormRef} onSubmit={() => {}}>
+                <Results>
                     <Header>
                         <span>{providers.length} estabelecimentos encontrados. Exibindo resultados de 1 a 5.</span>
                         <IconButton icon={FaSearch} background="#777777" justIcon action={handleFilter} />

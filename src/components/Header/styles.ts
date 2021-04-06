@@ -1,19 +1,20 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    padding: 10px 20px;
+    padding: 10px;
     height: 90px;
     max-height: 90px;
     background-color: #ff9000;
 `;
 
 export const Content = styled.div`
+    height: 100%;
     max-width: 1200px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     text-align: center;
-    margin: 0 auto;
+    margin: auto;
     background-color: #ff9000;
 `;
 
