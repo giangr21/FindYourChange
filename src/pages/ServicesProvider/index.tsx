@@ -32,6 +32,7 @@ import Radio from '../../components/Radio';
 import api from '../../services/api';
 import PaginationButton from '../../components/Button/PaginationButton';
 import { FooterFilter } from '../../components/Filter/styles';
+import Input from '../../components/Input/MainSearchInput';
 
 export const Col = withStyle(Column, () => ({
     marginBottom: '3px',
@@ -145,6 +146,14 @@ const Index: React.FC = () => {
                             }}
                         >
                             <DatePicker name="availability" placeholderText="Qualquer data" />
+                        </div>
+                        <div className="separator" />
+                        <div
+                            style={{
+                                marginTop: '5px',
+                            }}
+                        >
+                            <Input name="name" icon={FaSearch} placeholder="Nome do Estabelecimento" />
                         </div>
                         <div className="separator" />
                         <span>Cidades: </span>
