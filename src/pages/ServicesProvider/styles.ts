@@ -1,5 +1,9 @@
 import { Form as Unform } from '@unform/web';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+interface FilterProps {
+    showFilter: boolean;
+}
 
 export const Container = styled.div`
     height: calc(100vh - 230px);
@@ -15,22 +19,21 @@ export const Content = styled.div`
     height: 100%;
 `;
 
-export const SearchContainer = styled.div`
+export const SearchContainer = styled.div<FilterProps>`
     display: flex;
     flex-direction: column;
     margin-right: 5px;
     height: 100%;
-    width: 300px;
+    width: ${(props) => (props.showFilter ? '24%' : '0%')};
     max-width: 300px;
     background: #f3f4f4;
     color: #3a3a3a;
     border: 1px solid #3a3a3a;
     border-radius: 10px;
+    transition: all ease 0.7s;
 
-    padding: 40px 30px;
-    /* flex-direction: column; */
+    padding: 20px 30px;
     align-items: center;
-    /* justify-content: center; */
 
     p {
         color: #312e38;
@@ -41,8 +44,19 @@ export const SearchContainer = styled.div`
 
     span {
         font-size: 15px;
-        /* padding-bottom: 10px; */
     }
+
+    ${(props) =>
+        props.showFilter &&
+        css`
+            transform: translateX(0);
+        `}
+
+    ${(props) =>
+        !props.showFilter &&
+        css`
+            transform: translateX(-10000%);
+        `}
 
     @media (max-width: 990px) {
         display: none;
@@ -98,7 +112,7 @@ export const ContentSearch = styled(Unform)`
     }
 `;
 
-export const Results = styled(Unform)`
+export const Results = styled.div`
     background: #f3f4f4;
     color: #3a3a3a;
     width: 100%;

@@ -53,7 +53,6 @@ const Row = withStyle(Rows, () => ({
 
 const Index: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
-    const secondFormRef = useRef<FormHandles>(null);
     const history = useHistory();
     const [providers, setProviders] = useState([]);
     const [showFilter, setShowFilter] = useState(true);
@@ -136,7 +135,7 @@ const Index: React.FC = () => {
     return (
         <Container>
             <Content>
-                <SearchContainer>
+                <SearchContainer showFilter={showFilter}>
                     <ContentSearch ref={formRef} onSubmit={formFilterSubmit}>
                         <p>Filtrar Resultado</p>
                         <span>Disponibilidade: </span>
@@ -243,7 +242,7 @@ const Index: React.FC = () => {
                         </FooterFilter>
                     </ContentSearch>
                 </SearchContainer>
-                <Results ref={secondFormRef} onSubmit={() => {}}>
+                <Results>
                     <Header>
                         <span>{providers.length} estabelecimentos encontrados. Exibindo resultados de 1 a 5.</span>
                         <IconButton icon={FaSearch} background="#777777" justIcon action={handleFilter} />

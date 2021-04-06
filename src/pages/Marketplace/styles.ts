@@ -171,7 +171,6 @@ export const SearchContainer = styled.div<FilterProps>`
 
     padding: 20px 30px;
     align-items: center;
-    /* justify-content: center; */
 
     p {
         color: #f4ede8;
@@ -182,7 +181,6 @@ export const SearchContainer = styled.div<FilterProps>`
 
     span {
         font-size: 15px;
-        /* padding-bottom: 10px; */
     }
 
     ${(props) =>

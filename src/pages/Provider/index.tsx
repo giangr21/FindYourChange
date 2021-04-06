@@ -10,6 +10,7 @@ import Select from '../../components/Select/MainSearchSelect';
 import { Container, Content, InfoContainer, ScheduleInfo, ProviderInfo, ProviderService, Header } from './styles';
 import background from '../../assets/background-provider.png';
 import api from '../../services/api';
+import ModalLogin from '../../components/Modal/LoginModal';
 
 export interface ProviderData {
     id: string;
@@ -32,6 +33,8 @@ const Index: React.FC = () => {
     const [provider, setProvider] = useState<any>({});
     const formRef = useRef<FormHandles>(null);
     const secondFormRef = useRef<FormHandles>(null);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalLoginOpen, setModalLoginOpen] = useState(false);
 
     const getProvider = useCallback(async () => {
         await api
@@ -67,6 +70,19 @@ const Index: React.FC = () => {
             formRef.current?.setFieldValue('services', 'false');
         }, 500);
     }, []);
+
+    const toggleModalLogin = useCallback((id?: string): void => {
+        setModalLoginOpen((prevState) => !prevState);
+    }, []);
+
+    const handleLogin = useCallback(async (): Promise<void> => {
+        try {
+
+        } catch (err) {
+            toast.error('Erro!');
+        }
+    }, []);
+
 
     return (
         <Container>
@@ -110,7 +126,7 @@ const Index: React.FC = () => {
                                                 icon={MdCheck}
                                                 title="Agendar"
                                                 background="#ff9000"
-                                                action={() => {}}
+                                                action={toggleModalLogin}
                                             />
                                         </div>
                                     </ProviderService>
@@ -136,12 +152,19 @@ const Index: React.FC = () => {
                                                 icon={MdCheck}
                                                 title="Agendar"
                                                 background="#ff9000"
-                                                action={() => {}}
+                                                action={toggleModalLogin}
                                             />
                                         </div>
                                     </ProviderService>
                                 ))}
                             </TabPanel>
+                            {modalLoginOpen && (
+                            <ModalLogin
+                                isOpen={modalLoginOpen}
+                                setIsOpen={toggleModalLogin}
+                                handleConfirm={handleLogin}
+                            />
+                        )}
                         </Tabs>
                     </ProviderInfo>
                     <InfoContainer>
@@ -160,7 +183,6 @@ const Index: React.FC = () => {
                         <ScheduleInfo>
                             <div className="schedule">
                                 <div className="day">Domingo</div>
-
                                 <div className="time">Fechado</div>
                             </div>
                             <div className="schedule">
