@@ -165,10 +165,6 @@ export const Provider = styled.div`
         width: 100%;
         height: 130px;
         border-radius: 2%;
-
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
     }
 `;
 

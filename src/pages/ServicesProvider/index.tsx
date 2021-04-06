@@ -252,7 +252,15 @@ const Index: React.FC = () => {
                             {providers.map((provider: any) => (
                                 <Col key={provider.id} xs={12} sm={12} md={6} lg={6}>
                                     <Provider>
-                                        <img src={`data:image/png;base64,${provider.defaultImg}`} alt="" />
+                                        <img
+                                            style={{
+                                                background: `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.6)), url(${`data:image/png;base64,${provider.defaultImg}`})`,
+                                                backgroundSize: 'cover',
+                                                backgroundPosition: 'center center',
+                                                backgroundRepeat: 'no-repeat',
+                                            }}
+                                            alt=""
+                                        />
                                         <ProviderInfo>
                                             <span>{provider.legalName}</span>
                                             <span className="city">
