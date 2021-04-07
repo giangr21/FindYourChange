@@ -32,6 +32,7 @@ import Radio from '../../components/Radio';
 import api from '../../services/api';
 import PaginationButton from '../../components/Button/PaginationButton';
 import { FooterFilter } from '../../components/Filter/styles';
+import Input from '../../components/Input/MainSearchInput';
 
 export const Col = withStyle(Column, () => ({
     marginBottom: '3px',
@@ -146,6 +147,14 @@ const Index: React.FC = () => {
                             <DatePicker name="availability" placeholderText="Qualquer data" />
                         </div>
                         <div className="separator" />
+                        <div
+                            style={{
+                                marginTop: '5px',
+                            }}
+                        >
+                            <Input name="name" icon={FaSearch} placeholder="Nome do Estabelecimento" />
+                        </div>
+                        <div className="separator" />
                         <span>Cidades: </span>
                         <div
                             style={{
@@ -243,7 +252,15 @@ const Index: React.FC = () => {
                             {providers.map((provider: any) => (
                                 <Col key={provider.id} xs={12} sm={12} md={6} lg={6}>
                                     <Provider>
-                                        <img src={`data:image/png;base64,${provider.defaultImg}`} alt="" />
+                                        <img
+                                            style={{
+                                                background: `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.6)), url(${`data:image/png;base64,${provider.defaultImg}`})`,
+                                                backgroundSize: 'cover',
+                                                backgroundPosition: 'center center',
+                                                backgroundRepeat: 'no-repeat',
+                                            }}
+                                            alt=""
+                                        />
                                         <ProviderInfo>
                                             <span>{provider.legalName}</span>
                                             <span className="city">
