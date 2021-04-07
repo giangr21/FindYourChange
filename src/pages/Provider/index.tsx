@@ -6,11 +6,12 @@ import { toast } from 'react-toastify';
 
 import { MdCheck, MdEdit } from 'react-icons/md';
 import IconButton from '../../components/Button/IconButton';
-import Select from '../../components/Select/MainSearchSelect';
 import { Container, Content, InfoContainer, ScheduleInfo, ProviderInfo, ProviderService, Header } from './styles';
 import background from '../../assets/background-provider.png';
 import api from '../../services/api';
 import ModalLogin from '../../components/Modal/LoginModal';
+import ModalAgendar from './ModalAppointment';
+import { useAuth } from '../../hooks/Auth';
 
 export interface ProviderData {
     id: string;
@@ -32,9 +33,9 @@ const Index: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [provider, setProvider] = useState<any>({});
     const formRef = useRef<FormHandles>(null);
-    const secondFormRef = useRef<FormHandles>(null);
-    const [modalOpen, setModalOpen] = useState(false);
     const [modalLoginOpen, setModalLoginOpen] = useState(false);
+    const [modalAgendarOpen, setModalAgendarOpen] = useState(false);
+    const { isAuthenticated } = useAuth();
 
     const getProvider = useCallback(async () => {
         await api
@@ -75,7 +76,19 @@ const Index: React.FC = () => {
         setModalLoginOpen((prevState) => !prevState);
     }, []);
 
+    const toggleModalAgendar = useCallback((id?: string): void => {
+        setModalAgendarOpen((prevState) => !prevState);
+    }, []);
+
     const handleLogin = useCallback(async (): Promise<void> => {
+        try {
+
+        } catch (err) {
+            toast.error('Erro!');
+        }
+    }, []);
+
+    const handleAgendar = useCallback(async (): Promise<void> => {
         try {
 
         } catch (err) {
@@ -122,12 +135,21 @@ const Index: React.FC = () => {
                                             <p>{serviceIsPopular.time}</p>
                                         </div>
                                         <div>
+                                        {isAuthenticated ? (
+                                             <IconButton
+                                             icon={MdCheck}
+                                             title="Agendar"
+                                             background="#ff9000"
+                                             action={toggleModalAgendar}
+                                            />
+                                        ) : (
                                             <IconButton
                                                 icon={MdCheck}
-                                                title="Agendar"
+                                                title="Login"
                                                 background="#ff9000"
                                                 action={toggleModalLogin}
                                             />
+                                        )}
                                         </div>
                                     </ProviderService>
                                 ))}
@@ -148,23 +170,39 @@ const Index: React.FC = () => {
                                             <p>{serviceIsNotPopular.time}</p>
                                         </div>
                                         <div>
+                                        {isAuthenticated ? (
+                                             <IconButton
+                                             icon={MdCheck}
+                                             title="Agendar"
+                                             background="#ff9000"
+                                             action={toggleModalAgendar}
+                                         />
+                                        ) : (
                                             <IconButton
                                                 icon={MdCheck}
-                                                title="Agendar"
+                                                title="Login"
                                                 background="#ff9000"
                                                 action={toggleModalLogin}
                                             />
+                                        )}
                                         </div>
                                     </ProviderService>
                                 ))}
                             </TabPanel>
                             {modalLoginOpen && (
-                            <ModalLogin
-                                isOpen={modalLoginOpen}
-                                setIsOpen={toggleModalLogin}
-                                handleConfirm={handleLogin}
-                            />
-                        )}
+                                <ModalLogin
+                                    isOpen={modalLoginOpen}
+                                    setIsOpen={toggleModalLogin}
+                                    handleConfirm={handleLogin}
+                                />
+                            )}
+                            {modalAgendarOpen && (
+                                <ModalAgendar
+                                    isOpen={modalAgendarOpen}
+                                    setIsOpen={toggleModalAgendar}
+                                    handleConfirm={handleAgendar}
+                                />
+                            )}
                         </Tabs>
                     </ProviderInfo>
                     <InfoContainer>

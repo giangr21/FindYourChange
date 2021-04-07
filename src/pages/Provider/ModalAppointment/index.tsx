@@ -6,9 +6,7 @@ import ReactModal from 'react-modal';
 import { MdDeleteForever } from 'react-icons/md';
 import { FaCheck } from 'react-icons/fa';
 import { FiAlertOctagon } from 'react-icons/fi';
-import { Container, LeftContainer, RightContainer, Row } from './styles';
-import IconButton from '../../Button/IconButton';
-import logoImg from '../../../assets/logoPrincipalMobile.png';
+import { Container, RightContainer, Row } from './styles';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import getValidationErrors from '../../../util/getValidationErrors';
@@ -29,7 +27,7 @@ interface SignInFormData {
     password: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ children, isOpen, setIsOpen, handleConfirm }) => {
+const ModalAppointment: React.FC<ModalProps> = ({ children, isOpen, setIsOpen, handleConfirm }) => {
     const [modalStatus, setModalStatus] = useState(isOpen);
     const formRef = useRef<FormHandles>(null);
     const { signIn } = useAuth();
@@ -105,13 +103,10 @@ const Modal: React.FC<ModalProps> = ({ children, isOpen, setIsOpen, handleConfir
         >
             {/* {children} */}
             <Container>
-                <LeftContainer>
 
-                </LeftContainer>
                 <RightContainer>
-                    <img src={logoImg} alt="logo" width="35%"/>
                     <Form ref={formRef} onSubmit={handleSubmit}>
-                        <h2>Login</h2>
+                        <h2>Agendar Horário</h2>
                         <Row>
                             <Input name="email" icon={FiMail} placeholder="E-mail" />
                         </Row>
@@ -119,18 +114,14 @@ const Modal: React.FC<ModalProps> = ({ children, isOpen, setIsOpen, handleConfir
                             <Input name="password" icon={FiLock} type="password" placeholder="Senha" />
                         </Row>
 
-                        <Button type="submit">Entrar</Button>
+                        <Button type="submit">Agendar</Button>
 
-                        <Link to="/forgotPassword">Esqueci minha senha</Link>
                     </Form>
-                    <Link to="/signup">
-                        <FiLogIn />
-                        Criar Conta
-                    </Link>
+
                 </RightContainer>
             </Container>
         </ReactModal>
     );
 };
 
-export default Modal;
+export default ModalAppointment;
