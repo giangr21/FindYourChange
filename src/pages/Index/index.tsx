@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable func-names */
+import React, { useEffect, useState } from 'react';
 
 import { useHistory } from 'react-router-dom';
 import {
@@ -19,9 +20,28 @@ import card2 from '../../assets/reco2.png';
 import card3 from '../../assets/reco3.png';
 import imageUrl from '../../assets/background.jpg';
 import Search from '../../components/Search';
+import api from '../../services/api';
 
 const Index: React.FC = () => {
     const history = useHistory();
+    const [loading, setLoading] = useState(false);
+    const [popularRecommendations, setPopularRecommendations] = useState([]);
+
+    useEffect(() => {
+        const getPopularRecommendations = async function (): Promise<void> {
+            await api
+                .get(`/providerRecommendation/populars/`)
+                .then(async (response) => {
+                    setPopularRecommendations(response.data);
+                    setLoading(false);
+                })
+                .catch((e) => {
+                    // toast.error('Houve um erro ao buscar dados!');
+                    console.log(e);
+                });
+        };
+        getPopularRecommendations();
+    }, []);
 
     return (
         <>

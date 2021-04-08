@@ -1,46 +1,37 @@
-import React, { useState, useEffect , useRef, useCallback} from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import ReactModal from 'react-modal';
-import { MdDeleteForever } from 'react-icons/md';
-import { FaCheck } from 'react-icons/fa';
-import { FiAlertOctagon } from 'react-icons/fi';
-import { Container, LeftContainer, RightContainer, Row } from './styles';
-import IconButton from '../../Button/IconButton';
-import logoImg from '../../../assets/logoPrincipalMobile.png';
-import Button from '../../../components/Button';
-import Input from '../../../components/Input';
-import getValidationErrors from '../../../util/getValidationErrors';
-import { Link, useHistory } from 'react-router-dom';
 import { FiLock, FiLogIn, FiMail } from 'react-icons/fi';
-import { useAuth } from '../../../hooks/Auth';
+import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
+import { Container, LeftContainer, RightContainer, Row } from './styles';
+import logoImg from '../../../assets/logoPrincipalMobile.png';
+import Button from '../../Button';
+import Input from '../../Input';
+import getValidationErrors from '../../../util/getValidationErrors';
+
+import { useAuth } from '../../../hooks/Auth';
 
 interface ModalProps {
     children?: any;
     isOpen: boolean;
     setIsOpen: () => void;
-    handleConfirm: () => void;
 }
 interface SignInFormData {
     email: string;
     password: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ children, isOpen, setIsOpen, handleConfirm }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
     const [modalStatus, setModalStatus] = useState(isOpen);
     const formRef = useRef<FormHandles>(null);
     const { signIn } = useAuth();
-    const [isProvider, setIsProvider] = useState(false);
-    const history = useHistory();
 
     useEffect(() => {
         setModalStatus(isOpen);
-        setTimeout(() => {
-            formRef.current?.setFieldValue('isProvider', 'false');
-        }, 300);
     }, [isOpen]);
 
     const handleSubmit = useCallback(
@@ -59,7 +50,7 @@ const Modal: React.FC<ModalProps> = ({ children, isOpen, setIsOpen, handleConfir
                 await signIn({
                     email: data.email,
                     password: data.password,
-                    isProvider,
+                    isProvider: false,
                 });
 
                 return setModalStatus(false);
@@ -73,7 +64,7 @@ const Modal: React.FC<ModalProps> = ({ children, isOpen, setIsOpen, handleConfir
                 toast.error('Ocorreu um erro ao fazer login, cheque as credenciais.');
             }
         },
-        [history, isProvider, signIn],
+        [signIn],
     );
     return (
         <ReactModal
@@ -103,13 +94,10 @@ const Modal: React.FC<ModalProps> = ({ children, isOpen, setIsOpen, handleConfir
                 },
             }}
         >
-            {/* {children} */}
             <Container>
-                <LeftContainer>
-
-                </LeftContainer>
+                <LeftContainer />
                 <RightContainer>
-                    <img src={logoImg} alt="logo" width="35%"/>
+                    <img src={logoImg} alt="logo" width="35%" />
                     <Form ref={formRef} onSubmit={handleSubmit}>
                         <h2>Login</h2>
                         <Row>
