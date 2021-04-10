@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable import/no-duplicates */
 /* eslint-disable @typescript-eslint/camelcase */
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
@@ -18,15 +19,24 @@ interface MonthAvailability {
 
 interface Appointment {
     id: string;
-    date: string;
+    notes: string;
+    rating: string;
+    serviceType: string;
+    value: string;
+    dateRelease: string;
     hourFormatted: string;
     user: {
+        id: string;
         name: string;
-        avatar_url: string;
+        lastName: string;
+        avatar: string;
+        email: string;
+        phone: string;
     };
 }
 
 const HomePageProvider: React.FC = () => {
+    const { user } = useAuth();
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [monthAvailability, setMonthAvailability] = useState<MonthAvailability[]>([]);
@@ -43,33 +53,41 @@ const HomePageProvider: React.FC = () => {
     }, []);
 
     // useEffect(() => {
-    //     api.get(`/providers/${user.id}/month-availability`, {
+    //     api.get(`/provider/${user.id}/month-availability`, {
     //         params: {
     //             year: currentMonth.getFullYear(),
     //             month: currentMonth.getMonth() + 1,
     //         },
     //     }).then((response) => {
-    //         setMonthAvailability(response.data);
+    //         // setMonthAvailability(response.data);
     //     });
     // }, [currentMonth, user.id]);
 
-    // useEffect(() => {
-    //     api.get<Appointment[]>('appointments/me', {
-    //         params: {
-    //             year: selectedDate.getFullYear(),
-    //             month: selectedDate.getMonth() + 1,
-    //             day: selectedDate.getDate(),
-    //         },
-    //     }).then((response) => {
-    //         const appointmentsFormatted = response.data.map((appointment) => {
-    //             return {
-    //                 ...appointment,
-    //                 hourFormatted: format(parseISO(appointment.date), 'HH:mm'),
-    //             };
-    //         });
-    //         setAppointments(appointmentsFormatted);
-    //     });
-    // }, [selectedDate]);
+    useEffect(() => {
+        api.get('provider/appointments/me', {
+            params: {
+                year: selectedDate.getFullYear(),
+                month: selectedDate.getMonth() + 1,
+                day: selectedDate.getDate(),
+                providerId: user.id,
+            },
+        }).then(async (response) => {
+            console.log(response.data);
+            const appointmentsFormatted = [];
+            for (let index = 0; index < response.data.length; index++) {
+                const appointment = response.data[index];
+
+                const { data: imgBase64 } = await api.get(`storage/base64/min/${appointment.user.avatar}`);
+                appointment.user.avatar = imgBase64;
+
+                appointmentsFormatted.push({
+                    ...appointment,
+                    hourFormatted: format(parseISO(appointment.dateRelease), 'HH:mm'),
+                });
+            }
+            setAppointments(appointmentsFormatted);
+        });
+    }, [selectedDate, user.id]);
 
     const disabledDays = useMemo(() => {
         const dates = monthAvailability
@@ -96,37 +114,18 @@ const HomePageProvider: React.FC = () => {
 
     const morningAppointments = useMemo(() => {
         return appointments.filter((appointment) => {
-            return parseISO(appointment.date).getHours() < 12;
+            return parseISO(appointment.dateRelease).getHours() < 12;
         });
     }, [appointments]);
 
     const afternoonAppointments = useMemo(() => {
-        // return appointments.filter((appointment) => {
-        //     return parseISO(appointment.date).getHours() >= 12;
-        // });
-        return [
-            {
-                id: '1',
-                hourFormatted: '14:00',
-                user: {
-                    avatar_url:
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQDbMKZteobkIiPdEh2uBMlZCP3jdqm5nBSQkryYPuy6w&usqp=CAU&ec=45707743',
-                    name: 'Pedro',
-                },
-            },
-            {
-                id: '2',
-                hourFormatted: '15:00',
-                user: {
-                    avatar_url: 'https://pickaface.net/gallery/avatar/unr_whatsapp_180806_1904_2m02lx0.png',
-                    name: 'Daniela',
-                },
-            },
-        ];
+        return appointments.filter((appointment) => {
+            return parseISO(appointment.dateRelease).getHours() >= 12;
+        });
     }, [appointments]);
 
     const nextAppointment = useMemo(() => {
-        return appointments.find((appointment) => isAfter(parseISO(appointment.date), new Date()));
+        return appointments.find((appointment) => isAfter(parseISO(appointment.dateRelease), new Date()));
     }, [appointments]);
 
     return (
@@ -143,8 +142,13 @@ const HomePageProvider: React.FC = () => {
                         <NextAppointment>
                             <strong>Agendamento a seguir</strong>
                             <div>
-                                <img src={nextAppointment.user.avatar_url} alt={nextAppointment.user.name} />
-                                <strong>{nextAppointment.user.name}</strong>
+                                <img
+                                    src={`data:image/png;base64,${nextAppointment.user.avatar}`}
+                                    alt={nextAppointment.user.name}
+                                />
+                                <strong>
+                                    {nextAppointment.user.name} {nextAppointment.user.lastName}
+                                </strong>
                                 <span>
                                     <FiClock />
                                     {nextAppointment.hourFormatted}
@@ -166,8 +170,35 @@ const HomePageProvider: React.FC = () => {
                                 </span>
 
                                 <div>
-                                    <img src={appointment.user.avatar_url} alt={appointment.user.name} />
-                                    <strong>{appointment.user.name}</strong>
+                                    <img
+                                        src={`data:image/png;base64,${appointment.user.avatar}`}
+                                        alt={appointment.user.name}
+                                    />
+                                    <aside
+                                        style={{
+                                            flexDirection: 'column',
+                                            marginLeft: '10px',
+                                        }}
+                                    >
+                                        <section>
+                                            <h4 style={{ color: '#ff9000', marginRight: '7px' }}>Nome:</h4>
+                                            <h4>
+                                                {appointment.user.name} {appointment.user.lastName}
+                                            </h4>
+                                        </section>
+                                        <section>
+                                            <h4 style={{ color: '#ff9000', marginRight: '7px' }}>Tipo Serviço:</h4>
+                                            <h4>{appointment.serviceType}</h4>
+                                        </section>
+                                        {appointment.notes && appointment.notes !== '' && (
+                                            <section>
+                                                <h4 style={{ color: '#ff9000', marginRight: '7px' }}>
+                                                    Comentarios:
+                                                </h4>
+                                                <h4>{appointment.notes}</h4>
+                                            </section>
+                                        )}
+                                    </aside>
                                 </div>
                             </Appointment>
                         ))}
@@ -186,8 +217,35 @@ const HomePageProvider: React.FC = () => {
                                 </span>
 
                                 <div>
-                                    <img src={appointment.user.avatar_url} alt={appointment.user.name} />
-                                    <strong>{appointment.user.name}</strong>
+                                    <img
+                                        src={`data:image/png;base64,${appointment.user.avatar}`}
+                                        alt={appointment.user.name}
+                                    />
+                                    <aside
+                                        style={{
+                                            flexDirection: 'column',
+                                            marginLeft: '10px',
+                                        }}
+                                    >
+                                        <section>
+                                            <h4 style={{ color: '#ff9000', marginRight: '7px' }}>Nome:</h4>
+                                            <h4>
+                                                {appointment.user.name} {appointment.user.lastName}
+                                            </h4>
+                                        </section>
+                                        <section>
+                                            <h4 style={{ color: '#ff9000', marginRight: '7px' }}>Tipo Serviço:</h4>
+                                            <h4>{appointment.serviceType}</h4>
+                                        </section>
+                                        {appointment.notes && appointment.notes !== '' && (
+                                            <section>
+                                                <h4 style={{ color: '#ff9000', marginRight: '7px' }}>
+                                                    Comentarios:
+                                                </h4>
+                                                <h4>{appointment.notes}</h4>
+                                            </section>
+                                        )}
+                                    </aside>
                                 </div>
                             </Appointment>
                         ))}
