@@ -11,6 +11,7 @@ import 'react-day-picker/lib/style.css';
 import { Container, Content, Schedule, NextAppointment, Section, Appointment, Calendar } from './styles';
 import { useAuth } from '../../hooks/Auth';
 import api from '../../services/api';
+import Loading from '../../components/Loading';
 
 interface MonthAvailability {
     day: number;
@@ -41,6 +42,7 @@ const HomePageProvider: React.FC = () => {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [monthAvailability, setMonthAvailability] = useState<MonthAvailability[]>([]);
     const [appointments, setAppointments] = useState<Appointment[]>([]);
+    const [loading, setLoading] = useState(true);
 
     const handleDateChange = useCallback((day: Date, modifiers: DayModifiers) => {
         if (modifiers.available && !modifiers.disabled) {
@@ -86,6 +88,7 @@ const HomePageProvider: React.FC = () => {
                 });
             }
             setAppointments(appointmentsFormatted);
+            setLoading(false);
         });
     }, [selectedDate, user.id]);
 
@@ -127,6 +130,10 @@ const HomePageProvider: React.FC = () => {
     const nextAppointment = useMemo(() => {
         return appointments.find((appointment) => isAfter(parseISO(appointment.dateRelease), new Date()));
     }, [appointments]);
+
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <Container>

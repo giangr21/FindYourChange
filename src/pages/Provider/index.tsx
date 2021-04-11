@@ -1,11 +1,14 @@
+/* eslint-disable no-await-in-loop */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormHandles } from '@unform/core';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+// import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { toast } from 'react-toastify';
+import { Tabs, Tab, FILL } from 'baseui/tabs-motion';
 
 import { MdCheck, MdEdit } from 'react-icons/md';
 import { useLocation } from 'react-router-dom';
+import moment from 'moment';
 import IconButton from '../../components/Button/IconButton';
 import { Container, Content, InfoContainer, ScheduleInfo, ProviderInfo, ProviderService, Header } from './styles';
 import background from '../../assets/background-provider.png';
@@ -14,6 +17,7 @@ import ModalLogin from '../../components/Modal/LoginModal';
 import ModalAgendar from './ModalAppointment';
 import { useAuth } from '../../hooks/Auth';
 import Loading from '../../components/Loading';
+import ReviewProvider from '../../components/ReviewProvider';
 
 export interface ProviderData {
     id: string;
@@ -32,13 +36,16 @@ export interface ProviderData {
 }
 
 const Index: React.FC = () => {
-    const { isAuthenticated } = useAuth();
+    const { user, isAuthenticated } = useAuth();
     const location = useLocation();
     const formRef = useRef<FormHandles>(null);
     const [loading, setLoading] = useState(true);
     const [provider, setProvider] = useState<any>({});
     const [modalLoginOpen, setModalLoginOpen] = useState(false);
     const [modalAgendarOpen, setModalAgendarOpen] = useState(false);
+    const [activeKy, setActiveKy] = useState<any>('0');
+    const tabRef2 = useRef<any>();
+    const [newRecommendation, setNewRecommendation] = useState(false);
 
     const getProvider = useCallback(async () => {
         const splitedPathName = location.pathname.split('/');
@@ -48,14 +55,30 @@ const Index: React.FC = () => {
             .then(async (response) => {
                 const isPopular = [];
                 const isNotPopular = [];
+
                 for (let index = 0; index < response.data.services.length; index++) {
                     const service = response.data.services[index];
+
                     if (service.isPopularService) {
                         isPopular.push(service);
                     } else {
                         isNotPopular.push(service);
                     }
                 }
+
+                for (let index = 0; index < response.data.providerRecommendations.length; index++) {
+                    const providerRecommendation = response.data.providerRecommendations[index];
+
+                    const { data: imgBase64 } = await api.get(
+                        `storage/base64/min/${providerRecommendation.user.avatar}`,
+                    );
+                    providerRecommendation.user.avatar = imgBase64;
+
+                    providerRecommendation.createdAt = moment(providerRecommendation.createdAt).format(
+                        'DD/MM/YYYY - HH:mm',
+                    );
+                }
+
                 response.data.isPopular = isPopular;
                 response.data.isNotPopular = isNotPopular;
                 setProvider(response.data);
@@ -75,11 +98,11 @@ const Index: React.FC = () => {
         }, 500);
     }, []);
 
-    const toggleModalLogin = useCallback((id?: string): void => {
+    const toggleModalLogin = useCallback((): void => {
         setModalLoginOpen((prevState) => !prevState);
     }, []);
 
-    const toggleModalAgendar = useCallback((id?: string): void => {
+    const toggleModalAgendar = useCallback((): void => {
         setModalAgendarOpen((prevState) => !prevState);
     }, []);
 
@@ -90,6 +113,11 @@ const Index: React.FC = () => {
             toast.error('Erro!');
         }
     }, []);
+
+    const handleNewReview = useCallback(() => {
+        tabRef2.current.click();
+        setNewRecommendation(true);
+    }, [tabRef2]);
 
     return (
         <Container>
@@ -102,14 +130,23 @@ const Index: React.FC = () => {
                     </Header>
                     <Content>
                         <ProviderInfo>
-                            <Tabs>
-                                <TabList>
-                                    <Tab>AGENDAR SERVIÇO</Tab>
-                                    <Tab>GALERIA DE FOTOS</Tab>
-                                    <Tab>RECOMENDAÇÕES</Tab>
-                                </TabList>
-
-                                <TabPanel>
+                            <Tabs
+                                activeKey={activeKy}
+                                onChange={({ activeKey }) => {
+                                    setActiveKy(activeKey);
+                                }}
+                                activateOnFocus
+                                overrides={{
+                                    TabHighlight: {
+                                        style: ({ $theme }) => ({
+                                            outline: `#ff9000 solid`,
+                                            backgroundColor: '#ff9000',
+                                        }),
+                                    },
+                                }}
+                                fill={FILL.fixed}
+                            >
+                                <Tab title="AGENDAR SERVIÇO">
                                     <div className="service">
                                         <span>Serviços</span>
                                         <div className="separator" />
@@ -180,9 +217,21 @@ const Index: React.FC = () => {
                                             </div>
                                         </ProviderService>
                                     ))}
-                                </TabPanel>
-                                <TabPanel />
-                                <TabPanel />
+                                </Tab>
+                                <Tab tabRef={tabRef2} title="RECOMENDAÇÕES">
+                                    <ReviewProvider
+                                        providerRecommendations={provider.providerRecommendations}
+                                        newRecommendation={newRecommendation}
+                                        setNewRecommendationToFalse={() => setNewRecommendation(false)}
+                                        infosToCreateNewRecommendation={{
+                                            userId: user.id,
+                                            providerId: provider.id,
+                                            userName: user.name,
+                                            userLastName: user.lastName,
+                                        }}
+                                    />
+                                </Tab>
+                                <Tab title="GALERIA DE FOTOS">Content 3</Tab>
                             </Tabs>
                             {modalLoginOpen && <ModalLogin isOpen={modalLoginOpen} setIsOpen={toggleModalLogin} />}
                             {modalAgendarOpen && (
@@ -238,18 +287,20 @@ const Index: React.FC = () => {
                                     <div className="time">08:00 - 18:00</div>
                                 </div>
                             </ScheduleInfo>
-                            <div
-                                style={{
-                                    margin: '5px auto',
-                                }}
-                            >
-                                <IconButton
-                                    icon={MdEdit}
-                                    title="Nova recomendaçao"
-                                    background="#ff9000"
-                                    action={() => {}}
-                                />
-                            </div>
+                            {!newRecommendation && !user.isProvider && (
+                                <div
+                                    style={{
+                                        margin: '5px auto',
+                                    }}
+                                >
+                                    <IconButton
+                                        icon={MdEdit}
+                                        title="Nova recomendaçao"
+                                        background="#ff9000"
+                                        action={handleNewReview}
+                                    />
+                                </div>
+                            )}
                         </InfoContainer>
                     </Content>
                 </>
