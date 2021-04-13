@@ -8,10 +8,11 @@ interface RouteProps extends ReactDOMRouteProps {
     privatePages?: boolean;
     signPages?: boolean;
     component: React.ComponentType;
+    privateUserPages?: boolean;
 }
 
 const Route: React.FC<RouteProps> = (
-    { privatePages = false, signPages = false, component: Component },
+    { privatePages = false, signPages = false, component: Component, privateUserPages = false },
     ...rest
 ) => {
     const { isAuthenticated, user } = useAuth();
@@ -23,6 +24,8 @@ const Route: React.FC<RouteProps> = (
             shouldRedirect = true;
         }
     } else if (privatePages && !user.isProvider) {
+        shouldRedirect = true;
+    } else if (privateUserPages && user.isProvider) {
         shouldRedirect = true;
     }
 

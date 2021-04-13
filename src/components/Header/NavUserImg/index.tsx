@@ -11,12 +11,14 @@ const NavUserImg: React.FC = () => {
     const [avatarImg, setAvatarImg] = useState('');
 
     useEffect(() => {
-        // eslint-disable-next-line func-names
-        const getImg = async function (): Promise<void> {
-            const { data } = await api.get(`storage/base64/min/${user.avatar}`);
-            setAvatarImg(data);
-        };
-        getImg();
+        if (user.avatar) {
+            // eslint-disable-next-line func-names
+            const getImg = async function (): Promise<void> {
+                const { data } = await api.get(`storage/base64/min/${user.avatar}`);
+                setAvatarImg(data);
+            };
+            getImg();
+        }
     }, [user.avatar]);
 
     return (
@@ -40,6 +42,11 @@ const NavUserImg: React.FC = () => {
                         {user.isProvider && (
                             <NavLink to="/homeProvider" exact={false} onClick={close}>
                                 Dashboard
+                            </NavLink>
+                        )}
+                        {!user.isProvider && (
+                            <NavLink to="/homeUser" exact={false} onClick={close}>
+                                Editar Conta
                             </NavLink>
                         )}
 

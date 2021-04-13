@@ -49,7 +49,7 @@ const SignIn: React.FC = () => {
                     isProvider,
                 });
 
-                return isProvider ? history.push('/homeProvider') : history.push('/');
+                return isProvider ? history.push('/homeProvider') : history.push('/homeUser');
             } catch (err) {
                 console.log(err);
                 if (err instanceof Yup.ValidationError) {

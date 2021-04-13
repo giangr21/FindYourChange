@@ -17,6 +17,7 @@ import Marketplace from '../pages/Marketplace';
 import Product from '../pages/Product';
 import About from '../pages/About';
 import Clerk from '../pages/Clerk';
+import HomePageUser from '../pages/HomePageUser';
 
 const Routes: React.FC = () => (
     <Switch>
@@ -29,6 +30,7 @@ const Routes: React.FC = () => (
         <Route path="/signUp" signPages component={SignUp} />
         <Route path="/forgotPassword" signPages component={ForgotPassword} />
 
+        <Route path="/homeUser" privateUserPages component={HomePageUser} />
         <Route path="/homeProvider" privatePages component={HomePageProvider} />
         <Route path="/providerProfile" privatePages component={ProviderProfile} />
         <Route path="/marketplace" privatePages component={Marketplace} />
