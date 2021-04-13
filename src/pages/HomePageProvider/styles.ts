@@ -143,8 +143,8 @@ export const Appointment = styled.div`
         margin-left: 24px;
 
         img {
-            width: 56px;
-            height: 56px;
+            width: 66px;
+            height: 66px;
             border-radius: 50%;
         }
 
@@ -152,6 +152,10 @@ export const Appointment = styled.div`
             margin-left: 24px;
             color: #fff;
             font-size: 20px;
+        }
+
+        section {
+            display: flex;
         }
     }
 `;
