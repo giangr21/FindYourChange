@@ -45,7 +45,7 @@ const NavUserImg: React.FC = () => {
                             </NavLink>
                         )}
                         {!user.isProvider && (
-                            <NavLink to="/homeUser" exact={false} onClick={close}>
+                            <NavLink to="/userProfile" exact={false} onClick={close}>
                                 Editar Conta
                             </NavLink>
                         )}

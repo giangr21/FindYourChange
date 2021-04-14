@@ -25,9 +25,11 @@ const Route: React.FC<RouteProps> = (
         }
     } else if (privatePages && !user.isProvider) {
         shouldRedirect = true;
-    } else if (privateUserPages && user.isProvider) {
-        shouldRedirect = true;
     }
+
+    // else if (privateUserPages && user.isProvider) {
+    //     shouldRedirect = true;
+    // }
 
     if (signPages) {
         Layout = null;

@@ -1,18 +1,18 @@
 import { shade } from 'polished';
 import styled from 'styled-components';
 import { Row as Rows, Col as Cols } from 'react-styled-flexboxgrid';
-import { inherits } from 'node:util';
 
 export const Container = styled.div`
     width: 100%;
+    height: calc(100vh - 230px);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3px;
 `;
 
 export const Content = styled.div`
     display: flex;
     flex-direction: column;
-    margin: 0 auto;
-    max-width: 1200px;
-    height: 100%;
 `;
 
 export const Row = styled(Rows)`
