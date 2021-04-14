@@ -10,11 +10,6 @@ export const Container = styled.div`
     padding: 3px;
 `;
 
-export const Content = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
-
 export const Row = styled(Rows)`
     @media only screen and (min-width: 0em) and (max-width: 47.99em) {
         margin-bottom: 30px;

@@ -16,7 +16,7 @@ import api from '../../services/api';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import getValidationErrors from '../../util/getValidationErrors';
-import { Container, Content, AvatarInput, Row, Col, ImgPreview } from './styles';
+import { Container, AvatarInput, Row, Col, ImgPreview } from './styles';
 import { useAuth } from '../../hooks/Auth';
 import InputMask from '../../components/Input/InputMask';
 import Loading from '../../components/Loading';
@@ -212,17 +212,6 @@ const UserProfile: React.FC = () => {
                     <Tab title="Reviews">Content 3</Tab>
                 </Tabs>
             </ThemeProvider>
-            {/* <Content>
-                <div
-                    style={{
-                        marginTop: '10%',
-                    }}
-                >
-                    <p>Editar Cadastro</p>
-                    <p>Agendamentos</p>
-                    <p>Reviews</p>
-                </div>
-            </Content> */}
         </Container>
     );
 };
