@@ -12,6 +12,7 @@ import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
 import { FaPhoneAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import moment from 'moment';
 import api from '../../services/api';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
@@ -28,20 +29,35 @@ const UserProfile: React.FC = () => {
     const [isEdit, setIsEdit] = useState(true);
     const [loading, setLoading] = useState(true);
     const [profileInfo, setProfileInfo] = useState<any>({});
+    const [appointments, setAppointments] = useState<any>([]);
+    const [reviews, setReviews] = useState<any>([]);
     const [profileAvatar, setProfileAvatar] = useState(null);
     const [tabNumber, setTabNumber] = React.useState<any>('0');
 
     const getProfileInfo = useCallback(async () => {
         await api.get(`/user/${user.id}`).then(async (response) => {
             setProfileInfo(response.data);
+        });
+    }, [user.id]);
+
+    const getAppointmentsFromUser = useCallback(async () => {
+        await api.get(`/user/appointments/${user.id}`).then(async (response) => {
+            response.data.forEach((r: any) => {
+                r.dateRelease = moment(r.dateRelease).format('DD/MM/YYYY - HH:mm');
+            });
+            setAppointments(response.data);
+        });
+    }, [user.id]);
+
+    const getReviewsFromUser = useCallback(async () => {
+        await api.get(`providerRecommendation/user/${user.id}`).then(async (response) => {
+            setReviews(response.data);
             setLoading(false);
-            console.log(response.data);
         });
     }, [user.id]);
 
     const handleSubmit = useCallback(
         async (data: any) => {
-            console.log(data);
             try {
                 formRef.current?.setErrors({});
                 const schema = Yup.object().shape({
@@ -94,6 +110,7 @@ const UserProfile: React.FC = () => {
                 toast.success('Perfil atualizado com sucesso!');
 
                 history.push('/userProfile');
+                setProfileInfo(data);
             } catch (err) {
                 if (err instanceof Yup.ValidationError) {
                     const errors = getValidationErrors(err);
@@ -108,6 +125,8 @@ const UserProfile: React.FC = () => {
 
     useEffect(() => {
         getProfileInfo();
+        getAppointmentsFromUser();
+        getReviewsFromUser();
     }, []);
 
     return (
@@ -208,8 +227,39 @@ const UserProfile: React.FC = () => {
                             </Form>
                         )}
                     </Tab>
-                    <Tab title="Agendamentos">Content 2</Tab>
-                    <Tab title="Reviews">Content 3</Tab>
+                    <Tab title="Agendamentos">
+                        {loading ? (
+                            <Loading />
+                        ) : (
+                            <div>
+                                <h1>Meus Agendamentos</h1>
+                                {appointments.map((appointment: any) => (
+                                    <div key={appointment.id}>
+                                        <h2>Notas: {appointment.notes}</h2>
+                                        <h2>Avaliação: {appointment.rating}</h2>
+                                        <h2>Tipo de Serviço: {appointment.serviceType}</h2>
+                                        <h2>Valor do Serviço: {appointment.value}</h2> <br />
+                                        <h2>Data: {appointment.dateRelease}</h2> <br />
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </Tab>
+                    <Tab title="Reviews">
+                        {loading ? (
+                            <Loading />
+                        ) : (
+                            <div>
+                                <h1>Meus Reviews</h1>
+                                {reviews.map((review: any) => (
+                                    <div>
+                                        <h2>Notas: {review.notes}</h2>
+                                        <h2>Avaliação: {review.rating}</h2> <br />
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </Tab>
                 </Tabs>
             </ThemeProvider>
         </Container>
