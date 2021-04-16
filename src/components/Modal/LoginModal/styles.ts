@@ -12,7 +12,7 @@ export const Container = styled.div`
 export const LeftContainer = styled.div`
     display: flex;
     flex-direction: column;
-    float:left;
+    float: left;
     background: url(${signInBackgroundImg}) no-repeat center;
     background-size: cover;
     width: 50%;
@@ -32,7 +32,7 @@ const appearFromRight = keyframes`
 export const RightContainer = styled.div`
     display: flex;
     flex-direction: column;
-    float:right;
+    float: right;
     width: 50%;
 
     align-items: center;
