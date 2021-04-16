@@ -64,13 +64,6 @@ const Index: React.FC = () => {
     const [page, setPage] = useState(1);
     const [cities, setCities] = useState([]);
 
-    const getCities = useCallback(async () => {
-        await api.get('/provider/cities/all').then((response) => {
-            const { data } = response;
-            setCities(data);
-        });
-    }, []);
-
     const renderEstablishmentsList = useCallback(async (establishmentsList: any) => {
         for (let index = 0; index < establishmentsList.data.length; index++) {
             const provider = establishmentsList.data[index];
@@ -98,7 +91,7 @@ const Index: React.FC = () => {
         async (filter: any) => {
             setLoading(true);
             try {
-                await api.post('/provider', filter).then(async (response) => {
+                await api.post('/provider', { ...filter, page }).then(async (response) => {
                     await renderEstablishmentsList(response);
                 });
             } catch (err) {
@@ -108,7 +101,7 @@ const Index: React.FC = () => {
                 }
             }
         },
-        [renderEstablishmentsList],
+        [page, renderEstablishmentsList],
     );
 
     const clearFilter = useCallback(async () => {
@@ -117,7 +110,7 @@ const Index: React.FC = () => {
         formRef.current?.setFieldValue('category', 'Todos');
         formRef.current?.setFieldValue('price', 'Todos');
 
-        await api.post('/provider', {}).then(async (result) => {
+        await api.post('/provider', { page: 1 }).then(async (result) => {
             await renderEstablishmentsList(result);
         });
 
@@ -127,13 +120,14 @@ const Index: React.FC = () => {
     }, [mobile, renderEstablishmentsList]);
 
     useEffect(() => {
-        async function getProviders(): Promise<void> {
-            await api.post('/provider', {}).then(async (result) => {
-                await renderEstablishmentsList(result);
+        async function getCities(): Promise<void> {
+            await api.get('/provider/cities/all').then((response) => {
+                const { data } = response;
+                setCities(data);
             });
         }
+
         getCities();
-        getProviders();
 
         setTimeout(() => {
             formRef.current?.setFieldValue('cities', 'Todas');
@@ -141,6 +135,16 @@ const Index: React.FC = () => {
             formRef.current?.setFieldValue('price', 'Todos');
         }, 500);
     }, []);
+
+    useEffect(() => {
+        async function getProviders(): Promise<void> {
+            await api.post('/provider', { page }).then(async (result) => {
+                await renderEstablishmentsList(result);
+            });
+        }
+
+        getProviders();
+    }, [page]);
 
     const handleFilter = useCallback(() => {
         setShowFilter((prevState) => !prevState);
@@ -281,7 +285,8 @@ const Index: React.FC = () => {
                         <>
                             <Header>
                                 <span>
-                                    {providers.length} estabelecimentos encontrados. Exibindo resultados de 1 a 5.
+                                    {providers.length} estabelecimentos encontrados. Exibindo resultados de 1 a{' '}
+                                    {providers.length}.
                                 </span>
                                 <IconButton icon={FaSearch} background="#777777" justIcon action={handleFilter} />
                             </Header>
@@ -313,7 +318,7 @@ const Index: React.FC = () => {
                                                 <ProviderServiceContent>
                                                     <ProviderServices>
                                                         {provider.services.map((service: any) => (
-                                                            <div className="service">
+                                                            <div className="service" key={service.id}>
                                                                 <div
                                                                     style={{
                                                                         display: 'flex',
@@ -396,7 +401,7 @@ const Index: React.FC = () => {
                                     onClick={() => setPage(page - 1)}
                                 />
                                 <PaginationButton
-                                    disabled={providers.length < 15}
+                                    disabled={providers.length < 10}
                                     icon={FaArrowRight}
                                     onClick={() => setPage(page + 1)}
                                 />
