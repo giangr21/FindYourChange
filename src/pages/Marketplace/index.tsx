@@ -278,7 +278,7 @@ const Index: React.FC = () => {
                     <ContentResults>
                         <Row>
                             {products.map((product) => (
-                                <Col xs={12} sm={6} md={4} lg={4}>
+                                <Col key={product.id} xs={12} sm={6} md={4} lg={4}>
                                     <ProductCardWrapper
                                         onClick={() => handleClickProduct(product.id)}
                                         className="product-card"

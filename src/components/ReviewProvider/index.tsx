@@ -47,8 +47,6 @@ const ReviewProvider: React.FC<ReviewProps> = ({
                     provider: infosToCreateNewRecommendation.providerId,
                 })
                 .then(async (response) => {
-                    console.log(response);
-
                     const { data: imgBase64 } = await api.get(
                         `storage/base64/min/${infosToCreateNewRecommendation.userId}`,
                     );

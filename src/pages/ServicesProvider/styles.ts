@@ -65,6 +65,7 @@ export const SearchContainer = styled.div<FilterProps>`
 
 export const ContentSearch = styled(Unform)`
     flex: auto;
+    overflow-y: auto;
     .separator {
         height: 2px;
         background-color: #3a3a3a;
