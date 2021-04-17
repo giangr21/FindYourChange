@@ -1,18 +1,9 @@
-import { Form as Unform } from '@unform/web';
 import styled from 'styled-components';
 
 export const Container = styled.div`
     height: 100%;
     width: 100%;
     background: #fff;
-`;
-
-export const Header = styled.div`
-    img {
-        width: 100%;
-        height: 300px;
-    }
-    /* height: 200px; */
 `;
 
 export const Content = styled.div`
@@ -77,14 +68,6 @@ export const ScheduleInfo = styled.div`
     }
 `;
 
-export const Results = styled(Unform)`
-    background: #f3f4f4;
-    color: #3a3a3a;
-    width: 100%;
-    padding: 15px;
-    border-radius: 10px;
-`;
-
 export const ProviderInfo = styled.div`
     width: 100%;
     color: #ff9000;
@@ -108,15 +91,6 @@ export const ProviderInfo = styled.div`
         margin: 5px 0px;
         width: 100%;
     }
-    /* width: 80%;
-    height: 250px;
-    border: 1px solid #3a3a3a;
-    margin-bottom: 15px;
-    border-radius: 5px; */
-    /* max-width: 100px; */
-    /* display: flex; */
-    /* align-items: center; */
-    /* justify-content: center; */
 `;
 
 export const ProviderService = styled.div`
@@ -127,8 +101,6 @@ export const ProviderService = styled.div`
     margin: 10px 0px;
     padding: 5px 20px;
     display: flex;
-    /* flex-direction: column; */
-    /* justify-content: space-between; */
     align-items: center;
 
     span {
@@ -144,4 +116,47 @@ export const ProviderService = styled.div`
 
 export const ProviderContent = styled.div`
     padding: 5px 10px;
+`;
+
+export const Header = styled.div`
+    display: flex;
+    flex-direction: column;
+    img {
+        width: 100%;
+        height: 300px;
+    }
+`;
+
+export const ProviderInfoHeader = styled.div`
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 0px 34px;
+    top: -120px;
+    display: flex;
+    flex-direction: column;
+
+    span {
+        position: absolute;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .legalName {
+        color: #ff9000;
+        font-size: 40px;
+    }
+
+    .city {
+        padding-top: 57px;
+        font-size: 16px;
+        font-weight: 400;
+    }
+
+    .servicesAvailable {
+        padding-top: 85px;
+        font-size: 18px;
+        font-weight: 400;
+    }
 `;

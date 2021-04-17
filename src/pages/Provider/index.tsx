@@ -1,8 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormHandles } from '@unform/core';
-// import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
 import { toast } from 'react-toastify';
 import { Tabs, Tab, FILL } from 'baseui/tabs-motion';
 
@@ -10,8 +8,16 @@ import { MdCheck, MdEdit } from 'react-icons/md';
 import { useLocation } from 'react-router-dom';
 import moment from 'moment';
 import IconButton from '../../components/Button/IconButton';
-import { Container, Content, InfoContainer, ScheduleInfo, ProviderInfo, ProviderService, Header } from './styles';
-import background from '../../assets/background-provider.png';
+import {
+    Container,
+    Content,
+    InfoContainer,
+    ScheduleInfo,
+    ProviderInfo,
+    ProviderService,
+    Header,
+    ProviderInfoHeader,
+} from './styles';
 import api from '../../services/api';
 import ModalLogin from '../../components/Modal/LoginModal';
 import ModalAgendar from './ModalAppointment';
@@ -79,8 +85,20 @@ const Index: React.FC = () => {
                     );
                 }
 
+                for (let index = 0; index < response.data.providerImages.length; index++) {
+                    const providerImage = response.data.providerImages[index];
+                    const { data: imgBase64 } = await api.get(`storage/base64/min/${providerImage.image}`);
+
+                    if (providerImage.defaultImage) {
+                        response.data.providerDefaultImg = imgBase64;
+                    }
+
+                    providerImage.image = imgBase64;
+                }
+
                 response.data.isPopular = isPopular;
                 response.data.isNotPopular = isNotPopular;
+
                 setProvider(response.data);
                 setLoading(false);
             })
@@ -126,7 +144,26 @@ const Index: React.FC = () => {
             ) : (
                 <>
                     <Header>
-                        <img src={background} alt="" />
+                        <img
+                            style={{
+                                background: `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.6)), url(${`data:image/png;base64,${provider.providerDefaultImg}`})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center center',
+                                backgroundRepeat: 'no-repeat',
+                            }}
+                            alt=""
+                        />
+                        <ProviderInfoHeader>
+                            <span className="legalName">{provider.legalName}</span>
+                            <span className="city">
+                                {provider.addressCity} / {provider.addressArea}
+                            </span>
+                            <span className="servicesAvailable">
+                                {provider.isTattoo && 'Tatuagem'}
+                                {provider.isBarber && ' / Barbeiro'}
+                                {provider.isPiercing && ' / Piercing'}
+                            </span>
+                        </ProviderInfoHeader>
                     </Header>
                     <Content>
                         <ProviderInfo>
