@@ -5,6 +5,7 @@ import { StyledForm, StyledInput, StyledCategoryName, StyledSearchButton } from 
 interface Props {
     onEnter: (e: React.SyntheticEvent) => void;
     onChange: React.ChangeEventHandler<HTMLInputElement>;
+    onSubmit: () => any;
     value: string;
     name: string;
     minimal?: boolean;
@@ -16,6 +17,7 @@ interface Props {
 export const SearchBox: React.FC<Props> = ({
     onEnter,
     onChange,
+    onSubmit,
     value,
     name,
     minimal,
@@ -34,7 +36,7 @@ export const SearchBox: React.FC<Props> = ({
                 <>
                     <StyledCategoryName>Teste</StyledCategoryName>
                     <StyledInput type="search" onChange={onChange} value={value} name={name} {...rest} />
-                    <StyledSearchButton>
+                    <StyledSearchButton type="button" onClick={onSubmit}>
                         <SearchIcon style={{ marginRight: 10 }} />
                         Pesquisar
                     </StyledSearchButton>

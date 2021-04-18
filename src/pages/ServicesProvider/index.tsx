@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FaAngleDoubleRight, FaArrowLeft, FaArrowRight, FaCheck, FaSearch } from 'react-icons/fa';
 import { FormHandles } from '@unform/core';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { withStyle } from 'baseui';
 import { BsDot } from 'react-icons/bs';
 import { toast } from 'react-toastify';
@@ -58,6 +58,7 @@ const Index: React.FC = () => {
     const mobile = useMedia('(max-width: 990px)');
     const formRef = useRef<FormHandles>(null);
     const history = useHistory();
+    const location = useLocation();
     const [loading, setLoading] = useState(true);
     const [providers, setProviders] = useState([]);
     const [showFilter, setShowFilter] = useState(true);
@@ -136,14 +137,32 @@ const Index: React.FC = () => {
         }, 500);
     }, []);
 
-    useEffect(() => {
-        async function getProviders(): Promise<void> {
-            await api.post('/provider', { page }).then(async (result) => {
-                await renderEstablishmentsList(result);
-            });
-        }
+    async function getProviders(): Promise<void> {
+        await api.post('/provider', { page }).then(async (result) => {
+            await renderEstablishmentsList(result);
+        });
+    }
 
-        getProviders();
+    async function getProviderByServiceName(locationState: any): Promise<void> {
+        await api.get(`/provider/serviceType/${locationState}`).then(async (result) => {
+            if (result.data.length !== 0) {
+                console.log('oi');
+                await renderEstablishmentsList(result);
+                return;
+            }
+            toast.error(
+                'Nenhum estabelecimento está oferecendo o serviço pesquisado. Listando todos os estabelecimentos...',
+            );
+            await getProviders();
+        });
+    }
+
+    useEffect(() => {
+        if (location.state) {
+            getProviderByServiceName(location.state);
+        } else {
+            getProviders();
+        }
     }, [page]);
 
     const handleFilter = useCallback(() => {

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import React from 'react';
+import React, { useCallback, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { SearchBox } from './search-box/search-box';
 
 interface Props {
@@ -10,46 +11,27 @@ interface Props {
 }
 
 const Search: React.FC<Props> = ({ onSubmit, ...props }) => {
-    // const searchTerm = useAppState('searchTerm');
-    // const dispatch = useAppDispatch();
-    // const router = useRouter();
-    // const intl = useIntl();
+    const [valueSearchBox, setValueSearchBox] = useState('');
+    const history = useHistory();
 
-    // const handleOnChange = (e) => {
-    //     const { value } = e.target;
-    //     dispatch({ type: 'SET_SEARCH_TERM', payload: value });
-    // };
-    // const { pathname, query } = router;
-    // const onSearch = (e) => {
-    //     e.preventDefault();
-    //     const { type, ...rest } = query;
-    //     if (type) {
-    //         router.push(
-    //             {
-    //                 pathname,
-    //                 query: { ...rest, text: searchTerm },
-    //             },
-    //             {
-    //                 pathname: `/${type}`,
-    //                 query: { ...rest, text: searchTerm },
-    //             },
-    //         );
-    //     } else {
-    //         router.push({
-    //             pathname,
-    //             query: { ...rest, text: searchTerm },
-    //         });
-    //     }
-    //     dispatch({ type: 'SET_SEARCH_TERM', payload: '' });
-    //     if (onSubmit) {
-    //         onSubmit();
-    //     }
-    // };
+    const handleSubmit = useCallback(() => {
+        history.push({
+            pathname: `/allServicesProvider/`,
+            state: valueSearchBox,
+        });
+    }, [valueSearchBox]);
+
+    const handleOnChange = useCallback((e: any) => {
+        e.preventDefault();
+        setValueSearchBox(e.target.value);
+    }, []);
+
     return (
         <SearchBox
             onEnter={() => {}}
-            onChange={() => {}}
-            value=""
+            onChange={(e) => handleOnChange(e)}
+            onSubmit={handleSubmit}
+            value={valueSearchBox}
             name="search"
             placeholder="Pesquise os serviços por aqui "
             {...props}
