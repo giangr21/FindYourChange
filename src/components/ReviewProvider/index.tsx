@@ -1,11 +1,11 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import ReactStars from 'react-rating-stars-component';
 import { Textarea } from 'baseui/textarea';
-import { MdCheck } from 'react-icons/md';
+import { MdCheck, MdClose } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { Container, HeaderReview, NewRecommendation, Reviews, Review } from './styles';
-import IconButton from '../Button/IconButton';
+import IconButton from '../FormComponents/Button/IconButton';
 import api from '../../services/api';
 
 interface Review {
@@ -34,10 +34,13 @@ const ReviewProvider: React.FC<ReviewProps> = ({
     infosToCreateNewRecommendation,
     setNewRecommendationToFalse,
 }): any => {
-    const [valueTextArea, setValueTextArea] = React.useState('');
-    const [newRatingStars, setNewRatingStars] = React.useState(0);
+    const [valueTextArea, setValueTextArea] = useState('');
+    const [newRatingStars, setNewRatingStars] = useState(0);
 
     const handleNewReview = useCallback(async () => {
+        if (valueTextArea.trim() === '' || !valueTextArea) {
+            return toast.error('Favor inserir uma mensagem. Tente novamente');
+        }
         try {
             await api
                 .post('/providerRecommendation', {
@@ -51,7 +54,7 @@ const ReviewProvider: React.FC<ReviewProps> = ({
                         `storage/base64/min/${infosToCreateNewRecommendation.userId}`,
                     );
 
-                    toast.success('Nova recomendação criada com sucesso!');
+                    toast.success('Recomendação criada com sucesso!');
 
                     providerRecommendations.push({
                         id: response.data,
@@ -81,6 +84,12 @@ const ReviewProvider: React.FC<ReviewProps> = ({
         setNewRecommendationToFalse,
         valueTextArea,
     ]);
+
+    const clearAndClose = useCallback(() => {
+        setNewRecommendationToFalse();
+        setValueTextArea('');
+        setNewRatingStars(0);
+    }, []);
 
     return (
         <Container>
@@ -117,15 +126,30 @@ const ReviewProvider: React.FC<ReviewProps> = ({
                         clearable
                         autoFocus
                     />
-                    <IconButton
+                    <div
                         style={{
-                            margin: '10px 0px',
+                            display: 'flex',
                         }}
-                        icon={MdCheck}
-                        title="Confirmar"
-                        background="#ff9000"
-                        action={handleNewReview}
-                    />
+                    >
+                        <IconButton
+                            style={{
+                                margin: '10px 5px',
+                            }}
+                            icon={MdCheck}
+                            title="Confirmar"
+                            background="#ff9000"
+                            action={handleNewReview}
+                        />
+                        <IconButton
+                            style={{
+                                margin: '10px 0px',
+                            }}
+                            icon={MdClose}
+                            title="Cancelar"
+                            background="#c53030"
+                            action={clearAndClose}
+                        />
+                    </div>
                 </NewRecommendation>
             )}
             <Reviews>

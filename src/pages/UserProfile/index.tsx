@@ -14,12 +14,12 @@ import { FaPhoneAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import api from '../../services/api';
-import Button from '../../components/Button';
-import Input from '../../components/Input';
+import Button from '../../components/FormComponents/Button';
+import Input from '../../components/FormComponents/Input';
 import getValidationErrors from '../../util/getValidationErrors';
 import { Container, AvatarInput, Content, Row, Col } from './styles';
 import { useAuth } from '../../hooks/Auth';
-import InputMask from '../../components/Input/InputMask';
+import InputMask from '../../components/FormComponents/Input/InputMask';
 import Loading from '../../components/Loading';
 
 const UserProfile: React.FC = () => {
@@ -286,7 +286,7 @@ const UserProfile: React.FC = () => {
                             >
                                 <h1
                                     style={{
-                                        margin: '0 auto',
+                                        margin: '0 auto 20px',
                                     }}
                                 >
                                     Meus Reviews

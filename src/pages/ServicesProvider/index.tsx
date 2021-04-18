@@ -8,8 +8,8 @@ import { BsDot } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { MdDeleteForever } from 'react-icons/md';
 import { Row as Rows, Col as Column } from '../../components/FlexBox/FlexBox';
-import IconButton from '../../components/Button/IconButton';
-import IconButtonProvider from '../../components/Button/IconButtonProvider';
+import IconButton from '../../components/FormComponents/Button/IconButton';
+import IconButtonProvider from '../../components/FormComponents/Button/IconButtonProvider';
 import {
     Container,
     Content,
@@ -26,13 +26,13 @@ import {
     DiscountedPrice,
     Pagination,
 } from './styles';
-import DatePicker from '../../components/DatePicker';
-import Radio from '../../components/Radio';
+import DatePicker from '../../components/FormComponents/DatePicker';
+import Radio from '../../components/FormComponents/Radio';
 
 import api from '../../services/api';
-import PaginationButton from '../../components/Button/PaginationButton';
+import PaginationButton from '../../components/FormComponents/Button/PaginationButton';
 import { FooterFilter } from '../../components/Filter/styles';
-import Input from '../../components/Input/MainSearchInput';
+import Input from '../../components/FormComponents/Input/MainSearchInput';
 import Loading from '../../components/Loading';
 import { useMedia } from '../../util/use-media';
 import FilterMobile from '../../components/Filter/MobileServiceProvider';

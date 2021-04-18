@@ -7,7 +7,7 @@ import { Tabs, Tab, FILL } from 'baseui/tabs-motion';
 import { MdCheck, MdEdit } from 'react-icons/md';
 import { useLocation } from 'react-router-dom';
 import moment from 'moment';
-import IconButton from '../../components/Button/IconButton';
+import IconButton from '../../components/FormComponents/Button/IconButton';
 import {
     Container,
     Content,
@@ -24,6 +24,7 @@ import ModalAgendar from './ModalAppointment';
 import { useAuth } from '../../hooks/Auth';
 import Loading from '../../components/Loading';
 import ReviewProvider from '../../components/ReviewProvider';
+import GalleryProvider from '../../components/GalleryProvider';
 
 export interface ProviderData {
     id: string;
@@ -93,7 +94,7 @@ const Index: React.FC = () => {
                         response.data.providerDefaultImg = imgBase64;
                     }
 
-                    providerImage.image = imgBase64;
+                    providerImage.imageBase64 = imgBase64;
                 }
 
                 response.data.isPopular = isPopular;
@@ -268,16 +269,10 @@ const Index: React.FC = () => {
                                         }}
                                     />
                                 </Tab>
-                                <Tab title="GALERIA DE FOTOS">Content 3</Tab>
+                                <Tab title="GALERIA DE FOTOS">
+                                    <GalleryProvider providerImages={provider.providerImages} />
+                                </Tab>
                             </Tabs>
-                            {modalLoginOpen && <ModalLogin isOpen={modalLoginOpen} setIsOpen={toggleModalLogin} />}
-                            {modalAgendarOpen && (
-                                <ModalAgendar
-                                    isOpen={modalAgendarOpen}
-                                    setIsOpen={toggleModalAgendar}
-                                    handleConfirm={handleAgendar}
-                                />
-                            )}
                         </ProviderInfo>
                         <InfoContainer>
                             <img
@@ -339,6 +334,14 @@ const Index: React.FC = () => {
                                 </div>
                             )}
                         </InfoContainer>
+                        {modalLoginOpen && <ModalLogin isOpen={modalLoginOpen} setIsOpen={toggleModalLogin} />}
+                        {modalAgendarOpen && (
+                            <ModalAgendar
+                                isOpen={modalAgendarOpen}
+                                setIsOpen={toggleModalAgendar}
+                                handleConfirm={handleAgendar}
+                            />
+                        )}
                     </Content>
                 </>
             )}

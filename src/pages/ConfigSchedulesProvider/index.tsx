@@ -3,7 +3,7 @@ import { FaPlus } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 import { Container, HeaderContainer, Content } from './styles';
-import IconButton from '../../components/Button/IconButton';
+import IconButton from '../../components/FormComponents/Button/IconButton';
 import ScheduleRow from './ScheduleRow/index';
 import ModalScheduleProvider from './ModalScheduleProvider';
 import ModalScheduleDelete from '../../components/Modal/DeleteModal';

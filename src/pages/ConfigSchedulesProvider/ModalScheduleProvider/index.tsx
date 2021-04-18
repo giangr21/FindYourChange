@@ -10,11 +10,11 @@ import * as Yup from 'yup';
 
 import { Form, Container, Header, Footer, Content } from './styles';
 import Modal from '../../../components/Modal';
-import IconButton from '../../../components/Button/IconButton';
-import Radio from '../../../components/Radio';
+import IconButton from '../../../components/FormComponents/Button/IconButton';
+import Radio from '../../../components/FormComponents/Radio';
 import api from '../../../services/api';
 import getValidationErrors from '../../../util/getValidationErrors';
-import Select from '../../../components/Select';
+import Select from '../../../components/FormComponents/Select';
 import { useAuth } from '../../../hooks/Auth';
 import Loading from '../../../components/Loading';
 import { useMedia } from '../../../util/use-media';
@@ -130,9 +130,6 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                 } else {
                     return toast.error(`Necessario escolher uma hora final de almoco `);
                 }
-
-                console.log(scheduleData.hourStart);
-                console.log(scheduleData.hourLunchStart);
 
                 if (
                     moment(hourStart).format('YYYY-MM-DD HH:mm:ss ZZ') >

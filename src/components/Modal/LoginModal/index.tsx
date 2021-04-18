@@ -9,8 +9,8 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { Container, LeftContainer, RightContainer, Row } from './styles';
 import logoImg from '../../../assets/logoPrincipalMobile.png';
-import Button from '../../Button';
-import Input from '../../Input';
+import Button from '../../FormComponents/Button';
+import Input from '../../FormComponents/Input';
 import getValidationErrors from '../../../util/getValidationErrors';
 
 import { useAuth } from '../../../hooks/Auth';

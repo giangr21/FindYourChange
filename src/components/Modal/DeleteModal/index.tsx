@@ -5,7 +5,7 @@ import { MdDeleteForever } from 'react-icons/md';
 import { FaCheck } from 'react-icons/fa';
 import { FiAlertOctagon } from 'react-icons/fi';
 import { Container } from './styles';
-import IconButton from '../../Button/IconButton';
+import IconButton from '../../FormComponents/Button/IconButton';
 
 interface ModalProps {
     children?: any;
