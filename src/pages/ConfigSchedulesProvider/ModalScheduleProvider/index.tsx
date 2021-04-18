@@ -131,9 +131,6 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                     return toast.error(`Necessario escolher uma hora final de almoco `);
                 }
 
-                console.log(scheduleData.hourStart);
-                console.log(scheduleData.hourLunchStart);
-
                 if (
                     moment(hourStart).format('YYYY-MM-DD HH:mm:ss ZZ') >
                     moment(hourLunchStart).format('YYYY-MM-DD HH:mm:ss ZZ')

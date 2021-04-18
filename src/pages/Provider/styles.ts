@@ -129,7 +129,6 @@ export const Header = styled.div`
 
 export const ProviderInfoHeader = styled.div`
     position: relative;
-    z-index: 2;
     width: 100%;
     padding: 0px 34px;
     top: -120px;

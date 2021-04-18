@@ -577,14 +577,16 @@ const Profile: React.FC = () => {
                                 </>
                             ) : (
                                 <>
-                                    <ImgPreview>
-                                        <CarouselWithCustomDots
-                                            items={profileInfo ? profileInfo.providerImages : []}
-                                            updatedImgInCarousel={(indexImg: number) =>
-                                                setIndexImgSelectedInCarousel(indexImg)
-                                            }
-                                        />
-                                    </ImgPreview>
+                                    {profileInfo && (
+                                        <ImgPreview>
+                                            <CarouselWithCustomDots
+                                                items={profileInfo ? profileInfo.providerImages : []}
+                                                updatedImgInCarousel={(indexImg: number) =>
+                                                    setIndexImgSelectedInCarousel(indexImg)
+                                                }
+                                            />
+                                        </ImgPreview>
+                                    )}
                                     <Row>
                                         <Col xs={12} sm={4} md={4} lg={4}>
                                             <div className="img">

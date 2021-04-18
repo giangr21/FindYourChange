@@ -24,6 +24,7 @@ import ModalAgendar from './ModalAppointment';
 import { useAuth } from '../../hooks/Auth';
 import Loading from '../../components/Loading';
 import ReviewProvider from '../../components/ReviewProvider';
+import GalleryProvider from '../../components/GalleryProvider';
 
 export interface ProviderData {
     id: string;
@@ -93,11 +94,13 @@ const Index: React.FC = () => {
                         response.data.providerDefaultImg = imgBase64;
                     }
 
-                    providerImage.image = imgBase64;
+                    providerImage.imageBase64 = imgBase64;
                 }
 
                 response.data.isPopular = isPopular;
                 response.data.isNotPopular = isNotPopular;
+
+                console.log(response.data);
 
                 setProvider(response.data);
                 setLoading(false);
@@ -268,16 +271,10 @@ const Index: React.FC = () => {
                                         }}
                                     />
                                 </Tab>
-                                <Tab title="GALERIA DE FOTOS">Content 3</Tab>
+                                <Tab title="GALERIA DE FOTOS">
+                                    <GalleryProvider providerImages={provider.providerImages} />
+                                </Tab>
                             </Tabs>
-                            {modalLoginOpen && <ModalLogin isOpen={modalLoginOpen} setIsOpen={toggleModalLogin} />}
-                            {modalAgendarOpen && (
-                                <ModalAgendar
-                                    isOpen={modalAgendarOpen}
-                                    setIsOpen={toggleModalAgendar}
-                                    handleConfirm={handleAgendar}
-                                />
-                            )}
                         </ProviderInfo>
                         <InfoContainer>
                             <img
@@ -339,6 +336,14 @@ const Index: React.FC = () => {
                                 </div>
                             )}
                         </InfoContainer>
+                        {modalLoginOpen && <ModalLogin isOpen={modalLoginOpen} setIsOpen={toggleModalLogin} />}
+                        {modalAgendarOpen && (
+                            <ModalAgendar
+                                isOpen={modalAgendarOpen}
+                                setIsOpen={toggleModalAgendar}
+                                handleConfirm={handleAgendar}
+                            />
+                        )}
                     </Content>
                 </>
             )}

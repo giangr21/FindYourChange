@@ -286,7 +286,7 @@ const UserProfile: React.FC = () => {
                             >
                                 <h1
                                     style={{
-                                        margin: '0 auto',
+                                        margin: '0 auto 20px',
                                     }}
                                 >
                                     Meus Reviews
