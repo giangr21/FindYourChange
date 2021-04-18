@@ -24,6 +24,7 @@ const Product: React.FC = () => {
         await api
             .get(`/products/${idProduct}`)
             .then(async (response) => {
+                console.log(response.data);
                 if (response.data.productImage) {
                     const imgNamePhotoData = await api.get(`storage/base64/${response.data.productImage}`);
                     setImgPhotoMin(imgNamePhotoData.data);
@@ -35,7 +36,7 @@ const Product: React.FC = () => {
                 toast.error('Houve um erro ao buscar dados!');
                 console.log(e);
             });
-    }, []);
+    }, [idProduct]);
 
     useEffect(() => {
         getProduct();
@@ -66,6 +67,7 @@ const Product: React.FC = () => {
 
                     <Column>
                         <ProductAction productValues={product} />
+
                         <SellerInfo />
 
                         <Section>

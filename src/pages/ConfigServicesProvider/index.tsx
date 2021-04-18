@@ -6,7 +6,7 @@ import { withStyle } from 'baseui';
 import { Row as Rows, Col as Column } from '../../components/FlexBox/FlexBox';
 
 import { Container, HeaderContainer, Content } from './styles';
-import IconButton from '../../components/Button/IconButton';
+import IconButton from '../../components/FormComponents/Button/IconButton';
 import ModalServiceProvider from './ModalServiceProvider';
 import ModalDeleteService from '../../components/Modal/DeleteModal';
 import ServiceCard from '../../components/ServiceCard';
@@ -14,7 +14,7 @@ import api from '../../services/api';
 import { useAuth } from '../../hooks/Auth';
 import Loading from '../../components/Loading';
 import Filter from '../../components/Filter';
-import Input from '../../components/Input/InputModal';
+import Input from '../../components/FormComponents/Input/InputModal';
 import { useMedia } from '../../util/use-media';
 
 export interface ServiceData {

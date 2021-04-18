@@ -5,7 +5,7 @@ import { Provider as StyletronProvider } from 'styletron-react';
 import { BaseProvider } from 'baseui';
 import { ToastContainer } from 'react-toastify';
 import 'react-multi-carousel/lib/styles.css';
-import './components/multi-carousel/styles.css';
+import './components/MultiCarousel/styles.css';
 
 import AppProvider from './hooks';
 

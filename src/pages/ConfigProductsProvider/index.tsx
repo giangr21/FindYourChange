@@ -2,15 +2,15 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { FaPlus, FaSearch } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { Container, HeaderContainer, Content } from './styles';
-import IconButton from '../../components/Button/IconButton';
+import IconButton from '../../components/FormComponents/Button/IconButton';
 import ProductRow from './ProductRow/index';
 import ModalProductProvider from './ModalProductProvider';
 import api from '../../services/api';
 import Loading from '../../components/Loading';
 import ModalDeleteProduct from '../../components/Modal/DeleteModal';
 import Filter from '../../components/Filter';
-import Input from '../../components/Input/InputModal';
-import Select from '../../components/Select';
+import Input from '../../components/FormComponents/Input/InputModal';
+import Select from '../../components/FormComponents/Select';
 import { useAuth } from '../../hooks/Auth';
 import { StyledHeadCell, StyledTable } from '../../components/Table/styles';
 

@@ -5,7 +5,7 @@ import { MdCheck, MdClose } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { Container, HeaderReview, NewRecommendation, Reviews, Review } from './styles';
-import IconButton from '../Button/IconButton';
+import IconButton from '../FormComponents/Button/IconButton';
 import api from '../../services/api';
 
 interface Review {

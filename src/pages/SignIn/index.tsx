@@ -6,12 +6,12 @@ import * as Yup from 'yup';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import logoImg from '../../assets/logoPrincipalMobile.png';
-import Button from '../../components/Button';
-import Input from '../../components/Input';
+import Button from '../../components/FormComponents/Button';
+import Input from '../../components/FormComponents/Input';
 import { useAuth } from '../../hooks/Auth';
 import getValidationErrors from '../../util/getValidationErrors';
 import { Background, Container, Content, AnimationContainer, Row } from './styles';
-import Radio from '../../components/Radio';
+import Radio from '../../components/FormComponents/Radio';
 
 interface SignInFormData {
     email: string;

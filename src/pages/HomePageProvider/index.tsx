@@ -5,13 +5,22 @@ import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { FiClock } from 'react-icons/fi';
 import { isToday, format, parseISO, isAfter } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
-
 import DayPicker, { DayModifiers } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
-import { Container, Content, Schedule, NextAppointment, Section, Appointment, Calendar } from './styles';
+import { Col, Row } from 'react-styled-flexboxgrid';
+import { useStyletron } from 'styletron-react';
+
+import { Container, InfoHeader, Content, Schedule, Section, Calendar } from './styles';
 import { useAuth } from '../../hooks/Auth';
 import api from '../../services/api';
 import Loading from '../../components/Loading';
+import StickerCard from '../../components/StickerCard/StickerCard';
+import { CoinIcon } from '../../components/StickerCard/Icons/CoinIcon';
+import { CartIconBig } from '../../components/StickerCard/Icons/CartIconBig';
+import { UserIcon } from '../../components/StickerCard/Icons/UserIcon';
+import { DeliveryIcon } from '../../components/StickerCard/Icons/DeliveryIcon';
+import NextAppointment from '../../components/DashboardAppointment/NextAppointment';
+import Appointment from '../../components/DashboardAppointment/Appointment';
 
 interface MonthAvailability {
     day: number;
@@ -43,6 +52,13 @@ const HomePageProvider: React.FC = () => {
     const [monthAvailability, setMonthAvailability] = useState<MonthAvailability[]>([]);
     const [appointments, setAppointments] = useState<Appointment[]>([]);
     const [loading, setLoading] = useState(true);
+
+    const [css] = useStyletron();
+    const mb30 = css({
+        '@media only screen and (max-width: 990px)': {
+            marginBottom: '16px',
+        },
+    });
 
     const handleDateChange = useCallback((day: Date, modifiers: DayModifiers) => {
         if (modifiers.available && !modifiers.disabled) {
@@ -137,6 +153,63 @@ const HomePageProvider: React.FC = () => {
 
     return (
         <Container>
+            <InfoHeader>
+                <Row>
+                    <Col lg={3} sm={6} xs={12} className={mb30}>
+                        <StickerCard
+                            title="Total Revenue"
+                            subtitle="( Últimos 30 dias )"
+                            icon={<CoinIcon />}
+                            price="$711.66"
+                            indicator="up"
+                            indicatorText="Revenue up"
+                            note=""
+                            link="#"
+                            linkText="Full Details"
+                        />
+                    </Col>
+                    <Col lg={3} sm={6} xs={12} className={mb30}>
+                        <StickerCard
+                            title="Total Order"
+                            subtitle="( Últimos 30 dias )"
+                            icon={<CartIconBig />}
+                            price="88,568"
+                            indicator="down"
+                            indicatorText="Order down"
+                            note=""
+                            link="#"
+                            linkText="Full Details"
+                        />
+                    </Col>
+                    <Col lg={3} sm={6} xs={12}>
+                        <StickerCard
+                            title="New Customer"
+                            subtitle="( Últimos 30 dias )"
+                            icon={<UserIcon />}
+                            price="5,678"
+                            indicator="up"
+                            indicatorText="Customer up"
+                            note=""
+                            link="#"
+                            linkText="Full Details"
+                        />
+                    </Col>
+                    <Col lg={3} sm={6} xs={12}>
+                        <StickerCard
+                            title="Total Delivery"
+                            subtitle="( Últimos 30 dias )"
+                            icon={<DeliveryIcon />}
+                            price="78,000"
+                            indicator="up"
+                            indicatorText="Delivery up"
+                            note=""
+                            link="#"
+                            linkText="Full Details"
+                        />
+                    </Col>
+                </Row>
+            </InfoHeader>
+
             <Content>
                 <Schedule>
                     <h1>Horários Agendados</h1>
@@ -145,23 +218,9 @@ const HomePageProvider: React.FC = () => {
                         <span>{selectedDateAsText}</span>
                         <span>{selectedWeekDay}</span>
                     </p>
+
                     {isToday(selectedDate) && nextAppointment && (
-                        <NextAppointment>
-                            <strong>Agendamento a seguir</strong>
-                            <div>
-                                <img
-                                    src={`data:image/png;base64,${nextAppointment.user.avatar}`}
-                                    alt={nextAppointment.user.name}
-                                />
-                                <strong>
-                                    {nextAppointment.user.name} {nextAppointment.user.lastName}
-                                </strong>
-                                <span>
-                                    <FiClock />
-                                    {nextAppointment.hourFormatted}
-                                </span>
-                            </div>
-                        </NextAppointment>
+                        <NextAppointment nextAppointmentInfo={nextAppointment} />
                     )}
 
                     <Section>
@@ -169,45 +228,8 @@ const HomePageProvider: React.FC = () => {
 
                         {morningAppointments.length === 0 && <p>Nenhum agendamento neste período</p>}
 
-                        {morningAppointments.map((appointment) => (
-                            <Appointment key={appointment.id}>
-                                <span>
-                                    <FiClock />
-                                    {appointment.hourFormatted}
-                                </span>
-
-                                <div>
-                                    <img
-                                        src={`data:image/png;base64,${appointment.user.avatar}`}
-                                        alt={appointment.user.name}
-                                    />
-                                    <aside
-                                        style={{
-                                            flexDirection: 'column',
-                                            marginLeft: '10px',
-                                        }}
-                                    >
-                                        <section>
-                                            <h4 style={{ color: '#ff9000', marginRight: '7px' }}>Nome:</h4>
-                                            <h4>
-                                                {appointment.user.name} {appointment.user.lastName}
-                                            </h4>
-                                        </section>
-                                        <section>
-                                            <h4 style={{ color: '#ff9000', marginRight: '7px' }}>Tipo Serviço:</h4>
-                                            <h4>{appointment.serviceType}</h4>
-                                        </section>
-                                        {appointment.notes && appointment.notes !== '' && (
-                                            <section>
-                                                <h4 style={{ color: '#ff9000', marginRight: '7px' }}>
-                                                    Comentarios:
-                                                </h4>
-                                                <h4>{appointment.notes}</h4>
-                                            </section>
-                                        )}
-                                    </aside>
-                                </div>
-                            </Appointment>
+                        {morningAppointments.map((morningAppointment) => (
+                            <Appointment appointmentInfo={morningAppointment} />
                         ))}
                     </Section>
 
@@ -216,45 +238,8 @@ const HomePageProvider: React.FC = () => {
 
                         {afternoonAppointments.length === 0 && <p>Nenhum agendamento neste período</p>}
 
-                        {afternoonAppointments.map((appointment) => (
-                            <Appointment key={appointment.id}>
-                                <span>
-                                    <FiClock />
-                                    {appointment.hourFormatted}
-                                </span>
-
-                                <div>
-                                    <img
-                                        src={`data:image/png;base64,${appointment.user.avatar}`}
-                                        alt={appointment.user.name}
-                                    />
-                                    <aside
-                                        style={{
-                                            flexDirection: 'column',
-                                            marginLeft: '10px',
-                                        }}
-                                    >
-                                        <section>
-                                            <h4 style={{ color: '#ff9000', marginRight: '7px' }}>Nome:</h4>
-                                            <h4>
-                                                {appointment.user.name} {appointment.user.lastName}
-                                            </h4>
-                                        </section>
-                                        <section>
-                                            <h4 style={{ color: '#ff9000', marginRight: '7px' }}>Tipo Serviço:</h4>
-                                            <h4>{appointment.serviceType}</h4>
-                                        </section>
-                                        {appointment.notes && appointment.notes !== '' && (
-                                            <section>
-                                                <h4 style={{ color: '#ff9000', marginRight: '7px' }}>
-                                                    Comentarios:
-                                                </h4>
-                                                <h4>{appointment.notes}</h4>
-                                            </section>
-                                        )}
-                                    </aside>
-                                </div>
-                            </Appointment>
+                        {afternoonAppointments.map((afternoonAppointment) => (
+                            <Appointment appointmentInfo={afternoonAppointment} />
                         ))}
                     </Section>
                 </Schedule>

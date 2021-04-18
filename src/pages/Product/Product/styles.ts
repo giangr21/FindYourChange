@@ -21,13 +21,13 @@ export const Row = styled.div`
         & + a {
             padding-left: 10px;
             margin-left: 10px;
-            border-left: 1px solid var(--color-border);
+            border-left: 1px solid #28262e;
         }
     }
 `;
 
 export const Panel = styled.div`
-    background: var(--color-white);
+    background: #f4ede8;
     box-shadow: var(--panel-shadow);
 
     display: grid;
@@ -36,7 +36,7 @@ export const Panel = styled.div`
 
 export const Column = styled.div`
     &:first-child {
-        border-right: 1px solid var(--color-border);
+        border-right: 1px solid #28262e;
     }
 `;
 
@@ -52,7 +52,7 @@ export const Gallery = styled.div`
 `;
 
 export const Section = styled.div`
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid #28262e;
     padding: 48px 32px;
 
     display: flex;
@@ -90,7 +90,7 @@ export const Section = styled.div`
 `;
 
 export const Description = styled.div`
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid #28262e;
     padding: 44px 32px;
 
     > h2 {

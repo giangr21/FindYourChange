@@ -6,8 +6,8 @@ import * as Yup from 'yup';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import Button from '../../components/Button';
-import Input from '../../components/Input';
+import Button from '../../components/FormComponents/Button';
+import Input from '../../components/FormComponents/Input';
 import getValidationErrors from '../../util/getValidationErrors';
 import { AnimationContainer, Wrapper, Content } from './styles';
 import api from '../../services/api';

@@ -10,8 +10,8 @@ import { FaWindowClose } from 'react-icons/fa';
 import TimePicker from 'rc-time-picker';
 import moment from 'moment';
 import { Form, Container, Content, Calendar, Header, Footer } from './styles';
-import Button from '../../../components/Button';
-import Input from '../../../components/Input';
+import Button from '../../../components/FormComponents/Button';
+import Input from '../../../components/FormComponents/Input';
 import getValidationErrors from '../../../util/getValidationErrors';
 import 'react-day-picker/lib/style.css';
 

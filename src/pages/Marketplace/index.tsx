@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import { withStyle } from 'baseui';
 import { MdDeleteForever } from 'react-icons/md';
-import IconButton from '../../components/Button/IconButton';
+import IconButton from '../../components/FormComponents/Button/IconButton';
 import {
     Content,
     Results,
@@ -26,13 +26,13 @@ import {
     ContentSearch,
     FooterFilter,
 } from './styles';
-import Radio from '../../components/Radio';
-import Input from '../../components/Input/MainSearchInput';
+import Radio from '../../components/FormComponents/Radio';
+import Input from '../../components/FormComponents/Input/MainSearchInput';
 import { ProductData } from '../ConfigProductsProvider';
 import api from '../../services/api';
 import Loading from '../../components/Loading';
 import { Row as Rows, Col as Column } from '../../components/FlexBox/FlexBox';
-import PaginationButton from '../../components/Button/PaginationButton';
+import PaginationButton from '../../components/FormComponents/Button/PaginationButton';
 import FilterMobile from '../../components/Filter/MobileMarketPlace';
 import { useMedia } from '../../util/use-media';
 

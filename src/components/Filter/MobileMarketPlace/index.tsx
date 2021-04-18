@@ -5,10 +5,10 @@ import Drawer, { ANCHOR } from '../../Drawer/Drawer';
 
 import { CloseButton, SidebarWrapper, ContentSearch } from './styles';
 import { ArrowLeftRound } from '../../Header/ProviderAuthenticate/mobile/Icons/ArrowLeftRound';
-import Input from '../../Input/MainSearchInput';
-import Radio from '../../Radio';
+import Input from '../../FormComponents/Input/MainSearchInput';
+import Radio from '../../FormComponents/Radio';
 import { FooterFilter } from '../../../pages/Marketplace/styles';
-import IconButton from '../../Button/IconButton';
+import IconButton from '../../FormComponents/Button/IconButton';
 
 interface MobileProps {
     isDrawerOpen: boolean;

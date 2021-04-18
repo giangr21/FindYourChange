@@ -5,7 +5,7 @@ import { FormHandles } from '@unform/core';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-import IconButton from '../Button/IconButton';
+import IconButton from '../FormComponents/Button/IconButton';
 import { Container, HeaderFilter, Form, FooterFilter } from './styles';
 import { useAuth } from '../../hooks/Auth';
 // import Select from '../Select';

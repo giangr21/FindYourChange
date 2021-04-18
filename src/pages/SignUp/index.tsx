@@ -15,10 +15,10 @@ import { Link, useHistory } from 'react-router-dom';
 import { FaMapSigns, FaPhoneAlt } from 'react-icons/fa';
 import api from '../../services/api';
 import logoImg from '../../assets/logoPrincipalMobile.png';
-import Button from '../../components/Button';
-import Input from '../../components/Input';
-import InputMask from '../../components/Input/InputMask';
-import Radio from '../../components/Radio';
+import Button from '../../components/FormComponents/Button';
+import Input from '../../components/FormComponents/Input';
+import InputMask from '../../components/FormComponents/Input/InputMask';
+import Radio from '../../components/FormComponents/Radio';
 import getValidationErrors from '../../util/getValidationErrors';
 import { Background, Container, Content, AnimationContainer, Row, Column } from './styles';
 

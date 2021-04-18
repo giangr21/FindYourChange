@@ -3,7 +3,7 @@ import { FaPlus } from 'react-icons/fa';
 
 import { toast } from 'react-toastify';
 import { Container, HeaderContainer } from './styles';
-import IconButton from '../../components/Button/IconButton';
+import IconButton from '../../components/FormComponents/Button/IconButton';
 import ModalDeleteClerk from '../../components/Modal/DeleteModal';
 import ClerkRow from './ClerkRow/index';
 import ModalClerkProvider from './ModalClerkProvider';

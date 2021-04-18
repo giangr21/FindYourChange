@@ -13,14 +13,14 @@ import Switch from 'react-switch';
 import { toast } from 'react-toastify';
 import { BsCheckAll } from 'react-icons/bs';
 import api from '../../services/api';
-import Button from '../../components/Button';
-import Input from '../../components/Input';
+import Button from '../../components/FormComponents/Button';
+import Input from '../../components/FormComponents/Input';
 import getValidationErrors from '../../util/getValidationErrors';
 import { Container, Content, AvatarInput, Row, Col, ImgPreview } from './styles';
 import { useAuth } from '../../hooks/Auth';
-import InputMask from '../../components/Input/InputMask';
+import InputMask from '../../components/FormComponents/Input/InputMask';
 import Loading from '../../components/Loading';
-import { CarouselWithCustomDots } from '../../components/multi-carousel/multi-carousel';
+import { CarouselWithCustomDots } from '../../components/MultiCarousel/multi-carousel';
 
 const Profile: React.FC = () => {
     const formRef = useRef<FormHandles>(null);

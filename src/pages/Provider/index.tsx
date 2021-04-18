@@ -7,7 +7,7 @@ import { Tabs, Tab, FILL } from 'baseui/tabs-motion';
 import { MdCheck, MdEdit } from 'react-icons/md';
 import { useLocation } from 'react-router-dom';
 import moment from 'moment';
-import IconButton from '../../components/Button/IconButton';
+import IconButton from '../../components/FormComponents/Button/IconButton';
 import {
     Container,
     Content,
@@ -99,8 +99,6 @@ const Index: React.FC = () => {
 
                 response.data.isPopular = isPopular;
                 response.data.isNotPopular = isNotPopular;
-
-                console.log(response.data);
 
                 setProvider(response.data);
                 setLoading(false);
