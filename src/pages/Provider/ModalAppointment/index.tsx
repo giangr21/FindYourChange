@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { isToday, format, parseISO, isAfter } from 'date-fns';
+import ptBR, { format } from 'date-fns';
 
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
@@ -18,6 +18,8 @@ import 'react-day-picker/lib/style.css';
 import { useAuth } from '../../../hooks/Auth';
 import { useMedia } from '../../../util/use-media';
 import Modal from '../../../components/Modal';
+import api from '../../../services/api';
+
 // import ptBR from 'date-fns/locale/pt-BR';
 
 interface MonthAvailability {
@@ -28,6 +30,8 @@ interface ModalProps {
     isOpen: boolean;
     setIsOpen: () => void;
     handleConfirm: () => void;
+    edit: boolean;
+    appointmentId: string;
 }
 
 interface AppointmentData {
@@ -38,7 +42,7 @@ interface AppointmentData {
     serviceType: string;
 }
 
-const ModalAppointment: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
+const ModalAppointment: React.FC<ModalProps> = ({ isOpen, setIsOpen, handleConfirm, edit, appointmentId }) => {
     const mobile = useMedia('(max-width: 760px)');
     const { user } = useAuth();
     const [loading, setLoading] = useState(true);
@@ -81,13 +85,13 @@ const ModalAppointment: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
 
     const selectedDateAsText = useMemo(() => {
         return format(selectedDate, "'Dia' dd 'de' MMM", {
-            // locale: ptBR,
+            locale: ptBR,
         });
     }, [selectedDate]);
 
     const selectedWeekDay = useMemo(() => {
         return format(selectedDate, 'cccc', {
-            // locale: ptBR,
+            locale: ptBR,
         });
     }, [selectedDate]);
 
@@ -96,8 +100,8 @@ const ModalAppointment: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
             try {
                 formRef.current?.setErrors({});
                 const schema = Yup.object().shape({
-                    // email: Yup.string().required('E-mail obrigatório').email('Digite um e-mail válido'),
-                    // password: Yup.string().required('Senha obrigatória'),
+                    // date: Yup.date().required('Selecione uma data válida!'),
+                    // clerk: Yup.string().required('Selecione um(a) atendente!'),
                 });
 
                 await schema.validate(data, {
@@ -105,7 +109,26 @@ const ModalAppointment: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
                 });
 
                 data.user = user.id;
+                // data.serviceType = ;
                 // data.provider = provider.id;
+
+                // // Necessário escolher horário
+                // if (hour) {
+                //     data.hour = moment(hour).format('HH:mm');
+                // } else {
+                //     return toast.error(`Necessário escolher um horário!`);
+                // }
+
+                const isAvailable = await api.post('appointment/isDayOfWeekAvailable', {
+                    // dayOfWeek: data.dayOfWeek,
+                    // providerId: user.id,
+                });
+
+                if (!isAvailable.data) {
+                    return toast.error(`Já existe um agendamento nesse horário`);
+                }
+
+                await api.post('appointment', data);
 
                 return setModalStatus(false);
             } catch (err) {
@@ -118,7 +141,7 @@ const ModalAppointment: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
                 toast.error('Ocorreu um erro na tentativa de agendamento, cheque as informações novamente.');
             }
         },
-        [history],
+        [hour, setIsOpen, handleConfirm, history, appointmentId, user.id],
     );
     return (
         <Modal width={mobile ? '100%' : '430px'} height="600px" isOpen={isOpen} setIsOpen={setIsOpen}>
