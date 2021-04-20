@@ -14,7 +14,7 @@ export const MoreContainer = styled.div`
     button {
         background: none;
         border: none;
-        margin-left: 7px;
+        margin-left: 12px;
     }
 `;
 

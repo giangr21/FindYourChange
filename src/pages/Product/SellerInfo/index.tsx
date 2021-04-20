@@ -9,21 +9,38 @@ import {
     ReputationThermometer,
     ReputationRow,
     SupportIcon,
+    UserIcon,
     ClockIcon,
     More,
 } from './styles';
 
-const SellerInfo: React.FC = () => {
+interface SellerInfoProps {
+    sellerInfo: any;
+}
+
+const SellerInfo: React.FC<SellerInfoProps> = ({ sellerInfo, children }) => {
     return (
         <Container>
             <Title>Informações sobre o vendedor</Title>
 
             <LocationCard>
+                <UserIcon />
+
+                <div>
+                    <p>Contato </p>
+                    <strong>
+                        {sellerInfo.legalName} - {sellerInfo.phone}
+                    </strong>
+                </div>
+            </LocationCard>
+            <LocationCard>
                 <LocationIcon />
 
                 <div>
-                    <p>Localização</p>
-                    <strong>Curitiba PR</strong>
+                    <p>Localização </p>
+                    <strong>
+                        {sellerInfo.addressCity} - {sellerInfo.addressState}
+                    </strong>
                 </div>
             </LocationCard>
 
@@ -55,8 +72,6 @@ const SellerInfo: React.FC = () => {
                     </div>
                 </ReputationRow>
             </ReputationCard>
-
-            <More href="#">Ver mais dados do vendedor</More>
         </Container>
     );
 };

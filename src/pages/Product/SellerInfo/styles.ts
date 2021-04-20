@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
-import { HiOutlineLocationMarker, HiOutlineChatAlt2, HiOutlineClock } from 'react-icons/hi';
+import { HiOutlineLocationMarker, HiOutlineChatAlt2, HiOutlineClock, HiUserCircle } from 'react-icons/hi';
 
 export const Container = styled.div`
-    padding: 48px 32px;
+    padding: 24px 32px;
     display: flex;
     flex-direction: column;
     border-top: 1px solid #28262e;
@@ -39,6 +39,10 @@ const iconCSS = css`
 `;
 
 export const LocationIcon = styled(HiOutlineLocationMarker)`
+    ${iconCSS}
+`;
+
+export const UserIcon = styled(HiUserCircle)`
     ${iconCSS}
 `;
 

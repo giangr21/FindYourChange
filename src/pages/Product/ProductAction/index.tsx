@@ -21,7 +21,7 @@ import {
 } from './styles';
 
 interface ProductActionProps {
-    productValues: ProductData | undefined;
+    productValues: any;
 }
 
 const ProductAction: React.FC<ProductActionProps> = ({ productValues }) => {
@@ -31,7 +31,7 @@ const ProductAction: React.FC<ProductActionProps> = ({ productValues }) => {
 
     return (
         <Container>
-            <Condition>Novo</Condition>
+            <Condition>Condição do produto: {productValues.productStatus}</Condition>
 
             <Row>
                 <h1>{productValues?.name}</h1>

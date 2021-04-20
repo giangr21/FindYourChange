@@ -5,15 +5,25 @@ import { toast } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
 import api from '../../../services/api';
 
-import { ProductData } from '../../ConfigProductsProvider';
 import ProductAction from '../ProductAction';
 import SellerInfo from '../SellerInfo';
 
 import { Container, Row, Panel, Column, Gallery, Section, Description } from './styles';
 import Loading from '../../../components/Loading';
 
+interface ProductData {
+    id: string;
+    name: string;
+    value: string;
+    quantity: string;
+    category: string;
+    description: string;
+    productImage: string;
+    provider: any;
+}
+
 const Product: React.FC = () => {
-    const [product, setProduct] = useState<ProductData>();
+    const [product, setProduct] = useState<any>(null);
     const [imgPhotoMin, setImgPhotoMin] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const location = useLocation();
@@ -54,13 +64,11 @@ const Product: React.FC = () => {
                         </Gallery>
 
                         <Description>
-                            <h2>Descrição</h2>
+                            <h2>Descrição Do Produto: </h2>
                             <p>
                                 {product !== undefined
                                     ? product.description
                                     : 'Descrição não especificada pelo vendedor!'}
-                                <br />
-                                <br />
                             </p>
                         </Description>
                     </Column>
@@ -68,7 +76,7 @@ const Product: React.FC = () => {
                     <Column>
                         <ProductAction productValues={product} />
 
-                        <SellerInfo />
+                        <SellerInfo sellerInfo={product.provider} />
 
                         <Section>
                             <h4>Garantia</h4>

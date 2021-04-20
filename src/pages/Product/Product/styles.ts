@@ -29,6 +29,7 @@ export const Row = styled.div`
 export const Panel = styled.div`
     background: #f4ede8;
     box-shadow: var(--panel-shadow);
+    border-radius: 2%;
 
     display: grid;
     grid-template-columns: 65fr 35fr;
@@ -44,10 +45,11 @@ export const Gallery = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 530px;
+    height: 500px;
 
     > img {
-        height: 73%;
+        height: 99%;
+        border-radius: 2%;
     }
 `;
 

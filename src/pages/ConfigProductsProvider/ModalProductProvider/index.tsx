@@ -64,6 +64,12 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                 if (response.data.category === 'BodyPiercing') {
                     response.data.category = { value: 'BodyPiercing', label: 'Body Piercing' };
                 }
+                if (response.data.productStatus === 'Novo') {
+                    response.data.productStatus = { value: 'Novo', label: 'Novo' };
+                }
+                if (response.data.productStatus === 'Usado') {
+                    response.data.productStatus = { value: 'Usado', label: 'Usado' };
+                }
                 if (response.data.productImage) {
                     const imgNamePhotoData = await api.get(`storage/base64/min/${response.data.productImage}`);
                     setImgPhotoMin(imgNamePhotoData.data);
@@ -120,12 +126,14 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
     const submitProduct = useCallback(
         async (data: ProductData) => {
             try {
-                console.log(data);
                 formRef.current?.setErrors({});
                 const schema = Yup.object().shape({
                     name: Yup.string().required('Nome obrigatório').max(60, 'Digite um nome válido'),
                     value: Yup.string().required('Valor obrigatório'),
                     category: Yup.string()
+                        .required('Categoria obrigatória')
+                        .max(40, 'Digite uma categoria válida'),
+                    productStatus: Yup.string()
                         .required('Categoria obrigatória')
                         .max(40, 'Digite uma categoria válida'),
                     quantity: Yup.string().required('Quantidade obrigatória'),
@@ -178,7 +186,7 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
     }, []);
 
     return (
-        <Modal width={mobile ? '100%' : '420px'} height="600px" isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Modal width={mobile ? '100%' : '420px'} height="630px" isOpen={isOpen} setIsOpen={setIsOpen}>
             <Form ref={formRef} initialData={productData} onSubmit={submitProduct}>
                 <Header>
                     {edit ? <h1>Editar Produto</h1> : <h1>Novo Produto</h1>}
@@ -241,6 +249,28 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                                             { value: 'Barbearia', label: 'Barbearia' },
                                             { value: 'Tatuagem', label: 'Tatuagem' },
                                             { value: 'BodyPiercing', label: 'Body Piercing' },
+                                        ]}
+                                    />
+                                </div>
+                            </Container>
+                            <Container>
+                                <div
+                                    style={{
+                                        padding: '2px',
+                                        width: '100%',
+                                        marginBottom: '15px',
+                                    }}
+                                >
+                                    <Select
+                                        name="productStatus"
+                                        fieldValue="value"
+                                        fieldLabel="label"
+                                        label="Estado do produto"
+                                        placeholder=""
+                                        className="react-select-container"
+                                        options={[
+                                            { value: 'Novo', label: 'Novo' },
+                                            { value: 'Usado', label: 'Usado' },
                                         ]}
                                     />
                                 </div>
