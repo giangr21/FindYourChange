@@ -168,13 +168,29 @@ const Index: React.FC = () => {
                 </div>
                 <div className="space">
                     <Select
+                        name="productState"
+                        fieldValue="value"
+                        fieldLabel="label"
+                        label="Estado do Produto"
+                        className="react-select-container"
+                        defaultValue={{ value: 'Todos', label: 'Todos' }}
+                        options={[
+                            { value: 'Todos', label: 'Todos' },
+                            { value: 'Novo', label: 'Novo' },
+                            { value: 'Usado', label: 'Usado' },
+                        ]}
+                    />
+                </div>
+                <div className="space">
+                    <Select
                         name="category"
                         fieldValue="value"
                         fieldLabel="label"
                         label="Categoria"
                         className="react-select-container"
-                        defaultValue={{ value: 'Barbearia', label: 'Barbearia' }}
+                        defaultValue={{ value: 'Todas', label: 'Todas' }}
                         options={[
+                            { value: 'Todas', label: 'Todas' },
                             { value: 'Barbearia', label: 'Barbearia' },
                             { value: 'Tatuagem', label: 'Tatuagem' },
                             { value: 'BodyPiercing', label: 'Body Piercing' },

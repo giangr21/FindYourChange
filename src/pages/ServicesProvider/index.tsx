@@ -146,7 +146,6 @@ const Index: React.FC = () => {
     async function getProviderByServiceName(locationState: any): Promise<void> {
         await api.get(`/provider/serviceType/${locationState}`).then(async (result) => {
             if (result.data.length !== 0) {
-                console.log('oi');
                 await renderEstablishmentsList(result);
                 return;
             }
