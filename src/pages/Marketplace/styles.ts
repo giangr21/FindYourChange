@@ -169,7 +169,7 @@ export const SearchContainer = styled.div<FilterProps>`
     border-radius: 10px;
     transition: all ease 0.7s;
 
-    padding: 20px 30px;
+    padding: 20px 10px;
     align-items: center;
 
     p {
@@ -202,6 +202,9 @@ export const SearchContainer = styled.div<FilterProps>`
 
 export const ContentSearch = styled(Unform)`
     flex: auto;
+    overflow-y: auto;
+    padding: 0px 3px;
+
     .separator {
         height: 2px;
         background-color: #3a3a3a;
@@ -251,7 +254,7 @@ export const ContentSearch = styled(Unform)`
 
 export const FooterFilter = styled.div`
     display: flex;
-    height: 60px;
+    height: 50px;
     padding: 5px 10px;
     margin-top: 10px;
     margin: 0 auto;
