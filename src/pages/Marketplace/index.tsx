@@ -119,6 +119,7 @@ const Index: React.FC = () => {
                 formRef.current?.setFieldValue('category', 'Todas');
                 formRef.current?.setFieldValue('cities', 'Todas');
                 formRef.current?.setFieldValue('price', 'Todos');
+                formRef.current?.setFieldValue('productState', 'Todos');
 
                 setProducts(auxProducts);
                 setLoading(false);

@@ -99,11 +99,11 @@ export const Form = styled(Unform)`
 export const FooterFilter = styled.div`
     display: flex;
     height: 60px;
-    padding: 5px 10px;
+    padding: 5px 5px;
     margin-top: 10px;
     margin: 0 auto;
 
     div + div {
-        margin-left: 10px;
+        margin-left: 5px;
     }
 `;
