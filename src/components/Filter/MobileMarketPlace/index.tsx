@@ -114,6 +114,30 @@ const MobileHeader: React.FC<MobileProps> = ({
                         />
                     </div>
                     <div className="separator" />
+                    <span>Estado do Produto: </span>
+                    <div
+                        style={{
+                            marginTop: '5px',
+                        }}
+                    >
+                        <Radio
+                            style={{
+                                width: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                            }}
+                            name="productState"
+                            options={[
+                                {
+                                    id: 'Todos',
+                                    label: 'Todos',
+                                },
+                                { id: 'Usado', label: 'Usado' },
+                                { id: 'Novo', label: 'Novo' },
+                            ]}
+                        />
+                    </div>
+                    <div className="separator" />
                     <span>Preço: </span>
                     <div
                         style={{
