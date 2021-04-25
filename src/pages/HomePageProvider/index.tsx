@@ -2,13 +2,13 @@
 /* eslint-disable import/no-duplicates */
 /* eslint-disable @typescript-eslint/camelcase */
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { FiClock } from 'react-icons/fi';
 import { isToday, format, parseISO, isAfter } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import DayPicker, { DayModifiers } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
-import { Col, Row } from 'react-styled-flexboxgrid';
+import { withStyle } from 'baseui';
 import { useStyletron } from 'styletron-react';
+import { Row as Rows, Col as Column } from '../../components/FlexBox/FlexBox';
 
 import { Container, InfoHeader, Content, Schedule, Section, Calendar } from './styles';
 import { useAuth } from '../../hooks/Auth';
@@ -45,12 +45,35 @@ interface Appointment {
     };
 }
 
+export const Col = withStyle(Column, () => ({
+    marginBottom: '20px',
+
+    '@media only screen and (max-width: 767px)': {
+        ':last-child': {
+            marginBottom: 0,
+        },
+    },
+}));
+
+const Row = withStyle(Rows, () => ({
+    paddingRight: '5px',
+    '@media only screen and (min-width: 768px) and (max-width: 991px)': {
+        alignItems: 'center',
+    },
+}));
+
 const HomePageProvider: React.FC = () => {
     const { user } = useAuth();
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [monthAvailability, setMonthAvailability] = useState<MonthAvailability[]>([]);
     const [appointments, setAppointments] = useState<Appointment[]>([]);
+    const [dashboardInfo, setDashboardInfo] = useState({
+        services: 0,
+        products: 0,
+        providerRecommendations: 0,
+        appointments: 0,
+    });
     const [loading, setLoading] = useState(true);
 
     const [css] = useStyletron();
@@ -70,42 +93,43 @@ const HomePageProvider: React.FC = () => {
         setCurrentMonth(month);
     }, []);
 
-    // useEffect(() => {
-    //     api.get(`/provider/${user.id}/month-availability`, {
-    //         params: {
-    //             year: currentMonth.getFullYear(),
-    //             month: currentMonth.getMonth() + 1,
-    //         },
-    //     }).then((response) => {
-    //         // setMonthAvailability(response.data);
-    //     });
-    // }, [currentMonth, user.id]);
-
     useEffect(() => {
-        api.get('provider/appointments/me', {
-            params: {
-                year: selectedDate.getFullYear(),
-                month: selectedDate.getMonth() + 1,
-                day: selectedDate.getDate(),
-                providerId: user.id,
-            },
-        }).then(async (response) => {
-            console.log(response.data);
-            const appointmentsFormatted = [];
-            for (let index = 0; index < response.data.length; index++) {
-                const appointment = response.data[index];
+        async function getAppointments(): Promise<void> {
+            await api
+                .get('provider/appointments/me', {
+                    params: {
+                        year: selectedDate.getFullYear(),
+                        month: selectedDate.getMonth() + 1,
+                        day: selectedDate.getDate(),
+                        providerId: user.id,
+                    },
+                })
+                .then(async (response) => {
+                    const appointmentsFormatted = [];
+                    for (let index = 0; index < response.data.length; index++) {
+                        const appointment = response.data[index];
 
-                const { data: imgBase64 } = await api.get(`storage/base64/min/${appointment.user.avatar}`);
-                appointment.user.avatar = imgBase64;
+                        const { data: imgBase64 } = await api.get(`storage/base64/min/${appointment.user.avatar}`);
+                        appointment.user.avatar = imgBase64;
 
-                appointmentsFormatted.push({
-                    ...appointment,
-                    hourFormatted: format(parseISO(appointment.dateRelease), 'HH:mm'),
+                        appointmentsFormatted.push({
+                            ...appointment,
+                            hourFormatted: format(parseISO(appointment.dateRelease), 'HH:mm'),
+                        });
+                    }
+                    setAppointments(appointmentsFormatted);
+                    setLoading(false);
                 });
-            }
-            setAppointments(appointmentsFormatted);
-            setLoading(false);
-        });
+        }
+
+        async function getDashboardInfo(): Promise<void> {
+            await api.get(`/provider/dashboardInfo/${user.id}`).then((response) => {
+                setDashboardInfo(response.data);
+            });
+        }
+
+        getAppointments();
+        getDashboardInfo();
     }, [selectedDate, user.id]);
 
     const disabledDays = useMemo(() => {
@@ -157,54 +181,50 @@ const HomePageProvider: React.FC = () => {
                 <Row>
                     <Col lg={3} sm={6} xs={12} className={mb30}>
                         <StickerCard
-                            title="Total Revenue"
-                            subtitle="( Últimos 30 dias )"
+                            title="Total Serviços"
+                            subtitle="( Cadastrados )"
                             icon={<CoinIcon />}
-                            price="$711.66"
-                            indicator="up"
-                            indicatorText="Revenue up"
+                            price={dashboardInfo.services === 0 ? 'Carregando..' : dashboardInfo.services}
                             note=""
                             link="#"
-                            linkText="Full Details"
+                            linkText="Mais Detalhes"
                         />
                     </Col>
                     <Col lg={3} sm={6} xs={12} className={mb30}>
                         <StickerCard
-                            title="Total Order"
+                            title="Total Produtos"
+                            subtitle="( Cadastrados )"
+                            icon={<DeliveryIcon />}
+                            price={dashboardInfo.products === 0 ? 'Carregando..' : dashboardInfo.products}
+                            note=""
+                            link="#"
+                            linkText="Mais Detalhes"
+                        />
+                    </Col>
+                    <Col lg={3} sm={6} xs={12}>
+                        <StickerCard
+                            title="Agendamentos"
                             subtitle="( Últimos 30 dias )"
                             icon={<CartIconBig />}
-                            price="88,568"
-                            indicator="down"
-                            indicatorText="Order down"
+                            price={dashboardInfo.appointments === 0 ? 'Carregando..' : dashboardInfo.appointments}
                             note=""
                             link="#"
-                            linkText="Full Details"
+                            linkText="Mais Detalhes"
                         />
                     </Col>
                     <Col lg={3} sm={6} xs={12}>
                         <StickerCard
-                            title="New Customer"
-                            subtitle="( Últimos 30 dias )"
+                            title="Recomendações"
+                            subtitle="( Total )"
                             icon={<UserIcon />}
-                            price="5,678"
-                            indicator="up"
-                            indicatorText="Customer up"
+                            price={
+                                dashboardInfo.providerRecommendations === 0
+                                    ? 'Carregando..'
+                                    : dashboardInfo.providerRecommendations
+                            }
                             note=""
                             link="#"
-                            linkText="Full Details"
-                        />
-                    </Col>
-                    <Col lg={3} sm={6} xs={12}>
-                        <StickerCard
-                            title="Total Delivery"
-                            subtitle="( Últimos 30 dias )"
-                            icon={<DeliveryIcon />}
-                            price="78,000"
-                            indicator="up"
-                            indicatorText="Delivery up"
-                            note=""
-                            link="#"
-                            linkText="Full Details"
+                            linkText="Mais Detalhes"
                         />
                     </Col>
                 </Row>

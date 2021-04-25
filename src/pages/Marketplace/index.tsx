@@ -180,7 +180,7 @@ const Index: React.FC = () => {
                 <SearchContainer showFilter={showFilter}>
                     <ContentSearch ref={formRef} onSubmit={formFilterSubmit}>
                         <p>Filtro MarketPlace</p>
-                        <Input name="name" icon={FaSearch} placeholder="Pesquisar Marketplace" />
+                        <Input name="name" icon={FaSearch} placeholder="Nome Produto" />
                         <div className="separator" />
                         <span>Cidades: </span>
                         <div
@@ -193,8 +193,6 @@ const Index: React.FC = () => {
                                     width: '100%',
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    // alignItems: 'center',
-                                    // justifyContent: 'center',
                                 }}
                                 name="cities"
                                 options={cities}

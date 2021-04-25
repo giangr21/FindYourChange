@@ -32,7 +32,7 @@ export const SearchContainer = styled.div<FilterProps>`
     border-radius: 10px;
     transition: all ease 0.7s;
 
-    padding: 20px 30px;
+    padding: 20px 10px;
     align-items: center;
 
     p {
@@ -66,6 +66,20 @@ export const SearchContainer = styled.div<FilterProps>`
 export const ContentSearch = styled(Unform)`
     flex: auto;
     overflow-y: auto;
+    padding: 0px 5px;
+
+    ::-webkit-scrollbar {
+        width: 2px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #f4ede8;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #ff9000;
+        border-radius: 20px;
+        border: 3px solid #ff9000;
+    }
+
     .separator {
         height: 2px;
         background-color: #3a3a3a;

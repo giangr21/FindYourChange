@@ -32,6 +32,7 @@ const Index: React.FC = () => {
             await api
                 .get(`/providerRecommendation/populars/`)
                 .then(async (response) => {
+                    console.log(response);
                     setPopularRecommendations(response.data);
                     setLoading(false);
                 })

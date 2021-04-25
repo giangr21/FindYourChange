@@ -158,7 +158,11 @@ const Index: React.FC = () => {
                             <IconButton icon={FaSearch} background="#777777" justIcon action={handleFilter} />
                         </HeaderContainer>
 
-                        <Row>
+                        <Row
+                            $style={{
+                                width: '100%',
+                            }}
+                        >
                             {services.map((service: any) => (
                                 <Col
                                     md={4}

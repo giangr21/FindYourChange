@@ -27,6 +27,7 @@ export const Container = styled.div<ContainerProps>`
         border: 0;
         flex: 1;
         color: black;
+        font-size: 14px;
 
         &::placeholder {
             /* color: #666360; */
