@@ -69,10 +69,10 @@ const HomePageProvider: React.FC = () => {
     const [monthAvailability, setMonthAvailability] = useState<MonthAvailability[]>([]);
     const [appointments, setAppointments] = useState<Appointment[]>([]);
     const [dashboardInfo, setDashboardInfo] = useState({
-        services: 0,
-        products: 0,
-        providerRecommendations: 0,
-        appointments: 0,
+        services: null,
+        products: null,
+        providerRecommendations: null,
+        appointments: null,
     });
     const [loading, setLoading] = useState(true);
 
@@ -124,6 +124,7 @@ const HomePageProvider: React.FC = () => {
 
         async function getDashboardInfo(): Promise<void> {
             await api.get(`/provider/dashboardInfo/${user.id}`).then((response) => {
+                console.log(response.data);
                 setDashboardInfo(response.data);
             });
         }
@@ -184,7 +185,7 @@ const HomePageProvider: React.FC = () => {
                             title="Total Serviços"
                             subtitle="( Cadastrados )"
                             icon={<CoinIcon />}
-                            price={dashboardInfo.services === 0 ? 'Carregando..' : dashboardInfo.services}
+                            price={!dashboardInfo.services ? 'Carregando..' : dashboardInfo.services}
                             note=""
                             link="#"
                             linkText="Mais Detalhes"
@@ -195,7 +196,7 @@ const HomePageProvider: React.FC = () => {
                             title="Total Produtos"
                             subtitle="( Cadastrados )"
                             icon={<DeliveryIcon />}
-                            price={dashboardInfo.products === 0 ? 'Carregando..' : dashboardInfo.products}
+                            price={!dashboardInfo.products ? 'Carregando..' : dashboardInfo.products}
                             note=""
                             link="#"
                             linkText="Mais Detalhes"
@@ -206,7 +207,7 @@ const HomePageProvider: React.FC = () => {
                             title="Agendamentos"
                             subtitle="( Últimos 30 dias )"
                             icon={<CartIconBig />}
-                            price={dashboardInfo.appointments === 0 ? 'Carregando..' : dashboardInfo.appointments}
+                            price={!dashboardInfo.appointments ? 'Carregando..' : dashboardInfo.appointments}
                             note=""
                             link="#"
                             linkText="Mais Detalhes"
@@ -218,7 +219,7 @@ const HomePageProvider: React.FC = () => {
                             subtitle="( Total )"
                             icon={<UserIcon />}
                             price={
-                                dashboardInfo.providerRecommendations === 0
+                                !dashboardInfo.providerRecommendations
                                     ? 'Carregando..'
                                     : dashboardInfo.providerRecommendations
                             }

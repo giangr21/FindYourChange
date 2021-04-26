@@ -11,6 +11,7 @@ interface Props extends SelectProps<OptionTypeBase> {
     label: string;
     notCleaning?: boolean;
     biggerWidth?: boolean;
+    isMulti?: any;
 }
 
 const Select: React.FC<Props> = ({
@@ -21,6 +22,7 @@ const Select: React.FC<Props> = ({
     label,
     notCleaning,
     biggerWidth = false,
+    isMulti,
     ...rest
 }) => {
     const selectRef = useRef(null);
@@ -96,11 +98,10 @@ const Select: React.FC<Props> = ({
             ref: selectRef.current,
             path: undefined,
             getValue: (ref: any) => {
-                if (rest.isMulti) {
+                if (rest.isMulti || isMulti) {
                     if (!ref.state.value) {
                         return [];
                     }
-
                     return ref.state.value.map((option: OptionTypeBase) => option.value);
                 }
                 if (!ref.state.value) {
@@ -119,7 +120,7 @@ const Select: React.FC<Props> = ({
                 ref.select.setValue(value);
             },
         });
-    }, [fieldName, notCleaning, registerField, rest.isMulti]);
+    }, [fieldName, isMulti, notCleaning, registerField, rest.isMulti]);
 
     return (
         <Container isErrored={!!error} style={{ width: biggerWidth ? '105%' : '100%' }}>
@@ -132,6 +133,7 @@ const Select: React.FC<Props> = ({
                 theme={customTheme}
                 styles={customStyles}
                 noOptionsMessage={() => 'Não há opções disponíveis'}
+                isMulti={isMulti}
                 {...rest}
             />
             <label className="label">{label}</label>

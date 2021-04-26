@@ -5,10 +5,12 @@ import React, { useRef, useCallback, useState, useEffect, ChangeEvent } from 're
 import { FormHandles } from '@unform/core';
 import { FiCamera, FiCheckSquare, FiDelete } from 'react-icons/fi';
 import { FaWindowClose } from 'react-icons/fa';
-
 import { BsCheckAll } from 'react-icons/bs';
 import * as Yup from 'yup';
+import { withStyle } from 'baseui';
 import { toast } from 'react-toastify';
+
+import { Row as Rows, Col as Column } from '../../../components/FlexBox/FlexBox';
 import { Form, Container, Header, Footer, Content } from './styles';
 import Input from '../../../components/FormComponents/Input/InputModal';
 import Modal from '../../../components/Modal';
@@ -41,6 +43,23 @@ interface ServiceData {
     isPopularService: boolean;
 }
 
+export const Col = withStyle(Column, () => ({
+    '@media only screen and (max-width: 767px)': {
+        marginBottom: '15px',
+    },
+}));
+
+const Row = withStyle(Rows, () => ({
+    paddingRight: '5px',
+    margin: '0px 0px 15px',
+    '@media only screen and (max-width: 767px)': {
+        margin: '0px 0px 7.5px',
+    },
+    '@media only screen and (min-width: 768px) and (max-width: 991px)': {
+        alignItems: 'center',
+    },
+}));
+
 const ModalServicesProvider: React.FC<ModalProps> = ({
     setIsOpen,
     reloadService,
@@ -58,38 +77,44 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
     const [imgPhotoMin, setImgPhotoMin] = useState<any>(null);
     const [serviceImg, setServiceImg] = useState<string | null>(null);
     const [changeImg, setChangeImg] = useState(false);
+    const [clerks, setClerks] = useState([]);
 
     const getService = useCallback(async (): Promise<void> => {
         await api
             .get(`/services/${serviceId}`)
             .then(async (response) => {
-                if (response.data.category === 'Barbearia') {
+                if (response.data.category === 'Barbearia')
                     response.data.category = { value: 'Barbearia', label: 'Barbearia' };
-                }
 
-                if (response.data.category === 'Tatuagem') {
+                if (response.data.category === 'Tatuagem')
                     response.data.category = { value: 'Tatuagem', label: 'Tatuagem' };
-                }
 
-                if (response.data.category === 'BodyPiercing') {
+                if (response.data.category === 'BodyPiercing')
                     response.data.category = { value: 'BodyPiercing', label: 'Body Piercing' };
-                }
 
-                if (response.data.isPopularService === true) {
+                if (response.data.isPopularService === true)
                     response.data.isPopularService = { value: true, label: 'Sim' };
-                } else {
-                    response.data.isPopularService = { value: false, label: 'Não' };
-                }
+                else response.data.isPopularService = { value: false, label: 'Não' };
 
                 if (response.data.image) {
                     const imgNamePhotoData = await api.get(`storage/base64/min/${response.data.image}`);
                     setImgPhotoMin(imgNamePhotoData.data);
                 }
 
+                response.data.time = { value: response.data.time, label: response.data.time };
+
+                if (response.data.clerks.length > 0)
+                    response.data.clerks = response.data.clerks.map((clerk: any) => {
+                        return {
+                            value: clerk.id,
+                            label: clerk.name,
+                        };
+                    });
+
                 setServiceData(response.data);
                 setLoading(false);
             })
-            .catch(() => {
+            .catch((e) => {
                 toast.error('Houve um erro ao buscar dados!');
             });
     }, [serviceId]);
@@ -106,6 +131,20 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
         } else {
             getService();
         }
+
+        async function getClerks(): Promise<void> {
+            await api.get(`/clerk/provider/${user.id}`).then((response) => {
+                setClerks(
+                    response.data.map((clerk: any) => {
+                        return {
+                            value: clerk.id,
+                            label: clerk.name,
+                        };
+                    }),
+                );
+            });
+        }
+        getClerks();
     }, []);
 
     const handleLogoChange = useCallback(async (e: ChangeEvent<HTMLInputElement>) => {
@@ -145,6 +184,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
                     value: Yup.string().required('Valor obrigatório'),
                     category: Yup.string().required('Categoria obrigatória'),
                     isPopularService: Yup.boolean().required('Preenchimento obrigatório'),
+                    clerks: Yup.array().required('Atendentes Obrigatorio'),
                 });
                 await schema.validate(data, {
                     abortEarly: false,
@@ -192,7 +232,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
     }, []);
 
     return (
-        <Modal width={mobile ? '100%' : '420px'} height="680px" isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Modal width={mobile ? '100%' : '520px'} height="620px" isOpen={isOpen} setIsOpen={setIsOpen}>
             <Form ref={formRef} initialData={serviceData} onSubmit={submitService}>
                 <Header>
                     {edit ? <h1>Editar Serviço</h1> : <h1>Novo Serviço</h1>}
@@ -203,29 +243,30 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
                         <Loading heightLoading="45vh" />
                     ) : (
                         <>
-                            <Container>
-                                <div
-                                    style={{
-                                        padding: '2px',
-                                        marginBottom: '15px',
-                                        width: '100%',
-                                    }}
-                                >
+                            <Row>
+                                <Col xs={12} sm={6} md={6} lg={6}>
                                     <Input name="title" placeholder="Título" />
-                                </div>
-                            </Container>
-                            <Container>
-                                <Input name="description" placeholder="Descrição" />
-                            </Container>
-                            <Container>
-                                <div
-                                    style={{
-                                        padding: '2px',
-                                        marginBottom: '15px',
-                                        marginTop: '15px',
-                                        width: '100%',
-                                    }}
-                                >
+                                </Col>
+                                <Col xs={12} sm={6} md={6} lg={6}>
+                                    <Input name="description" placeholder="Descrição" />
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col xs={12} sm={12} md={12} lg={12}>
+                                    <Select
+                                        name="clerks"
+                                        fieldValue="value"
+                                        fieldLabel="label"
+                                        label="Atendentes"
+                                        placeholder=""
+                                        isMulti
+                                        className="react-select-container"
+                                        options={clerks}
+                                    />
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col xs={12} sm={12} md={12} lg={12}>
                                     <Select
                                         name="category"
                                         fieldValue="value"
@@ -239,49 +280,42 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
                                             { value: 'BodyPiercing', label: 'Body Piercing' },
                                         ]}
                                     />
-                                </div>
-                            </Container>
-                            <Container>
-                                <div
-                                    style={{
-                                        padding: '2px',
-                                        marginBottom: '15px',
-                                        width: '100%',
-                                    }}
-                                >
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col xs={12} sm={12} md={12} lg={12}>
+                                    <Select
+                                        name="time"
+                                        fieldValue="value"
+                                        fieldLabel="label"
+                                        label="Tempo de Serviço"
+                                        placeholder=""
+                                        className="react-select-container"
+                                        options={[
+                                            { value: '30', label: '30 minutos' },
+                                            { value: '60', label: '1 hora' },
+                                            { value: '90', label: '1 hora e 30 minutos' },
+                                            { value: '120', label: '2 horas' },
+                                            { value: '150', label: '2 horas e 30 minutos' },
+                                            { value: '180', label: '3 horas' },
+                                            { value: '210', label: '3 horas e 30 minutos' },
+                                            { value: '240', label: '4 horas' },
+                                            { value: '270', label: '4 horas e 30 minutos' },
+                                            { value: '300', label: '5 horas' },
+                                        ]}
+                                    />
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col xs={12} sm={6} md={6} lg={6}>
                                     <Input name="value" placeholder="Valor $" />
-                                </div>
-                            </Container>
-                            <Container>
-                                <div
-                                    style={{
-                                        padding: '2px',
-                                        marginBottom: '15px',
-                                        width: '100%',
-                                    }}
-                                >
+                                </Col>
+                                <Col xs={12} sm={6} md={6} lg={6}>
                                     <Input name="disccount" placeholder="Desconto %" />
-                                </div>
-                            </Container>
-                            <Container>
-                                <div
-                                    style={{
-                                        padding: '2px',
-                                        marginBottom: '15px',
-                                        width: '100%',
-                                    }}
-                                >
-                                    <Input name="time" placeholder="Tempo" />
-                                </div>
-                            </Container>
-                            <Container>
-                                <div
-                                    style={{
-                                        padding: '2px',
-                                        marginBottom: '15px',
-                                        width: '100%',
-                                    }}
-                                >
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col xs={12} sm={12} md={12} lg={12}>
                                     <Select
                                         name="isPopularService"
                                         fieldValue="value"
@@ -294,37 +328,45 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
                                             { value: 'false', label: 'Não' },
                                         ]}
                                     />
-                                </div>
-                            </Container>
-                            {(!edit || changeImg || !serviceData.image) && (
-                                <Container>
-                                    <div className="img">
-                                        Foto Serviço:
-                                        {statusImgLogo === null && (
-                                            <label htmlFor="serviceImg">
-                                                <FiCamera />
-                                                <input
-                                                    accept=".jpg, .jpeg, .png"
-                                                    onChange={handleLogoChange}
-                                                    type="file"
-                                                    id="serviceImg"
-                                                />
-                                            </label>
-                                        )}
-                                        {statusImgLogo === true && <span>Carregando...</span>}
-                                        {statusImgLogo === false && (
-                                            <BsCheckAll
-                                                className="check"
-                                                style={{
-                                                    marginLeft: '15px',
-                                                }}
-                                                size={25}
-                                                color="#2e656a"
-                                            />
-                                        )}
-                                    </div>
-                                </Container>
-                            )}
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col xs={12} sm={12} md={12} lg={12}>
+                                    {(!edit || changeImg || !serviceData.image) && (
+                                        <Container
+                                            style={{
+                                                justifyContent: 'center',
+                                            }}
+                                        >
+                                            <div className="img">
+                                                Foto Serviço:
+                                                {statusImgLogo === null && (
+                                                    <label htmlFor="serviceImg">
+                                                        <FiCamera />
+                                                        <input
+                                                            accept=".jpg, .jpeg, .png"
+                                                            onChange={handleLogoChange}
+                                                            type="file"
+                                                            id="serviceImg"
+                                                        />
+                                                    </label>
+                                                )}
+                                                {statusImgLogo === true && <span>Carregando...</span>}
+                                                {statusImgLogo === false && (
+                                                    <BsCheckAll
+                                                        className="check"
+                                                        style={{
+                                                            marginLeft: '15px',
+                                                        }}
+                                                        size={25}
+                                                        color="#2e656a"
+                                                    />
+                                                )}
+                                            </div>
+                                        </Container>
+                                    )}
+                                </Col>
+                            </Row>
                             {edit && serviceData.image && !changeImg && (
                                 <div
                                     style={{
