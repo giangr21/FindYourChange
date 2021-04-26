@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import ptBR, { format } from 'date-fns';
+import { format } from 'date-fns';
 
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
@@ -19,6 +19,7 @@ import { useAuth } from '../../../hooks/Auth';
 import { useMedia } from '../../../util/use-media';
 import Modal from '../../../components/Modal';
 import api from '../../../services/api';
+import Select from '../../../components/FormComponents/Select';
 
 // import ptBR from 'date-fns/locale/pt-BR';
 
@@ -45,7 +46,6 @@ interface AppointmentData {
 const ModalAppointment: React.FC<ModalProps> = ({ isOpen, setIsOpen, handleConfirm, edit, appointmentId }) => {
     const mobile = useMedia('(max-width: 760px)');
     const { user } = useAuth();
-    const [loading, setLoading] = useState(true);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [monthAvailability, setMonthAvailability] = useState<MonthAvailability[]>([]);
@@ -85,13 +85,13 @@ const ModalAppointment: React.FC<ModalProps> = ({ isOpen, setIsOpen, handleConfi
 
     const selectedDateAsText = useMemo(() => {
         return format(selectedDate, "'Dia' dd 'de' MMM", {
-            locale: ptBR,
+            // locale: ptBR,
         });
     }, [selectedDate]);
 
     const selectedWeekDay = useMemo(() => {
         return format(selectedDate, 'cccc', {
-            locale: ptBR,
+            // locale: ptBR,
         });
     }, [selectedDate]);
 
@@ -211,7 +211,21 @@ const ModalAppointment: React.FC<ModalProps> = ({ isOpen, setIsOpen, handleConfi
                                 padding: '2px',
                                 width: '100%',
                             }}
-                        />
+                        >
+                            <Select
+                                name="clerk"
+                                fieldValue="value"
+                                fieldLabel="label"
+                                label=""
+                                placeholder=""
+                                className="react-select-container"
+                                options={[
+                                    { value: 'Atendente1', label: 'Atendente 1' },
+                                    { value: 'Atendente2', label: 'Atendente 2' },
+                                    { value: 'Atendente3', label: 'Atendente 3' },
+                                ]}
+                            />
+                        </div>
                     </Container>
                     <p>Comentário adicional</p>
                     <Container>

@@ -53,6 +53,8 @@ const Index: React.FC = () => {
     const [activeKy, setActiveKy] = useState<any>('0');
     const tabRef2 = useRef<any>();
     const [newRecommendation, setNewRecommendation] = useState(false);
+    const [isEdit, setIsEdit] = useState<boolean>(false);
+    const [idAppointment, setIdAppointment] = useState('');
 
     const getProvider = useCallback(async () => {
         const splitedPathName = location.pathname.split('/');
@@ -340,6 +342,8 @@ const Index: React.FC = () => {
                                 isOpen={modalAgendarOpen}
                                 setIsOpen={toggleModalAgendar}
                                 handleConfirm={handleAgendar}
+                                edit={isEdit}
+                                appointmentId={idAppointment}
                             />
                         )}
                     </Content>
