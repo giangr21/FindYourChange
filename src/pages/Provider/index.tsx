@@ -53,6 +53,7 @@ const Index: React.FC = () => {
     const [activeKy, setActiveKy] = useState<any>('0');
     const tabRef2 = useRef<any>();
     const [newRecommendation, setNewRecommendation] = useState(false);
+    const [deleteReview, setDeleteReview] = useState(false);
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [idAppointment, setIdAppointment] = useState('');
 
