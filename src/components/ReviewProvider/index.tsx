@@ -27,21 +27,22 @@ interface ReviewProps {
     providerRecommendations: Review[];
     newRecommendation: boolean;
     setNewRecommendationToFalse: () => void;
+    removeRecommendation: (id: string) => void;
     infosToCreateNewRecommendation: any;
+    providerId: string;
 }
 
 const ReviewProvider: React.FC<ReviewProps> = ({
     providerRecommendations,
     newRecommendation,
     infosToCreateNewRecommendation,
+    providerId,
     setNewRecommendationToFalse,
+    removeRecommendation,
 }): any => {
     const [valueTextArea, setValueTextArea] = useState('');
     const [newRatingStars, setNewRatingStars] = useState(0);
     const { user, isAuthenticated } = useAuth();
-    const location = useLocation();
-    const [reviews, setReviews] = useState<any>([]);
-    const [provider, setProvider] = useState<any>({});
 
     const handleNewReview = useCallback(async () => {
         if (valueTextArea.trim() === '' || !valueTextArea) {
@@ -91,45 +92,20 @@ const ReviewProvider: React.FC<ReviewProps> = ({
         valueTextArea,
     ]);
 
-    const getProvider = useCallback(async () => {
-        const splitedPathName = location.pathname.split('/');
-        const idProvider = splitedPathName[splitedPathName.length - 1];
-        await api
-            .get(`/provider/specificProvider/${idProvider}`)
-            .then(async (response) => {
-                setProvider(response.data);
-            })
-            .catch((e) => {
-                toast.error('Houve um erro ao buscar dados!');
-                console.log(e);
-            });
-    }, [location.pathname]);
-
-    const getReviewsFromUser = useCallback(async () => {
-        await api.get(`providerRecommendation/user/${user.id}`).then(async (response) => {
-            setReviews(response.data);
-        });
-    }, [user.id]);
-
     const clearAndClose = useCallback(() => {
         setNewRecommendationToFalse();
         setValueTextArea('');
         setNewRatingStars(0);
-    }, []);
-
-    useEffect(() => {
-        getProvider();
-        getReviewsFromUser();
-    }, []);
+    }, [setNewRecommendationToFalse]);
 
     const handleDeleteReview = useCallback(
         async (id: string) => {
             await api.delete(`/providerRecommendation/${id}`).then(() => {
-                setReviews(reviews.filter((review: any) => review.id !== id));
+                removeRecommendation(id);
                 return toast.success('Recomendação excluida com sucesso!')!;
             });
         },
-        [reviews],
+        [removeRecommendation],
     );
 
     return (
@@ -239,19 +215,28 @@ const ReviewProvider: React.FC<ReviewProps> = ({
                                     {recommendation.createdAt}
                                 </span>
                             </div>
-                            <p
+                            <div
                                 style={{
                                     margin: '10px 0px',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
                                 }}
                             >
-                                {recommendation.notes}
-                            </p>
+                                <p style={{}}>{recommendation.notes}</p>
+
+                                {isAuthenticated &&
+                                    (recommendation.user.id === user.id || providerId === user.id) && (
+                                        <MdDeleteForever
+                                            onClick={() => handleDeleteReview(recommendation.id)}
+                                            color="#DE3B3B"
+                                            size={22}
+                                            style={{
+                                                cursor: 'pointer',
+                                            }}
+                                        />
+                                    )}
+                            </div>
                         </div>
-                        {isAuthenticated && (recommendation.user.id === user.id || provider.id === user.id) && (
-                            <button onClick={() => handleDeleteReview(recommendation.id)} type="button">
-                                <MdDeleteForever color="#DE3B3B" size={20} />
-                            </button>
-                        )}
                     </Review>
                 ))}
             </Reviews>

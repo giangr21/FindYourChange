@@ -53,9 +53,6 @@ const Index: React.FC = () => {
     const [activeKy, setActiveKy] = useState<any>('0');
     const [newRecommendation, setNewRecommendation] = useState(false);
     const [specificServiceInfo, setSpecificServiceInfo] = useState({});
-    const [deleteReview, setDeleteReview] = useState(false);
-    const [isEdit, setIsEdit] = useState<boolean>(false);
-    const [idAppointment, setIdAppointment] = useState('');
 
     const getProvider = useCallback(async () => {
         const splitedPathName = location.pathname.split('/');
@@ -96,6 +93,18 @@ const Index: React.FC = () => {
         tabRef2.current.click();
         setNewRecommendation(true);
     }, [tabRef2]);
+
+    const handleRemoveRecommendation = useCallback(
+        (recommendationId: string) => {
+            setProvider({
+                ...provider,
+                providerRecommendations: provider.providerRecommendations.filter(
+                    (recommendation: any) => recommendation.id !== recommendationId,
+                ),
+            });
+        },
+        [provider],
+    );
 
     const handleAppointment = useCallback(
         (serviceId: string) => {
@@ -224,7 +233,9 @@ const Index: React.FC = () => {
                                     <ReviewProvider
                                         providerRecommendations={provider.providerRecommendations}
                                         newRecommendation={newRecommendation}
+                                        providerId={provider.id}
                                         setNewRecommendationToFalse={() => setNewRecommendation(false)}
+                                        removeRecommendation={(id) => handleRemoveRecommendation(id)}
                                         infosToCreateNewRecommendation={
                                             user
                                                 ? {
