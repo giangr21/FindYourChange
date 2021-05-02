@@ -47,4 +47,9 @@ export const Button = styled.button<ButtonProps>`
                 margin-right: 0px;
             }
         `}
+
+    &:disabled {
+        color: #666666;
+        cursor: not-allowed;
+    }
 `;

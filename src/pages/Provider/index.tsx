@@ -1,12 +1,10 @@
-/* eslint-disable no-await-in-loop */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormHandles } from '@unform/core';
 import { toast } from 'react-toastify';
 import { Tabs, Tab, FILL } from 'baseui/tabs-motion';
-
 import { MdCheck, MdEdit } from 'react-icons/md';
 import { useLocation } from 'react-router-dom';
-import moment from 'moment';
+
 import IconButton from '../../components/FormComponents/Button/IconButton';
 import {
     Container,
@@ -20,7 +18,7 @@ import {
 } from './styles';
 import api from '../../services/api';
 import ModalLogin from '../../components/Modal/LoginModal';
-import ModalAgendar from './ModalAppointment';
+import ModalHandleAppointment from './ModalAppointment';
 import { useAuth } from '../../hooks/Auth';
 import Loading from '../../components/Loading';
 import ReviewProvider from '../../components/ReviewProvider';
@@ -45,16 +43,16 @@ export interface ProviderData {
 const Index: React.FC = () => {
     const { user, isAuthenticated } = useAuth();
     const location = useLocation();
+    const tabRef2 = useRef<any>();
     const formRef = useRef<FormHandles>(null);
+
     const [loading, setLoading] = useState(true);
     const [provider, setProvider] = useState<any>({});
     const [modalLoginOpen, setModalLoginOpen] = useState(false);
-    const [modalAgendarOpen, setModalAgendarOpen] = useState(false);
+    const [modalAppointmentOpen, setModalAppointmentOpen] = useState(false);
     const [activeKy, setActiveKy] = useState<any>('0');
-    const tabRef2 = useRef<any>();
     const [newRecommendation, setNewRecommendation] = useState(false);
-    const [isEdit, setIsEdit] = useState<boolean>(false);
-    const [idAppointment, setIdAppointment] = useState('');
+    const [specificServiceInfo, setSpecificServiceInfo] = useState({});
 
     const getProvider = useCallback(async () => {
         const splitedPathName = location.pathname.split('/');
@@ -62,46 +60,6 @@ const Index: React.FC = () => {
         await api
             .get(`/provider/specificProvider/${idProvider}`)
             .then(async (response) => {
-                const isPopular = [];
-                const isNotPopular = [];
-
-                for (let index = 0; index < response.data.services.length; index++) {
-                    const service = response.data.services[index];
-
-                    if (service.isPopularService) {
-                        isPopular.push(service);
-                    } else {
-                        isNotPopular.push(service);
-                    }
-                }
-
-                for (let index = 0; index < response.data.providerRecommendations.length; index++) {
-                    const providerRecommendation = response.data.providerRecommendations[index];
-
-                    const { data: imgBase64 } = await api.get(
-                        `storage/base64/min/${providerRecommendation.user.avatar}`,
-                    );
-                    providerRecommendation.user.avatar = imgBase64;
-
-                    providerRecommendation.createdAt = moment(providerRecommendation.createdAt).format(
-                        'DD/MM/YYYY - HH:mm',
-                    );
-                }
-
-                for (let index = 0; index < response.data.providerImages.length; index++) {
-                    const providerImage = response.data.providerImages[index];
-                    const { data: imgBase64 } = await api.get(`storage/base64/min/${providerImage.image}`);
-
-                    if (providerImage.defaultImage) {
-                        response.data.providerDefaultImg = imgBase64;
-                    }
-
-                    providerImage.imageBase64 = imgBase64;
-                }
-
-                response.data.isPopular = isPopular;
-                response.data.isNotPopular = isNotPopular;
-
                 setProvider(response.data);
                 setLoading(false);
             })
@@ -123,22 +81,27 @@ const Index: React.FC = () => {
         setModalLoginOpen((prevState) => !prevState);
     }, []);
 
-    const toggleModalAgendar = useCallback((): void => {
-        setModalAgendarOpen((prevState) => !prevState);
-    }, []);
-
-    const handleAgendar = useCallback(async (): Promise<void> => {
-        try {
-            console.log();
-        } catch (err) {
-            toast.error('Erro!');
-        }
-    }, []);
+    const toggleModalAppointment = useCallback(
+        (serviceId?: string): any => {
+            setSpecificServiceInfo(provider.services.filter((service: any) => service.id === serviceId)[0]);
+            setModalAppointmentOpen((prevState) => !prevState);
+        },
+        [provider.services],
+    );
 
     const handleNewReview = useCallback(() => {
         tabRef2.current.click();
         setNewRecommendation(true);
     }, [tabRef2]);
+
+    const handleAppointment = useCallback(
+        (serviceId: string) => {
+            if (!isAuthenticated) return toggleModalLogin();
+            if (user.isProvider) return toast.error('Agendamento disponíveis somente para usuarios!');
+            toggleModalAppointment(serviceId);
+        },
+        [isAuthenticated, toggleModalAppointment, toggleModalLogin, user],
+    );
 
     return (
         <Container>
@@ -178,7 +141,7 @@ const Index: React.FC = () => {
                                 activateOnFocus
                                 overrides={{
                                     TabHighlight: {
-                                        style: ({ $theme }) => ({
+                                        style: () => ({
                                             outline: `#ff9000 solid`,
                                             backgroundColor: '#ff9000',
                                         }),
@@ -217,9 +180,7 @@ const Index: React.FC = () => {
                                                     icon={MdCheck}
                                                     title="Agendar"
                                                     background="#ff9000"
-                                                    action={
-                                                        isAuthenticated ? toggleModalAgendar : toggleModalLogin
-                                                    }
+                                                    action={() => handleAppointment(serviceIsPopular.id)}
                                                 />
                                             </div>
                                         </ProviderService>
@@ -250,9 +211,7 @@ const Index: React.FC = () => {
                                                     icon={MdCheck}
                                                     title="Agendar"
                                                     background="#ff9000"
-                                                    action={
-                                                        isAuthenticated ? toggleModalAgendar : toggleModalLogin
-                                                    }
+                                                    action={() => handleAppointment(serviceIsNotPopular.id)}
                                                 />
                                             </div>
                                         </ProviderService>
@@ -263,12 +222,16 @@ const Index: React.FC = () => {
                                         providerRecommendations={provider.providerRecommendations}
                                         newRecommendation={newRecommendation}
                                         setNewRecommendationToFalse={() => setNewRecommendation(false)}
-                                        infosToCreateNewRecommendation={{
-                                            userId: user.id,
-                                            providerId: provider.id,
-                                            userName: user.name,
-                                            userLastName: user.lastName,
-                                        }}
+                                        infosToCreateNewRecommendation={
+                                            user
+                                                ? {
+                                                      userId: user.id,
+                                                      providerId: provider.id,
+                                                      userName: user.name,
+                                                      userLastName: user.lastName,
+                                                  }
+                                                : {}
+                                        }
                                     />
                                 </Tab>
                                 <Tab title="GALERIA DE FOTOS">
@@ -321,7 +284,7 @@ const Index: React.FC = () => {
                                     <div className="time">08:00 - 18:00</div>
                                 </div>
                             </ScheduleInfo>
-                            {!newRecommendation && !user.isProvider && (
+                            {user && !newRecommendation && !user.isProvider && (
                                 <div
                                     style={{
                                         margin: '5px auto',
@@ -337,13 +300,12 @@ const Index: React.FC = () => {
                             )}
                         </InfoContainer>
                         {modalLoginOpen && <ModalLogin isOpen={modalLoginOpen} setIsOpen={toggleModalLogin} />}
-                        {modalAgendarOpen && (
-                            <ModalAgendar
-                                isOpen={modalAgendarOpen}
-                                setIsOpen={toggleModalAgendar}
-                                handleConfirm={handleAgendar}
-                                edit={isEdit}
-                                appointmentId={idAppointment}
+                        {modalAppointmentOpen && (
+                            <ModalHandleAppointment
+                                serviceInfo={specificServiceInfo}
+                                providerId={provider.id}
+                                isOpen={modalAppointmentOpen}
+                                setIsOpen={toggleModalAppointment}
                             />
                         )}
                     </Content>

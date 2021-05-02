@@ -96,9 +96,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
         setData({} as AuthState);
         setIsAuthenticated(false);
-
-        history.push('/');
-    }, [history]);
+    }, []);
 
     const updateUser = useCallback(
         (user: User) => {

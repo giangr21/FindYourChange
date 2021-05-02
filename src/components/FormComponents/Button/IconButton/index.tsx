@@ -11,6 +11,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     justIcon?: boolean;
     badge?: number;
     styleBadge?: {};
+    colorIcon?: any;
 };
 
 const IconButton: React.FC<ButtonProps> = ({
@@ -21,6 +22,7 @@ const IconButton: React.FC<ButtonProps> = ({
     justIcon = false,
     badge = 0,
     styleBadge,
+    colorIcon,
     ...rest
 }) => {
     const onClickAction = useCallback(() => {
@@ -35,7 +37,7 @@ const IconButton: React.FC<ButtonProps> = ({
                 </span>
             )}
             <Button onClick={onClickAction} justIcon={justIcon} background={background} {...rest}>
-                {Icon && <Icon color="#fff" size={16} />}
+                {Icon && <Icon color={colorIcon || '#fff'} size={16} />}
                 {title}
             </Button>
         </Container>

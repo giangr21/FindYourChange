@@ -1,260 +1,434 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { format } from 'date-fns';
-
-import { FormHandles } from '@unform/core';
-import * as Yup from 'yup';
+import React, { useCallback, useState } from 'react';
+import { DatePicker } from 'baseui/datepicker';
+import { TimePicker } from 'baseui/timepicker';
+import { FormControl } from 'baseui/form-control';
+import { Input } from 'baseui/input';
+import pt from 'date-fns/locale/pt-BR';
+import { withStyle } from 'baseui';
 import { toast } from 'react-toastify';
-import DayPicker, { DayModifiers } from 'react-day-picker';
-import { useHistory } from 'react-router-dom';
-import { FaWindowClose } from 'react-icons/fa';
-import TimePicker from 'rc-time-picker';
-import moment from 'moment';
-import { Form, Container, Content, Calendar, Header, Footer } from './styles';
-import Button from '../../../components/FormComponents/Button';
-import Input from '../../../components/FormComponents/Input';
-import getValidationErrors from '../../../util/getValidationErrors';
-import 'react-day-picker/lib/style.css';
 
-import { useAuth } from '../../../hooks/Auth';
-import { useMedia } from '../../../util/use-media';
-import Modal from '../../../components/Modal';
+import { Modal, ModalHeader, ROLE } from 'baseui/modal';
+import { ListItem, ListItemLabel, ARTWORK_SIZES } from 'baseui/list';
+import { Check } from 'baseui/icon';
+import { MdCheck, MdClose } from 'react-icons/md';
+import { FaCheck } from 'react-icons/fa';
 import api from '../../../services/api';
-import Select from '../../../components/FormComponents/Select';
+import { Row as Rows, Col as Column } from '../../../components/FlexBox/FlexBox';
+import InfoModal from '../../../components/Modal/InfoModal';
+import { Container, Header, Content, Clerks, AppointmentInfo, AppointmentResume, Footer } from './styles';
+import { useMedia } from '../../../util/use-media';
+import { useAuth } from '../../../hooks/Auth';
+import ClerkInfo from './ClerkInfo';
+import IconButton from '../../../components/FormComponents/Button/IconButton';
+import Loading from '../../../components/Loading';
 
-// import ptBR from 'date-fns/locale/pt-BR';
+export const Col = withStyle(Column, () => ({
+    marginBottom: '20px',
+    margin: 'auto 0',
+    '@media only screen and (max-width: 767px)': {
+        ':last-child': {
+            marginBottom: 0,
+        },
+    },
+}));
 
-interface MonthAvailability {
-    day: number;
-    available: boolean;
-}
-interface ModalProps {
+const Row = withStyle(Rows, () => ({
+    paddingRight: '5px',
+    '@media only screen and (min-width: 768px) and (max-width: 991px)': {
+        alignItems: 'center',
+    },
+}));
+
+interface ModalAppointmentProps {
     isOpen: boolean;
     setIsOpen: () => void;
-    handleConfirm: () => void;
-    edit: boolean;
-    appointmentId: string;
+    serviceInfo: any;
+    providerId: string;
 }
 
-interface AppointmentData {
-    id?: string;
-    provider: string;
-    user: string;
-    value: number;
-    serviceType: string;
-}
-
-const ModalAppointment: React.FC<ModalProps> = ({ isOpen, setIsOpen, handleConfirm, edit, appointmentId }) => {
+const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
+    serviceInfo,
+    providerId,
+    isOpen,
+    setIsOpen,
+}): any => {
     const mobile = useMedia('(max-width: 760px)');
     const { user } = useAuth();
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const [currentMonth, setCurrentMonth] = useState(new Date());
-    const [monthAvailability, setMonthAvailability] = useState<MonthAvailability[]>([]);
-    const [modalStatus, setModalStatus] = useState(isOpen);
-    const formRef = useRef<FormHandles>(null);
-    const history = useHistory();
-    const [hour, setHour] = useState<any>(undefined);
+    const [dateAppointment, setDateAppointment] = useState([new Date()]);
+    const [hourAppointment, setHourAppointment] = useState<any>();
+    const [selectedClerk, setSelectedClerk] = useState(null);
+    const [notes, setNotes] = useState('');
+    const [resumeConfirmationModal, setResumeConfirmationModal] = useState(false);
+    const [resumeInformation, setResumeInformation] = useState<any>({});
+    const [loadingNewAppointment, setLoadingNewAppointment] = useState(false);
 
-    const handleDateChange = useCallback((day: Date, modifiers: DayModifiers) => {
-        if (modifiers.available && !modifiers.disabled) {
-            setSelectedDate(day);
+    const toggleResumeModal = useCallback(() => {
+        setResumeConfirmationModal((prevState) => !prevState);
+    }, []);
+
+    const handleNewAppointment = useCallback(() => {
+        toggleResumeModal();
+
+        let { value } = serviceInfo;
+        if (serviceInfo.disccount !== '' && serviceInfo.disccount !== '0') {
+            const valueToDiscount = serviceInfo.value * (serviceInfo.disccount / 100);
+            value = (serviceInfo.value - valueToDiscount).toFixed(2);
         }
-    }, []);
 
-    const handleMonthChange = useCallback((month: Date) => {
-        setCurrentMonth(month);
-    }, []);
-
-    useEffect(() => {
-        setModalStatus(isOpen);
-    }, [isOpen]);
-
-    const onChangeHour = useCallback((value: any) => {
-        setHour(moment(value, ['HH:mm']));
-    }, []);
-
-    const disabledDays = useMemo(() => {
-        const dates = monthAvailability
-            .filter((monthDay) => monthDay.available === false)
-            .map((monthDay) => {
-                const year = currentMonth.getFullYear();
-                const month = currentMonth.getMonth();
-                return new Date(year, month, monthDay.day);
-            });
-        return dates;
-    }, [currentMonth, monthAvailability]);
-
-    const selectedDateAsText = useMemo(() => {
-        return format(selectedDate, "'Dia' dd 'de' MMM", {
-            // locale: ptBR,
+        setResumeInformation({
+            clerk: {
+                name: serviceInfo.clerks.find((clerk: any) => clerk.id === selectedClerk).name,
+            },
+            service: {
+                title: serviceInfo.title,
+                value,
+                time: serviceInfo.time,
+            },
         });
-    }, [selectedDate]);
+    }, [selectedClerk, serviceInfo, toggleResumeModal]);
 
-    const selectedWeekDay = useMemo(() => {
-        return format(selectedDate, 'cccc', {
-            // locale: ptBR,
-        });
-    }, [selectedDate]);
-
-    const handleSubmit = useCallback(
-        async (data: AppointmentData) => {
-            try {
-                formRef.current?.setErrors({});
-                const schema = Yup.object().shape({
-                    // date: Yup.date().required('Selecione uma data válida!'),
-                    // clerk: Yup.string().required('Selecione um(a) atendente!'),
+    const handleConfirmationNewAppointment = useCallback(async () => {
+        if (user.id) {
+            setLoadingNewAppointment(true);
+            await api
+                .post('/appointment/add', {
+                    provider: providerId,
+                    user: user.id,
+                    clerk: selectedClerk,
+                    service: serviceInfo.id,
+                    notes,
+                    dateAppointment: new Date(),
+                })
+                .then(() => {
+                    toast.success('Agendamento realizado com sucesso!!');
+                    setLoadingNewAppointment(false);
+                    toggleResumeModal();
+                    setIsOpen();
+                })
+                .catch((e) => {
+                    toast.error('Houve um erro ao realizar o agendamento, Tente novamente!!');
+                    console.log(e);
                 });
+        }
+    }, [notes, providerId, selectedClerk, serviceInfo.id, setIsOpen, toggleResumeModal, user.id]);
 
-                await schema.validate(data, {
-                    abortEarly: false,
-                });
-
-                data.user = user.id;
-                // data.serviceType = ;
-                // data.provider = provider.id;
-
-                // // Necessário escolher horário
-                // if (hour) {
-                //     data.hour = moment(hour).format('HH:mm');
-                // } else {
-                //     return toast.error(`Necessário escolher um horário!`);
-                // }
-
-                const isAvailable = await api.post('appointment/isDayOfWeekAvailable', {
-                    // dayOfWeek: data.dayOfWeek,
-                    // providerId: user.id,
-                });
-
-                if (!isAvailable.data) {
-                    return toast.error(`Já existe um agendamento nesse horário`);
-                }
-
-                await api.post('appointment', data);
-
-                return setModalStatus(false);
-            } catch (err) {
-                console.log(err);
-                if (err instanceof Yup.ValidationError) {
-                    const errors = getValidationErrors(err);
-                    formRef.current?.setErrors(errors);
-                    return;
-                }
-                toast.error('Ocorreu um erro na tentativa de agendamento, cheque as informações novamente.');
-            }
-        },
-        [hour, setIsOpen, handleConfirm, history, appointmentId, user.id],
-    );
     return (
-        <Modal width={mobile ? '100%' : '430px'} height="600px" isOpen={isOpen} setIsOpen={setIsOpen}>
-            <Form ref={formRef} onSubmit={handleSubmit}>
+        <Modal
+            onClose={setIsOpen}
+            closeable
+            isOpen={isOpen}
+            animate
+            role={ROLE.dialog}
+            overrides={{
+                Dialog: {
+                    style: {
+                        width: `${mobile ? '100%' : '650px'}`,
+                        height: '600px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                    },
+                },
+            }}
+        >
+            <ModalHeader
+                style={{
+                    marginBottom: '0px',
+                }}
+            >
                 <Header>
-                    <h1>Agendar Horário</h1>
-                    <FaWindowClose size={20} onClick={setIsOpen} />
+                    <h1>Agendamento</h1>
                 </Header>
+            </ModalHeader>
+            <Container>
                 <Content>
-                    <p>Escolha a data</p>
-                    <Container>
-                        <div
-                            style={{
-                                padding: '2px',
-                                width: '100%',
+                    <Clerks>
+                        <FormControl
+                            label={() => 'Selecione um atendente'}
+                            overrides={{
+                                Label: {
+                                    style: () => ({
+                                        color: '#2a2a2a',
+                                        marginBottom: '15px',
+                                    }),
+                                },
                             }}
                         >
-                            <Calendar>
-                                <DayPicker
-                                    weekdaysShort={['D', 'S', 'T', 'Q', 'Q', 'S', 'S']}
-                                    months={[
-                                        'Janeiro',
-                                        'Feveiro',
-                                        'Março',
-                                        'Abril',
-                                        'Maio',
-                                        'Junho',
-                                        'Julho',
-                                        'Agosto',
-                                        'Setembro',
-                                        'Outubro',
-                                        'Novembro',
-                                        'Dezembro',
-                                    ]}
-                                    onDayClick={handleDateChange}
-                                    onMonthChange={handleMonthChange}
-                                    fromMonth={new Date()}
-                                    selectedDays={selectedDate}
-                                    disabledDays={[{ daysOfWeek: [0, 6] }, ...disabledDays]}
-                                    modifiers={{
-                                        available: { daysOfWeek: [1, 2, 3, 4, 5] },
-                                    }}
-                                />
-                            </Calendar>
-                        </div>
-                    </Container>
-                    <p>Escolha o horário</p>
-                    <Container>
-                        <div
-                            style={{
-                                padding: '2px',
-                                width: '100%',
-                            }}
-                        />
-                        <TimePicker
-                            showSecond={false}
-                            onChange={(e) => onChangeHour(e)}
-                            className="timePicker"
-                            inputReadOnly
-                            value={hour}
-                        />
-                    </Container>
-                    <p>Escolha o atendente</p>
-                    <Container>
-                        <div
-                            style={{
-                                padding: '2px',
-                                width: '100%',
+                            <Row>
+                                {serviceInfo &&
+                                    serviceInfo.clerks.map((clerk: any) => (
+                                        <Col
+                                            key={clerk.id}
+                                            xs={12}
+                                            sm={6}
+                                            md={6}
+                                            lg={6}
+                                            onClick={() => setSelectedClerk(clerk.id)}
+                                        >
+                                            <ClerkInfo
+                                                clerk={clerk}
+                                                isSelectedClerk={selectedClerk === clerk.id}
+                                            />
+                                        </Col>
+                                    ))}
+                            </Row>
+                        </FormControl>
+                    </Clerks>
+                    <AppointmentInfo>
+                        <FormControl
+                            label={() => 'Selecione uma Data'}
+                            overrides={{
+                                Label: {
+                                    style: () => ({
+                                        color: '#2a2a2a',
+                                        marginBottom: '15px',
+                                    }),
+                                },
                             }}
                         >
-                            <Select
-                                name="clerk"
-                                fieldValue="value"
-                                fieldLabel="label"
-                                label=""
-                                placeholder=""
-                                className="react-select-container"
-                                options={[
-                                    { value: 'Atendente1', label: 'Atendente 1' },
-                                    { value: 'Atendente2', label: 'Atendente 2' },
-                                    { value: 'Atendente3', label: 'Atendente 3' },
-                                ]}
+                            <DatePicker
+                                locale={pt}
+                                value={dateAppointment}
+                                onChange={({ date }) => setDateAppointment(Array.isArray(date) ? date : [date])}
+                                formatString="dd '/' MMMM '/' yyyy"
+                                disabled={selectedClerk === null}
+                                mask={null}
+                                overrides={{
+                                    Input: {
+                                        props: {
+                                            overrides: {
+                                                Root: {
+                                                    style: () => ({
+                                                        borderRadius: '7px',
+                                                    }),
+                                                },
+                                            },
+                                        },
+                                    },
+                                }}
+                            />
+                        </FormControl>
+                        <FormControl
+                            label={() => 'Selecione um Horário'}
+                            overrides={{
+                                Label: {
+                                    style: () => ({
+                                        color: '#2a2a2a',
+                                        marginBottom: '15px',
+                                    }),
+                                },
+                            }}
+                        >
+                            <TimePicker
+                                value={hourAppointment}
+                                onChange={(date) => setHourAppointment(date)}
+                                disabled={selectedClerk === null}
+                                step={1800}
+                                format="24"
+                                overrides={{
+                                    Select: {
+                                        props: {
+                                            overrides: {
+                                                ControlContainer: {
+                                                    style: () => ({
+                                                        borderRadius: '7px',
+                                                    }),
+                                                },
+                                            },
+                                        },
+                                    },
+                                }}
+                            />
+                        </FormControl>
+                        <FormControl
+                            label={() => 'Comentários Adicionais'}
+                            overrides={{
+                                Label: {
+                                    style: () => ({
+                                        color: '#2a2a2a',
+                                        marginBottom: '15px',
+                                    }),
+                                },
+                            }}
+                        >
+                            <Input
+                                value={notes}
+                                onChange={(e: any) => setNotes(e.target.value)}
+                                clearable
+                                disabled={selectedClerk === null}
+                            />
+                        </FormControl>
+                    </AppointmentInfo>
+                    <Footer>
+                        <div />
+                        <div className="buttons">
+                            <IconButton
+                                style={{
+                                    color: '#2a2a2a',
+                                    fontWeight: 'bold',
+                                }}
+                                icon={MdCheck}
+                                title="Confirmar"
+                                background="#ff9000"
+                                colorIcon="#2a2a2a"
+                                action={handleNewAppointment}
+                                disabled={selectedClerk === null}
                             />
                         </div>
-                    </Container>
-                    <p>Comentário adicional</p>
-                    <Container>
-                        <div
-                            style={{
-                                padding: '2px',
-                                width: '100%',
-                            }}
-                        >
-                            <Input name="notes" placeholder="Comentário" />
-                        </div>
-                    </Container>
-                    <p>Confirme os dados do serviço</p>
-                    <Container>
-                        <div
-                            style={{
-                                padding: '2px',
-                                width: '100%',
-                            }}
-                        >
-                            <p>Serviço: ...</p>
-                            <p>Valor: ...</p>
-                        </div>
-                    </Container>
-                    <Button type="submit">Agendar</Button>
+                    </Footer>
                 </Content>
-            </Form>
+            </Container>
+
+            {resumeConfirmationModal && (
+                <InfoModal
+                    isOpen={resumeConfirmationModal}
+                    setIsOpen={toggleResumeModal}
+                    width="425px"
+                    height="390px"
+                >
+                    <AppointmentResume>
+                        {loadingNewAppointment ? (
+                            <Loading />
+                        ) : (
+                            <>
+                                <Header>
+                                    <h1>Resumo Agendamento</h1>
+                                </Header>
+                                <div className="content">
+                                    <ul>
+                                        <ListItem
+                                            artwork={(props: any) => <Check {...props} />}
+                                            artworkSize={ARTWORK_SIZES.MEDIUM}
+                                            overrides={{
+                                                Content: {
+                                                    style: () => ({
+                                                        minHeight: '50px',
+                                                    }),
+                                                },
+
+                                                ArtworkContainer: {
+                                                    style: () => ({
+                                                        width: '50px',
+                                                        color: '#00A57C ',
+                                                    }),
+                                                },
+                                            }}
+                                        >
+                                            <ListItemLabel>
+                                                Atendente:
+                                                <span> {resumeInformation.clerk.name}</span>
+                                            </ListItemLabel>
+                                        </ListItem>
+                                        <ListItem
+                                            artwork={(props: any) => <Check {...props} />}
+                                            artworkSize={ARTWORK_SIZES.MEDIUM}
+                                            overrides={{
+                                                Content: {
+                                                    style: () => ({
+                                                        minHeight: '50px',
+                                                    }),
+                                                },
+                                                ArtworkContainer: {
+                                                    style: () => ({
+                                                        width: '50px',
+                                                        color: '#00A57C ',
+                                                    }),
+                                                },
+                                            }}
+                                        >
+                                            <ListItemLabel>Agendamento: </ListItemLabel>
+                                        </ListItem>
+                                        <ListItem
+                                            artwork={(props: any) => <Check {...props} />}
+                                            artworkSize={ARTWORK_SIZES.MEDIUM}
+                                            overrides={{
+                                                Content: {
+                                                    style: () => ({
+                                                        minHeight: '50px',
+                                                    }),
+                                                },
+                                                ArtworkContainer: {
+                                                    style: () => ({
+                                                        width: '50px',
+                                                        color: '#00A57C ',
+                                                    }),
+                                                },
+                                            }}
+                                        >
+                                            <ListItemLabel>
+                                                Serviço: <span>{resumeInformation.service.title}</span>
+                                            </ListItemLabel>
+                                        </ListItem>
+                                        <ListItem
+                                            artwork={(props: any) => <Check {...props} />}
+                                            artworkSize={ARTWORK_SIZES.MEDIUM}
+                                            overrides={{
+                                                Content: {
+                                                    style: () => ({
+                                                        minHeight: '50px',
+                                                    }),
+                                                },
+                                                ArtworkContainer: {
+                                                    style: () => ({
+                                                        width: '50px',
+                                                        color: '#00A57C ',
+                                                    }),
+                                                },
+                                            }}
+                                        >
+                                            <ListItemLabel>
+                                                Tempo de duração: <span>{resumeInformation.service.time}</span>
+                                            </ListItemLabel>
+                                        </ListItem>
+                                        <ListItem
+                                            artwork={(props: any) => <Check {...props} />}
+                                            artworkSize={ARTWORK_SIZES.MEDIUM}
+                                            overrides={{
+                                                Content: {
+                                                    style: () => ({
+                                                        minHeight: '50px',
+                                                    }),
+                                                },
+                                                ArtworkContainer: {
+                                                    style: () => ({
+                                                        width: '50px',
+                                                        color: '#00A57C ',
+                                                    }),
+                                                },
+                                            }}
+                                        >
+                                            <ListItemLabel>
+                                                Valores:{' '}
+                                                <span>
+                                                    {Intl.NumberFormat('pt-BR', {
+                                                        style: 'currency',
+                                                        currency: 'BRL',
+                                                    }).format(Number(resumeInformation.service.value))}
+                                                </span>
+                                            </ListItemLabel>
+                                        </ListItem>
+                                    </ul>
+                                </div>
+                                <div className="buttons">
+                                    <IconButton
+                                        icon={MdClose}
+                                        title="Cancelar"
+                                        background="#DE3B3B"
+                                        action={toggleResumeModal}
+                                    />
+                                    <IconButton
+                                        icon={FaCheck}
+                                        title="Confirmar"
+                                        background="#00A57C"
+                                        action={handleConfirmationNewAppointment}
+                                    />
+                                </div>
+                            </>
+                        )}
+                    </AppointmentResume>
+                </InfoModal>
+            )}
         </Modal>
     );
 };
 
-export default ModalAppointment;
+export default ModalHandleAppointment;
