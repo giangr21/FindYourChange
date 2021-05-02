@@ -53,6 +53,9 @@ const Index: React.FC = () => {
     const [activeKy, setActiveKy] = useState<any>('0');
     const [newRecommendation, setNewRecommendation] = useState(false);
     const [specificServiceInfo, setSpecificServiceInfo] = useState({});
+    const [deleteReview, setDeleteReview] = useState(false);
+    const [isEdit, setIsEdit] = useState<boolean>(false);
+    const [idAppointment, setIdAppointment] = useState('');
 
     const getProvider = useCallback(async () => {
         const splitedPathName = location.pathname.split('/');

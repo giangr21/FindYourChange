@@ -1,12 +1,14 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ReactStars from 'react-rating-stars-component';
 import { Textarea } from 'baseui/textarea';
-import { MdCheck, MdClose } from 'react-icons/md';
+import { MdCheck, MdClose, MdDeleteForever } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import moment from 'moment';
+import { useLocation } from 'react-router-dom';
 import { Container, HeaderReview, NewRecommendation, Reviews, Review } from './styles';
 import IconButton from '../FormComponents/Button/IconButton';
 import api from '../../services/api';
+import { useAuth } from '../../hooks/Auth';
 
 interface Review {
     id: string;
@@ -36,6 +38,10 @@ const ReviewProvider: React.FC<ReviewProps> = ({
 }): any => {
     const [valueTextArea, setValueTextArea] = useState('');
     const [newRatingStars, setNewRatingStars] = useState(0);
+    const { user, isAuthenticated } = useAuth();
+    const location = useLocation();
+    const [reviews, setReviews] = useState<any>([]);
+    const [provider, setProvider] = useState<any>({});
 
     const handleNewReview = useCallback(async () => {
         if (valueTextArea.trim() === '' || !valueTextArea) {
@@ -85,11 +91,46 @@ const ReviewProvider: React.FC<ReviewProps> = ({
         valueTextArea,
     ]);
 
+    const getProvider = useCallback(async () => {
+        const splitedPathName = location.pathname.split('/');
+        const idProvider = splitedPathName[splitedPathName.length - 1];
+        await api
+            .get(`/provider/specificProvider/${idProvider}`)
+            .then(async (response) => {
+                setProvider(response.data);
+            })
+            .catch((e) => {
+                toast.error('Houve um erro ao buscar dados!');
+                console.log(e);
+            });
+    }, [location.pathname]);
+
+    const getReviewsFromUser = useCallback(async () => {
+        await api.get(`providerRecommendation/user/${user.id}`).then(async (response) => {
+            setReviews(response.data);
+        });
+    }, [user.id]);
+
     const clearAndClose = useCallback(() => {
         setNewRecommendationToFalse();
         setValueTextArea('');
         setNewRatingStars(0);
     }, []);
+
+    useEffect(() => {
+        getProvider();
+        getReviewsFromUser();
+    }, []);
+
+    const handleDeleteReview = useCallback(
+        async (id: string) => {
+            await api.delete(`/providerRecommendation/${id}`).then(() => {
+                setReviews(reviews.filter((review: any) => review.id !== id));
+                return toast.success('Recomendação excluida com sucesso!')!;
+            });
+        },
+        [reviews],
+    );
 
     return (
         <Container>
@@ -206,6 +247,11 @@ const ReviewProvider: React.FC<ReviewProps> = ({
                                 {recommendation.notes}
                             </p>
                         </div>
+                        {isAuthenticated && (recommendation.user.id === user.id || provider.id === user.id) && (
+                            <button onClick={() => handleDeleteReview(recommendation.id)} type="button">
+                                <MdDeleteForever color="#DE3B3B" size={20} />
+                            </button>
+                        )}
                     </Review>
                 ))}
             </Reviews>
