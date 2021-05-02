@@ -110,7 +110,7 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                     console.log(e);
                 });
         }
-    }, [notes, providerId, selectedClerk, serviceInfo.id, setIsOpen, toggleResumeModal, user.id]);
+    }, [notes, providerId, selectedClerk, serviceInfo, setIsOpen, toggleResumeModal, user.id]);
 
     return (
         <Modal
@@ -287,7 +287,7 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                 >
                     <AppointmentResume>
                         {loadingNewAppointment ? (
-                            <Loading />
+                            <Loading heightLoading="34vh" />
                         ) : (
                             <>
                                 <Header>
