@@ -83,12 +83,14 @@ export const ProviderInfo = styled.div`
             color: #ff9000;
             font-size: 14px;
         }
+
+        margin-bottom: 10px;
     }
 
     .separator {
         height: 2px;
         background-color: #3a3a3a;
-        margin: 5px 0px;
+        margin: 10px 0px;
         width: 100%;
     }
 `;

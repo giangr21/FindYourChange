@@ -1,12 +1,14 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ReactStars from 'react-rating-stars-component';
 import { Textarea } from 'baseui/textarea';
-import { MdCheck, MdClose } from 'react-icons/md';
+import { MdCheck, MdClose, MdDeleteForever } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import moment from 'moment';
+import { useLocation } from 'react-router-dom';
 import { Container, HeaderReview, NewRecommendation, Reviews, Review } from './styles';
 import IconButton from '../FormComponents/Button/IconButton';
 import api from '../../services/api';
+import { useAuth } from '../../hooks/Auth';
 
 interface Review {
     id: string;
@@ -25,17 +27,22 @@ interface ReviewProps {
     providerRecommendations: Review[];
     newRecommendation: boolean;
     setNewRecommendationToFalse: () => void;
+    removeRecommendation: (id: string) => void;
     infosToCreateNewRecommendation: any;
+    providerId: string;
 }
 
 const ReviewProvider: React.FC<ReviewProps> = ({
     providerRecommendations,
     newRecommendation,
     infosToCreateNewRecommendation,
+    providerId,
     setNewRecommendationToFalse,
+    removeRecommendation,
 }): any => {
     const [valueTextArea, setValueTextArea] = useState('');
     const [newRatingStars, setNewRatingStars] = useState(0);
+    const { user, isAuthenticated } = useAuth();
 
     const handleNewReview = useCallback(async () => {
         if (valueTextArea.trim() === '' || !valueTextArea) {
@@ -89,7 +96,17 @@ const ReviewProvider: React.FC<ReviewProps> = ({
         setNewRecommendationToFalse();
         setValueTextArea('');
         setNewRatingStars(0);
-    }, []);
+    }, [setNewRecommendationToFalse]);
+
+    const handleDeleteReview = useCallback(
+        async (id: string) => {
+            await api.delete(`/providerRecommendation/${id}`).then(() => {
+                removeRecommendation(id);
+                return toast.success('Recomendação excluida com sucesso!')!;
+            });
+        },
+        [removeRecommendation],
+    );
 
     return (
         <Container>
@@ -198,13 +215,27 @@ const ReviewProvider: React.FC<ReviewProps> = ({
                                     {recommendation.createdAt}
                                 </span>
                             </div>
-                            <p
+                            <div
                                 style={{
                                     margin: '10px 0px',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
                                 }}
                             >
-                                {recommendation.notes}
-                            </p>
+                                <p style={{}}>{recommendation.notes}</p>
+
+                                {isAuthenticated &&
+                                    (recommendation.user.id === user.id || providerId === user.id) && (
+                                        <MdDeleteForever
+                                            onClick={() => handleDeleteReview(recommendation.id)}
+                                            color="#DE3B3B"
+                                            size={22}
+                                            style={{
+                                                cursor: 'pointer',
+                                            }}
+                                        />
+                                    )}
+                            </div>
                         </div>
                     </Review>
                 ))}
