@@ -32,8 +32,8 @@ export const Content = styled.div`
 
     p {
         padding: 10px 0px;
-        color: #e82b43;
-        font-weight: 600;
+        color: #000000;
+        font-weight: 200;
         padding-bottom: 15px;
     }
 

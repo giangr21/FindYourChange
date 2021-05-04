@@ -27,6 +27,7 @@ const Index: React.FC = () => {
     const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [idClerk, setIdClerk] = useState('');
+    const [schedules, setSchedule] = useState([]);
 
     const getClerks = useCallback(async () => {
         await api
@@ -42,7 +43,27 @@ const Index: React.FC = () => {
             });
     }, []);
 
+    const getBusinessHours = useCallback(async (): Promise<void> => {
+        await api
+            .get(`/schedule/provider/${user.id}`)
+            .then((response) => {
+                const weekDaysAndHours = response.data.map((day: any) => {
+                    return {
+                        dayOfWeek: day.dayOfWeek,
+                        hourStart: day.hourStart,
+                        hourEnd: day.hourEnd,
+                    };
+                });
+                setSchedule(weekDaysAndHours);
+            })
+            .catch((e) => {
+                toast.error('Houve um erro ao buscar dados!');
+                console.log(e);
+            });
+    }, [user.id]);
+
     useEffect(() => {
+        getBusinessHours();
         getClerks();
     }, []);
 
@@ -126,6 +147,7 @@ const Index: React.FC = () => {
                             isOpen={modalOpen}
                             setIsOpen={toggleModal}
                             edit={isEdit}
+                            scheduleHours={schedules}
                         />
                     )}
 
