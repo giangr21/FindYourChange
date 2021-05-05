@@ -84,6 +84,7 @@ const Index: React.FC = () => {
 
     const handleDelete = useCallback(async (): Promise<void> => {
         try {
+            await api.delete(`/clerkSchedule/${idClerk}`);
             await api.delete(`/clerk/${idClerk}`);
             const filterClerks = clerks.filter((clerk) => clerk.id !== idClerk);
             setClerks(filterClerks);

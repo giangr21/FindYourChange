@@ -127,57 +127,72 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
             });
     }, [clerkId]);
 
-    const initWeekDays = useCallback(async (scheduleProvider: any): Promise<void> => {
-        for (let i = 0; i < scheduleProvider.length; i++) {
-            switch (scheduleProvider[i].dayOfWeek) {
-                case 'Segunda-Feira':
-                    FORMATTED_WEEK_DAY.seg.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
-                    FORMATTED_WEEK_DAY.seg.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
-                    FORMATTED_WEEK_DAY.seg.dia = scheduleProvider[i].dayOfWeek;
-                    break;
+    const initWeekDays = useCallback(
+        (scheduleProvider: any): void => {
+            for (let i = 0; i < scheduleProvider.length; i++) {
+                switch (scheduleProvider[i].dayOfWeek) {
+                    case 'Segunda-Feira':
+                        FORMATTED_WEEK_DAY.seg.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
+                        FORMATTED_WEEK_DAY.seg.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
+                        FORMATTED_WEEK_DAY.seg.dia = scheduleProvider[i].dayOfWeek;
+                        break;
 
-                case 'Terça-Feira':
-                    FORMATTED_WEEK_DAY.ter.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
-                    FORMATTED_WEEK_DAY.ter.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
-                    FORMATTED_WEEK_DAY.ter.dia = scheduleProvider[i].dayOfWeek;
-                    break;
+                    case 'Terça-Feira':
+                        FORMATTED_WEEK_DAY.ter.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
+                        FORMATTED_WEEK_DAY.ter.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
+                        FORMATTED_WEEK_DAY.ter.dia = scheduleProvider[i].dayOfWeek;
+                        break;
 
-                case 'Quarta-Feira':
-                    FORMATTED_WEEK_DAY.qua.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
-                    FORMATTED_WEEK_DAY.qua.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
-                    FORMATTED_WEEK_DAY.qua.dia = scheduleProvider[i].dayOfWeek;
-                    break;
+                    case 'Quarta-Feira':
+                        FORMATTED_WEEK_DAY.qua.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
+                        FORMATTED_WEEK_DAY.qua.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
+                        FORMATTED_WEEK_DAY.qua.dia = scheduleProvider[i].dayOfWeek;
+                        break;
 
-                case 'Quinta-Feira':
-                    FORMATTED_WEEK_DAY.qui.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
-                    FORMATTED_WEEK_DAY.qui.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
-                    FORMATTED_WEEK_DAY.qui.dia = scheduleProvider[i].dayOfWeek;
-                    break;
+                    case 'Quinta-Feira':
+                        FORMATTED_WEEK_DAY.qui.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
+                        FORMATTED_WEEK_DAY.qui.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
+                        FORMATTED_WEEK_DAY.qui.dia = scheduleProvider[i].dayOfWeek;
+                        break;
 
-                case 'Sexta-Feira':
-                    FORMATTED_WEEK_DAY.sex.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
-                    FORMATTED_WEEK_DAY.sex.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
-                    FORMATTED_WEEK_DAY.sex.dia = scheduleProvider[i].dayOfWeek;
-                    break;
+                    case 'Sexta-Feira':
+                        FORMATTED_WEEK_DAY.sex.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
+                        FORMATTED_WEEK_DAY.sex.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
+                        FORMATTED_WEEK_DAY.sex.dia = scheduleProvider[i].dayOfWeek;
+                        break;
 
-                case 'Sabado':
-                    FORMATTED_WEEK_DAY.sab.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
-                    FORMATTED_WEEK_DAY.sab.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
-                    FORMATTED_WEEK_DAY.sab.dia = scheduleProvider[i].dayOfWeek;
-                    setWeekDays(FORMATTED_WEEK_DAY);
-                    setlimitWeekHours(FORMATTED_WEEK_DAY);
-                    break;
+                    case 'Sabado':
+                        FORMATTED_WEEK_DAY.sab.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
+                        FORMATTED_WEEK_DAY.sab.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
+                        FORMATTED_WEEK_DAY.sab.dia = scheduleProvider[i].dayOfWeek;
+                        break;
 
-                default:
-                    toast.error('Falha ao inicializar os horários!');
-                    break;
+                    default:
+                        toast.error('Falha ao inicializar os horários!');
+                        break;
+                }
             }
-        }
-    }, []);
+        },
+        [edit],
+    );
+
+    const getClerkSchedule = useCallback(async (): Promise<void> => {
+        await api
+            .get(`/clerkSchedule/${clerkId}`)
+            .then((response) => {
+                initWeekDays(response.data);
+                setWeekDays(FORMATTED_WEEK_DAY);
+            })
+            .catch(() => {
+                toast.error('Houve um erro ao buscar os horários do atendente!');
+            });
+    }, [clerkId, initWeekDays]);
 
     useEffect(() => {
+        initWeekDays(scheduleHours);
+        setlimitWeekHours(FORMATTED_WEEK_DAY);
         if (!edit) {
-            initWeekDays(scheduleHours);
+            setWeekDays(FORMATTED_WEEK_DAY);
             setLoading(false);
             setTimeout(() => {
                 const nameInput = formRef.current?.getFieldRef('name');
@@ -186,10 +201,10 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                 }
             }, 500);
         } else {
-            // TODO: Load business hours from database;
+            getClerkSchedule();
             getClerk();
         }
-    }, []);
+    }, [edit, getClerk, getClerkSchedule, initWeekDays, scheduleHours]);
 
     const handleWeekData = useCallback(
         (data, dayOfWeek) => {
@@ -370,7 +385,6 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
             toast.error('Os horários do Sábado devem estar dentro dos horários limites do estabelecimento!');
             hasError = true;
         }
-
         return hasError;
     }, [weekDays, limitWeekHours]);
 
@@ -467,14 +481,15 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                 }
 
                 data.provider = user.id;
-
                 if (validateHours()) {
                     throw new Error('Horários inválidos!');
                 }
-
                 if (edit) {
                     data.id = clerkId;
                     await api.put('clerk', data);
+                    const clerkSchedule = mountScheduleToSave();
+                    clerkSchedule.unshift(clerkId);
+                    await api.put('clerkSchedule', clerkSchedule);
                 } else {
                     await api.post('clerk', data).then(async (response) => {
                         const clerkSchedule = mountScheduleToSave();
