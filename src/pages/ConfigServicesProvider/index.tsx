@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { withStyle } from 'baseui';
 import { Row as Rows, Col as Column } from '../../components/FlexBox/FlexBox';
 
-import { Container, HeaderContainer, Content } from './styles';
+import { Container, HeaderContainer, Content, SubHeader } from './styles';
 import IconButton from '../../components/FormComponents/Button/IconButton';
 import ModalServiceProvider from './ModalServiceProvider';
 import ModalDeleteService from '../../components/Modal/DeleteModal';
@@ -157,6 +157,16 @@ const Index: React.FC = () => {
                             />
                             <IconButton icon={FaSearch} background="#777777" justIcon action={handleFilter} />
                         </HeaderContainer>
+
+                        {services.length > 0 ? (
+                            <SubHeader>
+                                <p> Confira seus serviços cadastrados</p>
+                            </SubHeader>
+                        ) : (
+                            <SubHeader>
+                                <p> Nenhum serviço cadastrado</p>
+                            </SubHeader>
+                        )}
 
                         <Row
                             $style={{

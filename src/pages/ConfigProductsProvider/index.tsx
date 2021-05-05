@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { FaPlus, FaSearch } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { Container, HeaderContainer, Content } from './styles';
+import { Container, HeaderContainer, Content, SubHeader } from './styles';
 import IconButton from '../../components/FormComponents/Button/IconButton';
 import ProductRow from './ProductRow/index';
 import ModalProductProvider from './ModalProductProvider';
@@ -112,6 +112,16 @@ const Index: React.FC = () => {
                             <IconButton icon={FaPlus} title="Novo" background="#2e656a" action={toggleModal} />
                             <IconButton icon={FaSearch} background="#777777" justIcon action={handleFilter} />
                         </HeaderContainer>
+
+                        {products.length > 0 ? (
+                            <SubHeader>
+                                <p> Confira seus produtos cadastrados</p>
+                            </SubHeader>
+                        ) : (
+                            <SubHeader>
+                                <p> Nenhum produto cadastrado</p>
+                            </SubHeader>
+                        )}
 
                         <div style={{ boxShadow: '0 0 5px rgba(0, 0 , 0, 0.05)' }}>
                             <div
