@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { FaPlus } from 'react-icons/fa';
 
 import { toast } from 'react-toastify';
-import { Container, HeaderContainer } from './styles';
+import { Container, HeaderContainer, SubHeader } from './styles';
 import IconButton from '../../components/FormComponents/Button/IconButton';
 import ModalDeleteClerk from '../../components/Modal/DeleteModal';
 import ClerkRow from './ClerkRow/index';
@@ -115,6 +115,17 @@ const Index: React.FC = () => {
                             action={toggleModal}
                         />
                     </HeaderContainer>
+
+                    {clerks.length > 0 ? (
+                        <SubHeader>
+                            <p> Confira seus atendentes cadastrados</p>
+                        </SubHeader>
+                    ) : (
+                        <SubHeader>
+                            <p> Nenhum atendente cadastrado</p>
+                        </SubHeader>
+                    )}
+
                     <div style={{ boxShadow: '0 0 5px rgba(0, 0 , 0, 0.05)' }}>
                         <div
                             style={{

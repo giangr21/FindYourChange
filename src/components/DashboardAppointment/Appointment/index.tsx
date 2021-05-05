@@ -34,7 +34,7 @@ const Appointment: React.FC<AppointmentProps> = ({ appointmentInfo }): any => (
                 </section>
                 {appointmentInfo.notes && appointmentInfo.notes !== '' && (
                     <section>
-                        <h4 style={{ color: '#ff9000', marginRight: '7px' }}>Comentarios:</h4>
+                        <h4 style={{ color: '#ff9000', marginRight: '7px' }}>Comentários:</h4>
                         <h4>{appointmentInfo.notes}</h4>
                     </section>
                 )}

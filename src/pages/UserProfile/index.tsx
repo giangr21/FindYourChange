@@ -66,16 +66,16 @@ const UserProfile: React.FC = () => {
                     oldPassword: Yup.string(),
                     password: Yup.string().when('oldPassword', {
                         is: (val) => !!val.length,
-                        then: Yup.string().required('Campo obrigatorio!!'),
+                        then: Yup.string().required('Campo obrigatório!!'),
                         otherwise: Yup.string(),
                     }),
                     passwordConfirmation: Yup.string()
                         .when('oldPassword', {
                             is: (val) => !!val.length,
-                            then: Yup.string().required('Campo obrigatorio!!'),
+                            then: Yup.string().required('Campo obrigatório!!'),
                             otherwise: Yup.string(),
                         })
-                        .oneOf([Yup.ref('password'), undefined], 'Confirmaçao incorreta'),
+                        .oneOf([Yup.ref('password'), undefined], 'Confirmação incorreta'),
                 });
 
                 await schema.validate(data, {
@@ -135,7 +135,7 @@ const UserProfile: React.FC = () => {
         async (id: string) => {
             await api.delete(`/providerRecommendation/${id}`).then(() => {
                 setReviews(reviews.filter((review: any) => review.id !== id));
-                return toast.success('Recomendação excluida com sucesso!')!;
+                return toast.success('Recomendação excluída com sucesso!')!;
             });
         },
         [reviews],

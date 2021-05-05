@@ -15,6 +15,21 @@ export const HeaderContainer = styled.div`
     border-radius: 8px;
 `;
 
+export const SubHeader = styled.div`
+    display: flex;
+    height: 20px;
+    margin: 0px 5px 5px 5px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+
+    p {
+        color: #999591;
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+    }
+`;
+
 export const Recommendation = styled.div`
     height: 600px;
     max-height: 600px;

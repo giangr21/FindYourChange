@@ -24,7 +24,7 @@ const sidebarMenus = [
         icon: <DashboardIcon />,
     },
     {
-        name: 'Horarios',
+        name: 'Horários',
         path: '/configSchedulesProvider',
         exact: false,
         icon: <DashboardIcon />,

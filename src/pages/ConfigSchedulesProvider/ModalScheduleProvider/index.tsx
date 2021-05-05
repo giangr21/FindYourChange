@@ -107,49 +107,49 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                 if (hourStart) {
                     scheduleData.hourStart = moment(hourStart).format('HH:mm');
                 } else {
-                    return toast.error(`Necessario escolher uma hora inicial `);
+                    return toast.error(`Necessário escolher uma hora inicial `);
                 }
 
                 // Necessario escolher horarios
                 if (hourLunchStart) {
                     scheduleData.hourLunchStart = moment(hourLunchStart).format('HH:mm');
                 } else {
-                    return toast.error(`Necessario escolher uma hora inicial de almoco `);
+                    return toast.error(`Necessário escolher uma hora inicial de almoço `);
                 }
 
                 // Necessario escolher horarios
                 if (hourEnd) {
                     scheduleData.hourEnd = moment(hourEnd).format('HH:mm');
                 } else {
-                    return toast.error(`Necessario escolher uma hora final `);
+                    return toast.error(`Necessário escolher uma hora final `);
                 }
 
                 // Necessario escolher horarios
                 if (hourLunchEnd) {
                     scheduleData.hourLunchEnd = moment(hourLunchEnd).format('HH:mm');
                 } else {
-                    return toast.error(`Necessario escolher uma hora final de almoco `);
+                    return toast.error(`Necessário escolher uma hora final de almoço `);
                 }
 
                 if (
                     moment(hourStart).format('YYYY-MM-DD HH:mm:ss ZZ') >
                     moment(hourLunchStart).format('YYYY-MM-DD HH:mm:ss ZZ')
                 ) {
-                    return toast.error(`Horario Inicio Invalido!`);
+                    return toast.error(`Horário Início Inválido!`);
                 }
 
                 if (
                     moment(hourStart).format('YYYY-MM-DD HH:mm:ss ZZ') >
                     moment(hourLunchEnd).format('YYYY-MM-DD HH:mm:ss ZZ')
                 ) {
-                    return toast.error(`Horario Inicio Invalido!`);
+                    return toast.error(`Horário Início Inválido!`);
                 }
 
                 if (
                     moment(hourStart).format('YYYY-MM-DD HH:mm:ss ZZ') >
                     moment(hourEnd).format('YYYY-MM-DD HH:mm:ss ZZ')
                 ) {
-                    return toast.error(`Horario Inicio Invalido!`);
+                    return toast.error(`Horário Início Inválido!`);
                 }
 
                 //
@@ -158,21 +158,21 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                     moment(hourLunchStart).format('YYYY-MM-DD HH:mm:ss ZZ') >
                     moment(hourLunchEnd).format('YYYY-MM-DD HH:mm:ss ZZ')
                 ) {
-                    return toast.error(`Horario Inicio Almoco Invalida!`);
+                    return toast.error(`Horário Início Almoço Inválido!`);
                 }
 
                 if (
                     moment(hourLunchStart).format('YYYY-MM-DD HH:mm:ss ZZ') >
                     moment(hourEnd).format('YYYY-MM-DD HH:mm:ss ZZ')
                 ) {
-                    return toast.error(`Horario Inicio Almoco Invalida!`);
+                    return toast.error(`HorHorárioario Inicio Almoço Inválido!`);
                 }
 
                 if (
                     moment(hourLunchStart).format('YYYY-MM-DD HH:mm:ss ZZ') <
                     moment(hourStart).format('YYYY-MM-DD HH:mm:ss ZZ')
                 ) {
-                    return toast.error(`Horario Inicio Almoco Invalida!`);
+                    return toast.error(`Horário Início Almoço Inválido!`);
                 }
 
                 //
@@ -181,21 +181,21 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                     moment(hourLunchEnd).format('YYYY-MM-DD HH:mm:ss ZZ') >
                     moment(hourEnd).format('YYYY-MM-DD HH:mm:ss ZZ')
                 ) {
-                    return toast.error(`Horario Fim Almoco Invalida!`);
+                    return toast.error(`Horário Fim Almoço Inválido!`);
                 }
 
                 if (
                     moment(hourLunchEnd).format('YYYY-MM-DD HH:mm:ss ZZ') <
                     moment(hourLunchStart).format('YYYY-MM-DD HH:mm:ss ZZ')
                 ) {
-                    return toast.error(`Horario Fim Almoco Invalida!`);
+                    return toast.error(`Horário Fim Almoço Inválido!`);
                 }
 
                 if (
                     moment(hourLunchEnd).format('YYYY-MM-DD HH:mm:ss ZZ') <
                     moment(hourStart).format('YYYY-MM-DD HH:mm:ss ZZ')
                 ) {
-                    return toast.error(`Horario Fim Almoco Invalida!`);
+                    return toast.error(`Horário Fim Almoço Inválido!`);
                 }
 
                 //
@@ -204,21 +204,21 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                     moment(hourEnd).format('YYYY-MM-DD HH:mm:ss ZZ') <
                     moment(hourStart).format('YYYY-MM-DD HH:mm:ss ZZ')
                 ) {
-                    return toast.error(`Horario Fim Invalida!`);
+                    return toast.error(`Horário Fim Inválido!`);
                 }
 
                 if (
                     moment(hourEnd).format('YYYY-MM-DD HH:mm:ss ZZ') <
                     moment(hourLunchStart).format('YYYY-MM-DD HH:mm:ss ZZ')
                 ) {
-                    return toast.error(`Horario Fim Invalida!`);
+                    return toast.error(`Horário Fim Inválido!`);
                 }
 
                 if (
                     moment(hourEnd).format('YYYY-MM-DD HH:mm:ss ZZ') <
                     moment(hourLunchEnd).format('YYYY-MM-DD HH:mm:ss ZZ')
                 ) {
-                    return toast.error(`Horario Fim Invalida!`);
+                    return toast.error(`Horário Fim Inválido!`);
                 }
 
                 scheduleData.provider = user.id;
@@ -234,7 +234,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                     });
 
                     if (!isAvailable.data) {
-                        return toast.error(`Já existe um horario cadastrado nesse dia`);
+                        return toast.error(`Já existe um horário cadastrado nesse dia`);
                     }
 
                     await api.post('schedule', scheduleData);
@@ -294,13 +294,13 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                                             { value: 'Quarta-Feira', label: 'Quarta-Feira' },
                                             { value: 'Quinta-Feira', label: 'Quinta-Feira' },
                                             { value: 'Sexta-Feira', label: 'Sexta-Feira' },
-                                            { value: 'Sabado', label: 'Sabado' },
+                                            { value: 'Sabado', label: 'Sábado' },
                                             { value: 'Domingo', label: 'Domingo' },
                                         ]}
                                     />
                                 </div>
                             </Container>
-                            <p>Horario Inicio</p>
+                            <p>Horário Início</p>
                             <Container>
                                 <div
                                     style={{
@@ -317,7 +317,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                                     />
                                 </div>
                             </Container>
-                            <p>Horario Inicio Almoço</p>
+                            <p>Horário Início Almoço</p>
                             <Container>
                                 <div
                                     style={{
@@ -334,7 +334,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                                     />
                                 </div>
                             </Container>
-                            <p>Horario Fim</p>
+                            <p>Horário Fim</p>
                             <Container>
                                 <div
                                     style={{
@@ -351,7 +351,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                                     />
                                 </div>
                             </Container>
-                            <p>Horario Fim Almoço</p>
+                            <p>Horário Fim Almoço</p>
                             <Container>
                                 <div
                                     style={{

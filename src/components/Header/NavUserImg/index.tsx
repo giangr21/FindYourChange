@@ -27,7 +27,7 @@ const NavUserImg: React.FC = () => {
                         {mobile && (
                             <>
                                 <NavLink to="/" exact={false} onClick={close}>
-                                    Inicio
+                                    Início
                                 </NavLink>
                                 <NavLink to="/allServicesProvider" exact={false} onClick={close}>
                                     Navegar

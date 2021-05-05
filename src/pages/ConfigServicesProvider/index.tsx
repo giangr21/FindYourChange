@@ -213,7 +213,7 @@ const Index: React.FC = () => {
                     <Input name="name" placeholder="Nome" />
                 </div>
                 <div className="space">
-                    <Input name="value" placeholder="Preco" />
+                    <Input name="value" placeholder="Preço" />
                 </div>
             </Filter>
         </Container>

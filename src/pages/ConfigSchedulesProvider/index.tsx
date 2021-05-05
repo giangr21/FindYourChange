@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
-import { Container, HeaderContainer, Content } from './styles';
+import { Container, HeaderContainer, Content, SubHeader } from './styles';
 import IconButton from '../../components/FormComponents/Button/IconButton';
 import ScheduleRow from './ScheduleRow/index';
 import ModalScheduleProvider from './ModalScheduleProvider';
@@ -89,6 +89,16 @@ const Index: React.FC = () => {
                             />
                         </HeaderContainer>
 
+                        {schedules.length > 0 ? (
+                            <SubHeader>
+                                <p> Confira seus horários cadastrados</p>
+                            </SubHeader>
+                        ) : (
+                            <SubHeader>
+                                <p> Nenhum horário cadastrado para o seu estabelecimento</p>
+                            </SubHeader>
+                        )}
+
                         <div style={{ boxShadow: '0 0 5px rgba(0, 0 , 0, 0.05)' }}>
                             <div
                                 style={{
@@ -98,7 +108,7 @@ const Index: React.FC = () => {
                             >
                                 <StyledTable $gridTemplateColumns="minmax(150px, auto) minmax(150px, auto) minmax(150px, auto) minmax(150px, auto) minmax(150px, auto)">
                                     <StyledHeadCell>Dia da semana</StyledHeadCell>
-                                    <StyledHeadCell>Horário Inicio</StyledHeadCell>
+                                    <StyledHeadCell>Horário Início</StyledHeadCell>
                                     <StyledHeadCell>Horário Fim</StyledHeadCell>
                                     <StyledHeadCell>Ativo</StyledHeadCell>
                                     <StyledHeadCell>Ações</StyledHeadCell>

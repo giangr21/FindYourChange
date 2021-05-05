@@ -241,7 +241,7 @@ const HomePageProvider: React.FC = () => {
                     )}
 
                     <Section>
-                        <strong>Manha</strong>
+                        <strong>Manhã</strong>
 
                         {morningAppointments.length === 0 && <p>Nenhum agendamento neste período</p>}
 
