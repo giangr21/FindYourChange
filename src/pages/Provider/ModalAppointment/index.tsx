@@ -192,6 +192,7 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                                 formatString="dd '/' MMMM '/' yyyy"
                                 disabled={selectedClerk === null}
                                 mask={null}
+                                minDate={new Date()}
                                 overrides={{
                                     Input: {
                                         props: {

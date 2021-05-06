@@ -7,26 +7,29 @@ import { ThemeProvider, createTheme, lightThemePrimitives } from 'baseui';
 import { Card, StyledBody, StyledAction } from 'baseui/card';
 import { Button as ButtonBaseUi } from 'baseui/button';
 import ReactStars from 'react-rating-stars-component';
-
+import { ListItem, ListItemLabel, ARTWORK_SIZES } from 'baseui/list';
+import { ArrowRight } from 'baseui/icon';
 import * as Yup from 'yup';
-import { useHistory } from 'react-router-dom';
-import { FaPhoneAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import moment from 'moment';
+import 'moment/locale/pt-br';
+
+import { useHistory } from 'react-router-dom';
+import { FaAngleDoubleRight, FaPhoneAlt } from 'react-icons/fa';
 import api from '../../services/api';
 import Button from '../../components/FormComponents/Button';
 import Input from '../../components/FormComponents/Input';
 import getValidationErrors from '../../util/getValidationErrors';
-import { Container, AvatarInput, Content, Row, Col } from './styles';
+import { Container, AvatarInput, Content, ContentAppointments, Appointments, Row, Col } from './styles';
 import { useAuth } from '../../hooks/Auth';
 import InputMask from '../../components/FormComponents/Input/InputMask';
 import Loading from '../../components/Loading';
+import IconButtonProvider from '../../components/FormComponents/Button/IconButtonProvider';
 
 const UserProfile: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
     const history = useHistory();
     const { user } = useAuth();
-    const [isEdit, setIsEdit] = useState(true);
     const [loading, setLoading] = useState(true);
     const [profileInfo, setProfileInfo] = useState<any>({});
     const [appointments, setAppointments] = useState<any>([]);
@@ -46,8 +49,16 @@ const UserProfile: React.FC = () => {
     const getAppointmentsFromUser = useCallback(async () => {
         await api.get(`/user/appointments/${user.id}`).then(async (response) => {
             response.data.forEach((r: any) => {
-                r.dateRelease = moment(r.dateRelease).format('DD/MM/YYYY - HH:mm');
+                if (r.service.disccount !== '' && r.service.disccount !== '0') {
+                    const valueToDiscount = r.service.value * (r.service.disccount / 100);
+                    r.service.value = (r.service.value - valueToDiscount).toFixed(2);
+                }
+
+                r.dayAppointment = moment(r.dateAppointment).format('DD');
+                r.hourAppointment = moment(r.dateAppointment).format('HH:mm');
+                r.monthAppointment = moment(r.dateAppointment).locale('pt-br').format('MMMM');
             });
+            console.log(response.data);
             setAppointments(response.data);
         });
     }, [user.id]);
@@ -169,6 +180,15 @@ const UserProfile: React.FC = () => {
         [profileInfo],
     );
 
+    const handleClickProvider = useCallback(
+        (id: string) => {
+            history.push({
+                pathname: `/provider/${id}`,
+            });
+        },
+        [history],
+    );
+
     return (
         <Container>
             {loading ? (
@@ -189,12 +209,12 @@ const UserProfile: React.FC = () => {
                         activateOnFocus
                         overrides={{
                             Root: {
-                                style: ({ $theme }) => ({
+                                style: () => ({
                                     height: '100%',
                                 }),
                             },
                             TabHighlight: {
-                                style: ({ $theme }) => ({
+                                style: () => ({
                                     outline: `#ff9000 solid`,
                                     backgroundColor: '#ff9000',
                                 }),
@@ -204,7 +224,7 @@ const UserProfile: React.FC = () => {
                         <Tab title="Editar Cadastro">
                             <Content>
                                 <Form initialData={profileInfo} ref={formRef} onSubmit={handleSubmit}>
-                                    <h1>Meu Perfil</h1>
+                                    <h1>Minha Conta</h1>
                                     <AvatarInput>
                                         <img src={`data:image/png;base64,${profileInfo.avatar}`} alt={user.name} />
                                         <label htmlFor="avatar">
@@ -264,18 +284,178 @@ const UserProfile: React.FC = () => {
                             </Content>
                         </Tab>
                         <Tab title="Agendamentos">
-                            <div>
-                                <h1>Meus Agendamentos</h1>
-                                {appointments.map((appointment: any) => (
-                                    <div key={appointment.id}>
-                                        <h2>Notas: {appointment.notes}</h2>
-                                        <h2>Avaliação: {appointment.rating}</h2>
-                                        <h2>Tipo de Serviço: {appointment.serviceType}</h2>
-                                        <h2>Valor do Serviço: {appointment.value}</h2> <br />
-                                        <h2>Data: {appointment.dateRelease}</h2> <br />
-                                    </div>
-                                ))}
-                            </div>
+                            <ContentAppointments>
+                                <h1
+                                    style={{
+                                        margin: '0 auto 20px',
+                                    }}
+                                >
+                                    Meus Agendamentos
+                                </h1>
+                                <Row>
+                                    {appointments.map((appointment: any) => (
+                                        <Col key={appointment.id} xs={12} sm={6} md={6} lg={6}>
+                                            <Card
+                                                overrides={{
+                                                    Root: { style: { width: '100%', borderRadius: '10px' } },
+                                                }}
+                                                title={appointment.service.title}
+                                            >
+                                                <Appointments>
+                                                    <div className="left">
+                                                        <ul>
+                                                            <ListItem
+                                                                artwork={(props: any) => <ArrowRight {...props} />}
+                                                                artworkSize={ARTWORK_SIZES.MEDIUM}
+                                                                overrides={{
+                                                                    Content: {
+                                                                        style: () => ({
+                                                                            minHeight: '40px',
+                                                                        }),
+                                                                    },
+                                                                    ArtworkContainer: {
+                                                                        style: () => ({
+                                                                            width: '40px',
+                                                                            color: '#00A57C ',
+                                                                        }),
+                                                                    },
+                                                                }}
+                                                            >
+                                                                <ListItemLabel>
+                                                                    Atendente:
+                                                                    <span
+                                                                        style={{
+                                                                            color: '#f3f4f4',
+                                                                            fontSize: '14px',
+                                                                            marginLeft: '4px',
+                                                                        }}
+                                                                    >
+                                                                        {appointment.clerk.name}
+                                                                    </span>
+                                                                </ListItemLabel>
+                                                            </ListItem>
+                                                            <ListItem
+                                                                artwork={(props: any) => <ArrowRight {...props} />}
+                                                                artworkSize={ARTWORK_SIZES.MEDIUM}
+                                                                overrides={{
+                                                                    Content: {
+                                                                        style: () => ({
+                                                                            minHeight: '40px',
+                                                                        }),
+                                                                    },
+                                                                    ArtworkContainer: {
+                                                                        style: () => ({
+                                                                            width: '40px',
+                                                                            color: '#00A57C ',
+                                                                        }),
+                                                                    },
+                                                                }}
+                                                            >
+                                                                <ListItemLabel>
+                                                                    Categoria:
+                                                                    <span
+                                                                        style={{
+                                                                            color: '#f3f4f4',
+                                                                            fontSize: '14px',
+                                                                            marginLeft: '4px',
+                                                                        }}
+                                                                    >
+                                                                        {appointment.service.category}
+                                                                    </span>
+                                                                </ListItemLabel>
+                                                            </ListItem>
+                                                            <ListItem
+                                                                artwork={(props: any) => <ArrowRight {...props} />}
+                                                                artworkSize={ARTWORK_SIZES.MEDIUM}
+                                                                overrides={{
+                                                                    Content: {
+                                                                        style: () => ({
+                                                                            minHeight: '40px',
+                                                                        }),
+                                                                    },
+                                                                    ArtworkContainer: {
+                                                                        style: () => ({
+                                                                            width: '40px',
+                                                                            color: '#00A57C ',
+                                                                        }),
+                                                                    },
+                                                                }}
+                                                            >
+                                                                <ListItemLabel>
+                                                                    Valor:{' '}
+                                                                    <span
+                                                                        style={{
+                                                                            color: '#f3f4f4',
+                                                                            fontSize: '14px',
+                                                                            marginLeft: '4px',
+                                                                        }}
+                                                                    >
+                                                                        {Intl.NumberFormat('pt-BR', {
+                                                                            style: 'currency',
+                                                                            currency: 'BRL',
+                                                                        }).format(
+                                                                            Number(appointment.service.value),
+                                                                        )}
+                                                                    </span>
+                                                                </ListItemLabel>
+                                                            </ListItem>
+                                                            <ListItem
+                                                                artwork={(props: any) => <ArrowRight {...props} />}
+                                                                artworkSize={ARTWORK_SIZES.MEDIUM}
+                                                                overrides={{
+                                                                    Content: {
+                                                                        style: () => ({
+                                                                            minHeight: '40px',
+                                                                        }),
+                                                                    },
+                                                                    ArtworkContainer: {
+                                                                        style: () => ({
+                                                                            width: '40px',
+                                                                            color: '#00A57C ',
+                                                                        }),
+                                                                    },
+                                                                }}
+                                                            >
+                                                                <ListItemLabel>
+                                                                    Comentarios:
+                                                                    <span
+                                                                        style={{
+                                                                            color: '#f3f4f4',
+                                                                            fontSize: '14px',
+                                                                            marginLeft: '4px',
+                                                                        }}
+                                                                    >
+                                                                        {appointment.notes}
+                                                                    </span>
+                                                                </ListItemLabel>
+                                                            </ListItem>
+                                                        </ul>
+                                                    </div>
+                                                    <div className="right">
+                                                        <span className="month">
+                                                            {appointment.monthAppointment}
+                                                        </span>
+                                                        <span className="day">{appointment.dayAppointment}</span>
+                                                        <span className="hour">{appointment.hourAppointment}</span>
+                                                    </div>
+                                                </Appointments>
+                                                <div
+                                                    style={{
+                                                        margin: '15px 0px 10px 0px',
+                                                    }}
+                                                >
+                                                    <IconButtonProvider
+                                                        icon={FaAngleDoubleRight}
+                                                        title="Mais Informações"
+                                                        background="#ff9000"
+                                                        action={() => handleClickProvider(appointment.provider.id)}
+                                                    />
+                                                </div>
+                                            </Card>
+                                        </Col>
+                                    ))}
+                                </Row>
+                            </ContentAppointments>
                         </Tab>
                         <Tab title="Reviews">
                             <div
@@ -295,7 +475,9 @@ const UserProfile: React.FC = () => {
                                     {reviews.map((review: any) => (
                                         <Col key={review.id} xs={12} sm={6} md={4} lg={4}>
                                             <Card
-                                                overrides={{ Root: { style: { width: '328px' } } }}
+                                                overrides={{
+                                                    Root: { style: { width: '328px', borderRadius: '10px' } },
+                                                }}
                                                 title={review.providerLegalName}
                                             >
                                                 <StyledBody
@@ -333,6 +515,7 @@ const UserProfile: React.FC = () => {
                                                                 style: {
                                                                     width: '100%',
                                                                     background: '#ff9000',
+                                                                    borderRadius: '10px',
                                                                 },
                                                             },
                                                         }}

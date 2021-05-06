@@ -24,13 +24,17 @@ const Appointment: React.FC<AppointmentProps> = ({ appointmentInfo }): any => (
             >
                 <section>
                     <h4 style={{ color: '#ff9000', marginRight: '7px' }}>Nome:</h4>
-                    <h4>
+                    <h4
+                        style={{
+                            textTransform: 'capitalize',
+                        }}
+                    >
                         {appointmentInfo.user.name} {appointmentInfo.user.lastName}
                     </h4>
                 </section>
                 <section>
                     <h4 style={{ color: '#ff9000', marginRight: '7px' }}>Tipo Serviço:</h4>
-                    <h4>{appointmentInfo.serviceType}</h4>
+                    <h4>{appointmentInfo.service.category}</h4>
                 </section>
                 {appointmentInfo.notes && appointmentInfo.notes !== '' && (
                     <section>
