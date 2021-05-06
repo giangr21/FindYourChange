@@ -24,6 +24,12 @@ const sidebarMenus = [
         icon: <DashboardIcon />,
     },
     {
+        name: 'Agendamentos',
+        path: '/appointmentsProvider',
+        exact: false,
+        icon: <DashboardIcon />,
+    },
+    {
         name: 'Horários',
         path: '/configSchedulesProvider',
         exact: false,

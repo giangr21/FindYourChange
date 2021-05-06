@@ -18,6 +18,7 @@ import Product from '../pages/Product';
 import About from '../pages/About';
 import Clerk from '../pages/Clerk';
 import UserProfile from '../pages/UserProfile';
+import AppointmentsProvider from '../pages/AppointmentsProvider';
 
 const Routes: React.FC = () => (
     <Switch>
@@ -40,6 +41,7 @@ const Routes: React.FC = () => (
         <Route path="/configSchedulesProvider" privatePages component={ConfigSchedulesProvider} />
         <Route path="/configProductsProvider" privatePages component={ConfigProductsProvider} />
         <Route path="/configClerksProvider" privatePages component={Clerk} />
+        <Route path="/appointmentsProvider" privatePages component={AppointmentsProvider} />
     </Switch>
 );
 
