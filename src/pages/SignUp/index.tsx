@@ -81,7 +81,7 @@ const SignUp: React.FC = () => {
 
                 await api.post('user', data);
                 history.push('/');
-                toast.success('Usuario criado com sucesso!');
+                toast.success('Usuário criado com sucesso!');
             } catch (err) {
                 if (err instanceof Yup.ValidationError) {
                     const errors = getValidationErrors(err);
@@ -101,11 +101,11 @@ const SignUp: React.FC = () => {
                     name: Yup.string().required('Nome obrigatório'),
                     lastName: Yup.string().required('Sobrenome obrigatório'),
                     email: Yup.string().required('E-mail obrigatório').email('Digite um e-mail válido'),
-                    password: Yup.string().min(4, 'No mínimo 4 digitos'),
-                    addressStreet: Yup.string().required('Rua obrigatório'),
-                    addressNumber: Yup.string().required('Numero obrigatório'),
+                    password: Yup.string().min(4, 'No mínimo 4 dígitos'),
+                    addressStreet: Yup.string().required('Rua obrigatória'),
+                    addressNumber: Yup.string().required('Número obrigatório'),
                     addressArea: Yup.string().required('Bairro obrigatório'),
-                    addressCity: Yup.string().required('Cidade obrigatório'),
+                    addressCity: Yup.string().required('Cidade obrigatória'),
                     addressState: Yup.string().required('Estado obrigatório'),
                 });
 
@@ -173,7 +173,7 @@ const SignUp: React.FC = () => {
         let cep = formRef.current?.getFieldValue('addressZipCode');
         cep = cep.replace(/[^\d]/g, '');
         if (cep === '' || cep.length < 8) {
-            toast.error('Digite um cep valido.');
+            toast.error('Digite um cep válido.');
         } else {
             await api
                 .get(`https://olog-api.jclan.com.br/street/${cep}`)
@@ -190,7 +190,7 @@ const SignUp: React.FC = () => {
                             inputNumber.focus();
                         }
                     } else {
-                        toast.error('Digite um cep valido.');
+                        toast.error('Digite um cep válido.');
                     }
                 })
                 .catch((error) => {
@@ -293,7 +293,7 @@ const SignUp: React.FC = () => {
                                 </Row>
                                 <Row>
                                     <Column>
-                                        <Input name="addressNumber" placeholder="Numero" icon={FaMapSigns} />
+                                        <Input name="addressNumber" placeholder="Número" icon={FaMapSigns} />
                                         <Input name="addressCity" placeholder="Cidade" icon={FaMapSigns} />
                                     </Column>
                                 </Row>

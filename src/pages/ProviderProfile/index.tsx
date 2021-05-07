@@ -71,16 +71,16 @@ const Profile: React.FC = () => {
                     oldPassword: Yup.string(),
                     password: Yup.string().when('oldPassword', {
                         is: (val) => !!val.length,
-                        then: Yup.string().required('Campo obrigatorio!!'),
+                        then: Yup.string().required('Campo obrigatório!!'),
                         otherwise: Yup.string(),
                     }),
                     passwordConfirmation: Yup.string()
                         .when('oldPassword', {
                             is: (val) => !!val.length,
-                            then: Yup.string().required('Campo obrigatorio!!'),
+                            then: Yup.string().required('Campo obrigatório!!'),
                             otherwise: Yup.string(),
                         })
-                        .oneOf([Yup.ref('password'), undefined], 'Confirmaçao incorreta'),
+                        .oneOf([Yup.ref('password'), undefined], 'Confirmação incorreta'),
                 });
 
                 await schema.validate(data, {
@@ -197,7 +197,7 @@ const Profile: React.FC = () => {
                             inputNumber.focus();
                         }
                     } else {
-                        toast.error('Digite um cep valido.');
+                        toast.error('Digite um cep válido.');
                     }
                 })
                 .catch((error) => {
@@ -422,7 +422,7 @@ const Profile: React.FC = () => {
 
                                     <Row>
                                         <Col xs={12} sm={3} md={3} lg={3}>
-                                            <Input name="addressNumber" placeholder="Numero" icon={FaMapSigns} />
+                                            <Input name="addressNumber" placeholder="Número" icon={FaMapSigns} />
                                         </Col>
                                         <Col xs={12} sm={3} md={3} lg={3}>
                                             <Input name="addressCity" placeholder="Cidade" icon={FaMapSigns} />

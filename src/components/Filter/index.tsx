@@ -43,7 +43,7 @@ const Filter: React.FC<FilterProps> = ({ showFilter, submitFilter, conditionClea
                 submitFilter(filter);
             } catch (err) {
                 if (err instanceof Yup.ValidationError) {
-                    toast.error('Necessario escolher uma central!');
+                    toast.error('Necessário escolher uma central!');
                 }
             }
         },

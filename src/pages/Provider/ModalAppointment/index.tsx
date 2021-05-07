@@ -6,6 +6,7 @@ import { Input } from 'baseui/input';
 import pt from 'date-fns/locale/pt-BR';
 import { withStyle } from 'baseui';
 import { toast } from 'react-toastify';
+import moment from 'moment';
 
 import { Modal, ModalHeader, ROLE } from 'baseui/modal';
 import { ListItem, ListItemLabel, ARTWORK_SIZES } from 'baseui/list';
@@ -54,7 +55,7 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
 }): any => {
     const mobile = useMedia('(max-width: 760px)');
     const { user } = useAuth();
-    const [dateAppointment, setDateAppointment] = useState([new Date()]);
+    const [dateAppointment, setDateAppointment] = useState<any>(new Date());
     const [hourAppointment, setHourAppointment] = useState<any>();
     const [selectedClerk, setSelectedClerk] = useState(null);
     const [notes, setNotes] = useState('');
@@ -68,7 +69,6 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
 
     const handleNewAppointment = useCallback(() => {
         toggleResumeModal();
-
         let { value } = serviceInfo;
         if (serviceInfo.disccount !== '' && serviceInfo.disccount !== '0') {
             const valueToDiscount = serviceInfo.value * (serviceInfo.disccount / 100);
@@ -83,9 +83,12 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                 title: serviceInfo.title,
                 value,
                 time: serviceInfo.time,
+                dateAppointment: `${moment(dateAppointment).format('DD/MM/YYYY')} - ${moment(
+                    hourAppointment,
+                ).format('HH:mm')}`,
             },
         });
-    }, [selectedClerk, serviceInfo, toggleResumeModal]);
+    }, [dateAppointment, hourAppointment, selectedClerk, serviceInfo, toggleResumeModal]);
 
     const handleConfirmationNewAppointment = useCallback(async () => {
         if (user.id) {
@@ -97,7 +100,9 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                     clerk: selectedClerk,
                     service: serviceInfo.id,
                     notes,
-                    dateAppointment: new Date(),
+                    dateAppointment: `${moment(dateAppointment).format('DD-MM-YYYY')} ${moment(
+                        hourAppointment,
+                    ).format('HH:mm')}`,
                 })
                 .then(() => {
                     toast.success('Agendamento realizado com sucesso!!');
@@ -110,7 +115,17 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                     console.log(e);
                 });
         }
-    }, [notes, providerId, selectedClerk, serviceInfo, setIsOpen, toggleResumeModal, user.id]);
+    }, [
+        dateAppointment,
+        hourAppointment,
+        notes,
+        providerId,
+        selectedClerk,
+        serviceInfo,
+        setIsOpen,
+        toggleResumeModal,
+        user.id,
+    ]);
 
     return (
         <Modal
@@ -188,10 +203,11 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                             <DatePicker
                                 locale={pt}
                                 value={dateAppointment}
-                                onChange={({ date }) => setDateAppointment(Array.isArray(date) ? date : [date])}
+                                onChange={({ date }) => setDateAppointment(date)}
                                 formatString="dd '/' MMMM '/' yyyy"
                                 disabled={selectedClerk === null}
                                 mask={null}
+                                minDate={new Date()}
                                 overrides={{
                                     Input: {
                                         props: {
@@ -335,7 +351,10 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                                                 },
                                             }}
                                         >
-                                            <ListItemLabel>Agendamento: </ListItemLabel>
+                                            <ListItemLabel>
+                                                Agendamento:
+                                                <span> {resumeInformation.service.dateAppointment}</span>
+                                            </ListItemLabel>
                                         </ListItem>
                                         <ListItem
                                             artwork={(props: any) => <Check {...props} />}

@@ -44,7 +44,7 @@ const ForgotPassword: React.FC = () => {
             //         })
             //         .then((response) => {
             //             toast.success(
-            //                 'Enviamos um e-mail para confirmar a recuperacao de senha, cheque sua caixa de mensagens',
+            //                 'Enviamos um e-mail para confirmar a recuperação de senha, cheque sua caixa de mensagens',
             //             );
             //         })
             //         .catch((e) => {

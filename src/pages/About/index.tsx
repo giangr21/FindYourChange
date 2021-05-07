@@ -34,24 +34,24 @@ const About: React.FC = () => {
                 <div className="separator" />
                 <Founders>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent et dolor bibendum diam
-                        ullamcorper bibendum vitae a ex. Ut in ipsum lacus. Nullam dictum nisi sem, sed sagittis
-                        arcu ultricies ut. Mauris sodales nisl velit. Mauris quis velit at urna bibendum viverra.
-                        Pellentesque sodales laoreet nunc, et blandit libero lobortis eget. Pellentesque
-                        pellentesque sed mauris dictum porttitor. Lorem ipsum dolor sit amet, consectetur
-                        adipiscing elit. Praesent et dolor bibendum diam ullamcorper bibendum vitae a ex. Ut in
-                        ipsum lacus. Nullam dictum nisi sem, sed sagittis arcu ultricies ut. Mauris sodales nisl
-                        velit. Mauris quis velit at urna bibendum viverra. Pellentesque sodales laoreet nunc, et
-                        blandit libero lobortis eget. Pellentesque pellentesque sed mauris dictum porttitor. Lorem
-                        ipsum dolor sit amet, consectetur adipiscing elit. Praesent et dolor bibendum diam
-                        ullamcorper bibendum vitae a ex. Ut in ipsum lacus. Nullam dictum nisi sem, sed sagittis
-                        arcu ultricies ut. Mauris sodales nisl velit. Mauris quis velit at urna bibendum viverra.
-                        Pellentesque sodales laoreet nunc, et blandit libero lobortis eget. Pellentesque
-                        pellentesque sed mauris dictum porttitor. Lorem ipsum dolor sit amet, consectetur
-                        adipiscing elit. Praesent et dolor bibendum diam ullamcorper bibendum vitae a ex. Ut in
-                        ipsum lacus. Nullam dictum nisi sem, sed sagittis arcu ultricies ut. Mauris sodales nisl
-                        velit. Mauris quis velit at urna bibendum viverra. Pellentesque sodales laoreet nunc, et
-                        blandit libero lobortis eget. Pellentesque pellentesque sed mauris dictum porttitor.
+                        É bem simples! Se você for prestador de serviço, basta realizar seu cadastro, indicando a
+                        opção de prestador, preenchendo seus dados e selecionando a(s) sua(s) categoria(s). Logo em
+                        seguida, basta realizar os cadastros do seu horário de atendimento, dos seus atendentes, e
+                        dos serviços que você tem a oferecer. Ao concluir esses passos, basta aguardar para que um
+                        possível cliente marque um horário de atendimento em seu estabelecimento. Você poderá
+                        acessar facilmente essas informações através do seu acesso.
+                        <br />
+                        Você também pode fazer parte da rede exclusiva de Marketplace, podendo cadastrar seus
+                        produtos, caso deseje vendê-los. Essa rede é interna e exclusiva para os prestadores de
+                        serviço. Lá, você também pode acessar os produtos de outros prestadores e comprá-los se
+                        possuir interesse.
+                        <br />
+                        Aos demais usuários, o processo também é bem simples. Basta navegar no sistema, escolher os
+                        estabelecimentos que agradar, selecionar o serviço necessário e realizar o agendamento.
+                        Porém, para confirmar o agendamento, é necessário possuir uma conta em nossa plataforma.
+                        Quando estiver logado, poderá conferir os agendamentos realizados, poderá criar
+                        recomendações, avaliando os serviços e assim ter uma lista de prestadores mais recomendados
+                        na página inicial!
                     </p>
                 </Founders>
             </AboutContainer>

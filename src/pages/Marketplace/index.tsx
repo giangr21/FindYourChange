@@ -295,7 +295,7 @@ const Index: React.FC = () => {
             {!loading ? (
                 <Results>
                     <HeaderResults>
-                        <span>{products.length} produtos encontados. Exibindo todos os resultados.</span>
+                        <span>{products.length} produtos encontrados. Exibindo todos os resultados.</span>
                         <IconButton icon={FaSearch} background="#777777" justIcon action={handleFilter} />
                     </HeaderResults>
                     <ContentResults>

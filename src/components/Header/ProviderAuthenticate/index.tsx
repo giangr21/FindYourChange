@@ -25,12 +25,13 @@ const Index: React.FC = () => {
             <HeaderContent>
                 <div className="links">
                     <Link to="/homeProvider">Dashboard</Link>
-                    <Link to="/configSchedulesProvider">Horarios</Link>
+                    <Link to="/appointmentsProvider">Agendamentos</Link>
+                    <Link to="/configSchedulesProvider">Horários</Link>
                     <Link to="/configServicesProvider">Serviços</Link>
                     <Link to="/configProductsProvider">Produtos</Link>
                     <Link to="/configClerksProvider">Atendentes</Link>
                     <Link to="/marketplace">MarketPlace</Link>
-                    <Link to="/">Home Sistema</Link>
+                    <Link to="/">Home</Link>
                 </div>
                 <Profile>
                     <img src={`data:image/png;base64,${avatarImg}`} alt="asd" />

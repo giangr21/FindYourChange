@@ -31,9 +31,11 @@ interface Appointment {
     id: string;
     notes: string;
     rating: string;
-    serviceType: string;
+    service: {
+        category: string;
+    };
     value: string;
-    dateRelease: string;
+    dateAppointment: string;
     hourFormatted: string;
     user: {
         id: string;
@@ -114,7 +116,7 @@ const HomePageProvider: React.FC = () => {
 
                         appointmentsFormatted.push({
                             ...appointment,
-                            hourFormatted: format(parseISO(appointment.dateRelease), 'HH:mm'),
+                            hourFormatted: format(parseISO(appointment.dateAppointment), 'HH:mm'),
                         });
                     }
                     setAppointments(appointmentsFormatted);
@@ -124,7 +126,6 @@ const HomePageProvider: React.FC = () => {
 
         async function getDashboardInfo(): Promise<void> {
             await api.get(`/provider/dashboardInfo/${user.id}`).then((response) => {
-                console.log(response.data);
                 setDashboardInfo(response.data);
             });
         }
@@ -158,18 +159,18 @@ const HomePageProvider: React.FC = () => {
 
     const morningAppointments = useMemo(() => {
         return appointments.filter((appointment) => {
-            return parseISO(appointment.dateRelease).getHours() < 12;
+            return parseISO(appointment.dateAppointment).getHours() < 12;
         });
     }, [appointments]);
 
     const afternoonAppointments = useMemo(() => {
         return appointments.filter((appointment) => {
-            return parseISO(appointment.dateRelease).getHours() >= 12;
+            return parseISO(appointment.dateAppointment).getHours() >= 12;
         });
     }, [appointments]);
 
     const nextAppointment = useMemo(() => {
-        return appointments.find((appointment) => isAfter(parseISO(appointment.dateRelease), new Date()));
+        return appointments.find((appointment) => isAfter(parseISO(appointment.dateAppointment), new Date()));
     }, [appointments]);
 
     if (loading) {
@@ -241,12 +242,12 @@ const HomePageProvider: React.FC = () => {
                     )}
 
                     <Section>
-                        <strong>Manha</strong>
+                        <strong>Manhã</strong>
 
                         {morningAppointments.length === 0 && <p>Nenhum agendamento neste período</p>}
 
                         {morningAppointments.map((morningAppointment) => (
-                            <Appointment appointmentInfo={morningAppointment} />
+                            <Appointment key={morningAppointment.id} appointmentInfo={morningAppointment} />
                         ))}
                     </Section>
 
@@ -256,7 +257,7 @@ const HomePageProvider: React.FC = () => {
                         {afternoonAppointments.length === 0 && <p>Nenhum agendamento neste período</p>}
 
                         {afternoonAppointments.map((afternoonAppointment) => (
-                            <Appointment appointmentInfo={afternoonAppointment} />
+                            <Appointment key={afternoonAppointment.id} appointmentInfo={afternoonAppointment} />
                         ))}
                     </Section>
                 </Schedule>

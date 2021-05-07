@@ -102,7 +102,7 @@ const ReviewProvider: React.FC<ReviewProps> = ({
         async (id: string) => {
             await api.delete(`/providerRecommendation/${id}`).then(() => {
                 removeRecommendation(id);
-                return toast.success('Recomendação excluida com sucesso!')!;
+                return toast.success('Recomendação excluída com sucesso!')!;
             });
         },
         [removeRecommendation],

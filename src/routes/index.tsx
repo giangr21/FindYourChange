@@ -18,6 +18,7 @@ import Product from '../pages/Product';
 import About from '../pages/About';
 import Clerk from '../pages/Clerk';
 import UserProfile from '../pages/UserProfile';
+import AppointmentsProvider from '../pages/AppointmentsProvider';
 
 const Routes: React.FC = () => (
     <Switch>
@@ -26,11 +27,11 @@ const Routes: React.FC = () => (
         <Route path="/provider" component={Provider} />
         <Route path="/About" component={About} />
 
-        <Route path="/userProfile" privateUserPages component={UserProfile} />
-
         <Route path="/signIn" signPages component={SignIn} />
         <Route path="/signUp" signPages component={SignUp} />
+
         <Route path="/forgotPassword" signPages component={ForgotPassword} />
+        <Route path="/userProfile" privateUserPages component={UserProfile} />
 
         <Route path="/homeProvider" privatePages component={HomePageProvider} />
         <Route path="/providerProfile" privatePages component={ProviderProfile} />
@@ -40,6 +41,7 @@ const Routes: React.FC = () => (
         <Route path="/configSchedulesProvider" privatePages component={ConfigSchedulesProvider} />
         <Route path="/configProductsProvider" privatePages component={ConfigProductsProvider} />
         <Route path="/configClerksProvider" privatePages component={Clerk} />
+        <Route path="/appointmentsProvider" privatePages component={AppointmentsProvider} />
     </Switch>
 );
 

@@ -283,7 +283,7 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                                         marginBottom: '5px',
                                     }}
                                 >
-                                    <Input name="description" placeholder="Descricao" />
+                                    <Input name="description" placeholder="Descrição" />
                                 </div>
                             </Container>
                             {(!edit || changeImg || !productData.productImage) && (

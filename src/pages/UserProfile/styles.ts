@@ -12,7 +12,7 @@ export const Container = styled.div`
 
 export const Row = styled(Rows)`
     @media only screen and (min-width: 0em) and (max-width: 47.99em) {
-        margin-bottom: 30px;
+        margin-bottom: 15px;
         &:last-child {
             margin-bottom: 0;
             padding-bottom: 0;
@@ -21,13 +21,80 @@ export const Row = styled(Rows)`
 `;
 
 export const Col = styled(Cols)`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 30px;
+
     @media only screen and (min-width: 0em) and (max-width: 47.99em) {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
-    /* &:last-child {
-        margin-bottom: 0;
-    } */
+`;
+
+export const ContentAppointments = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 0px 20px;
+
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #f4ede8;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #ff9000;
+        border-radius: 20px;
+        border: 3px solid #ff9000;
+    }
+`;
+
+export const Appointments = styled.div`
+    display: flex;
+    flex-direction: row;
+    height: 180px;
+
+    .left {
+        width: 77%;
+        overflow-y: auto;
+
+        ul {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+    }
+
+    .right {
+        width: 23%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        border-left: 1px solid #f3f4f4;
+
+        .hour {
+            font-size: 16px;
+            color: #f3f4f4;
+        }
+        .day {
+            font-size: 34px;
+            font-weight: bold;
+            margin: 5px 0px;
+        }
+        .month {
+            font-size: 16px;
+            color: #f3f4f4;
+            text-transform: capitalize;
+        }
+    }
 `;
 
 export const Content = styled.div`
