@@ -19,6 +19,8 @@ export interface ClerkData {
     phone: string;
 }
 
+const DAYS_OF_WEEK: string[] = ['Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira'];
+
 const Index: React.FC = () => {
     const { user } = useAuth();
     const [loading, setLoading] = useState(true);
@@ -27,7 +29,8 @@ const Index: React.FC = () => {
     const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [idClerk, setIdClerk] = useState('');
-    const [schedules, setSchedule] = useState([]);
+    const [schedules, setSchedule] = useState<string | any>([]);
+    const [workOnSaturday, setWorkOnSaturday] = useState<boolean>(false);
 
     const getClerks = useCallback(async () => {
         await api
@@ -48,6 +51,9 @@ const Index: React.FC = () => {
             .get(`/schedule/provider/${user.id}`)
             .then((response) => {
                 const weekDaysAndHours = response.data.map((day: any) => {
+                    if (day.dayOfWeek === 'Sabado') {
+                        setWorkOnSaturday(true);
+                    }
                     return {
                         dayOfWeek: day.dayOfWeek,
                         hourStart: day.hourStart,
@@ -65,15 +71,22 @@ const Index: React.FC = () => {
     useEffect(() => {
         getBusinessHours();
         getClerks();
-    }, []);
+    }, [getBusinessHours, getClerks]);
 
     const toggleModal = useCallback((): void => {
-        setModalOpen((prevState) => !prevState);
-        if (isEdit) {
-            setIsEdit(false);
-            setIdClerk('');
+        const clerkSchedule = schedules.map((day: any) => {
+            return day.dayOfWeek;
+        });
+        if (DAYS_OF_WEEK.every((elem: string) => clerkSchedule.includes(elem))) {
+            setModalOpen((prevState) => !prevState);
+            if (isEdit) {
+                setIsEdit(false);
+                setIdClerk('');
+            }
+        } else {
+            toast.error('É necessário cadastrar os horários do estabelecimento de Segunda a Sexta-Feira.');
         }
-    }, [isEdit]);
+    }, [isEdit, schedules]);
 
     const toggleModalDelete = useCallback((id?: string): void => {
         if (id) {
@@ -149,6 +162,7 @@ const Index: React.FC = () => {
                             setIsOpen={toggleModal}
                             edit={isEdit}
                             scheduleHours={schedules}
+                            workOnSaturday={workOnSaturday}
                         />
                     )}
 

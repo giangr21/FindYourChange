@@ -5,7 +5,6 @@ import React, { useRef, useCallback, useState, useEffect, ChangeEvent } from 're
 import { FormHandles } from '@unform/core';
 import { FiCamera, FiCheckSquare } from 'react-icons/fi';
 import { FaWindowClose } from 'react-icons/fa';
-
 import { BsCheckAll } from 'react-icons/bs';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
@@ -24,6 +23,9 @@ import Loading from '../../../components/Loading';
 import { useAuth } from '../../../hooks/Auth';
 import { useMedia } from '../../../util/use-media';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const _ = require('lodash');
+
 interface ModalProps {
     isOpen: boolean;
     setIsOpen: () => void;
@@ -31,6 +33,7 @@ interface ModalProps {
     reloadClerk: () => void;
     clerkId: string;
     scheduleHours: any;
+    workOnSaturday: boolean;
 }
 
 interface ClerkData {
@@ -98,6 +101,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
     isOpen,
     edit,
     scheduleHours,
+    workOnSaturday,
 }) => {
     const mobile = useMedia('(max-width: 760px)');
     const { user } = useAuth();
@@ -127,54 +131,51 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
             });
     }, [clerkId]);
 
-    const initWeekDays = useCallback(
-        (scheduleProvider: any): void => {
-            for (let i = 0; i < scheduleProvider.length; i++) {
-                switch (scheduleProvider[i].dayOfWeek) {
-                    case 'Segunda-Feira':
-                        FORMATTED_WEEK_DAY.seg.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
-                        FORMATTED_WEEK_DAY.seg.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
-                        FORMATTED_WEEK_DAY.seg.dia = scheduleProvider[i].dayOfWeek;
-                        break;
+    const initWeekDays = useCallback((scheduleProvider: any): void => {
+        for (let i = 0; i < scheduleProvider.length; i++) {
+            switch (scheduleProvider[i].dayOfWeek) {
+                case 'Segunda-Feira':
+                    FORMATTED_WEEK_DAY.seg.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
+                    FORMATTED_WEEK_DAY.seg.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
+                    FORMATTED_WEEK_DAY.seg.dia = scheduleProvider[i].dayOfWeek;
+                    break;
 
-                    case 'Terça-Feira':
-                        FORMATTED_WEEK_DAY.ter.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
-                        FORMATTED_WEEK_DAY.ter.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
-                        FORMATTED_WEEK_DAY.ter.dia = scheduleProvider[i].dayOfWeek;
-                        break;
+                case 'Terça-Feira':
+                    FORMATTED_WEEK_DAY.ter.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
+                    FORMATTED_WEEK_DAY.ter.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
+                    FORMATTED_WEEK_DAY.ter.dia = scheduleProvider[i].dayOfWeek;
+                    break;
 
-                    case 'Quarta-Feira':
-                        FORMATTED_WEEK_DAY.qua.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
-                        FORMATTED_WEEK_DAY.qua.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
-                        FORMATTED_WEEK_DAY.qua.dia = scheduleProvider[i].dayOfWeek;
-                        break;
+                case 'Quarta-Feira':
+                    FORMATTED_WEEK_DAY.qua.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
+                    FORMATTED_WEEK_DAY.qua.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
+                    FORMATTED_WEEK_DAY.qua.dia = scheduleProvider[i].dayOfWeek;
+                    break;
 
-                    case 'Quinta-Feira':
-                        FORMATTED_WEEK_DAY.qui.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
-                        FORMATTED_WEEK_DAY.qui.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
-                        FORMATTED_WEEK_DAY.qui.dia = scheduleProvider[i].dayOfWeek;
-                        break;
+                case 'Quinta-Feira':
+                    FORMATTED_WEEK_DAY.qui.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
+                    FORMATTED_WEEK_DAY.qui.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
+                    FORMATTED_WEEK_DAY.qui.dia = scheduleProvider[i].dayOfWeek;
+                    break;
 
-                    case 'Sexta-Feira':
-                        FORMATTED_WEEK_DAY.sex.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
-                        FORMATTED_WEEK_DAY.sex.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
-                        FORMATTED_WEEK_DAY.sex.dia = scheduleProvider[i].dayOfWeek;
-                        break;
+                case 'Sexta-Feira':
+                    FORMATTED_WEEK_DAY.sex.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
+                    FORMATTED_WEEK_DAY.sex.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
+                    FORMATTED_WEEK_DAY.sex.dia = scheduleProvider[i].dayOfWeek;
+                    break;
 
-                    case 'Sabado':
-                        FORMATTED_WEEK_DAY.sab.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
-                        FORMATTED_WEEK_DAY.sab.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
-                        FORMATTED_WEEK_DAY.sab.dia = scheduleProvider[i].dayOfWeek;
-                        break;
+                case 'Sabado':
+                    FORMATTED_WEEK_DAY.sab.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
+                    FORMATTED_WEEK_DAY.sab.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
+                    FORMATTED_WEEK_DAY.sab.dia = scheduleProvider[i].dayOfWeek;
+                    break;
 
-                    default:
-                        toast.error('Falha ao inicializar os horários!');
-                        break;
-                }
+                default:
+                    toast.error('Falha ao inicializar os horários!');
+                    break;
             }
-        },
-        [edit],
-    );
+        }
+    }, []);
 
     const getClerkSchedule = useCallback(async (): Promise<void> => {
         await api
@@ -188,9 +189,16 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
             });
     }, [clerkId, initWeekDays]);
 
+    const updateLimitSaturday = useCallback((): any => {
+        limitWeekHours.sab.inicio = FORMATTED_WEEK_DAY.sab.inicio;
+        limitWeekHours.sab.fim = FORMATTED_WEEK_DAY.sab.fim;
+    }, [limitWeekHours]);
+
     useEffect(() => {
         initWeekDays(scheduleHours);
-        setlimitWeekHours(FORMATTED_WEEK_DAY);
+        const formattedLimit = _.cloneDeep(FORMATTED_WEEK_DAY);
+        setlimitWeekHours(formattedLimit);
+
         if (!edit) {
             setWeekDays(FORMATTED_WEEK_DAY);
             setLoading(false);
@@ -204,7 +212,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
             getClerkSchedule();
             getClerk();
         }
-    }, [edit, getClerk, getClerkSchedule, initWeekDays, scheduleHours]);
+    }, [edit, getClerk, getClerkSchedule, initWeekDays, scheduleHours, setlimitWeekHours]);
 
     const handleWeekData = useCallback(
         (data, dayOfWeek) => {
@@ -361,32 +369,59 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
 
     const validateHours = useCallback(() => {
         let hasError = false;
-        if (weekDays.seg.inicio < limitWeekHours.seg.inicio || weekDays.seg.fim > limitWeekHours.seg.fim) {
+        if (
+            weekDays.seg.inicio < limitWeekHours.seg.inicio ||
+            weekDays.seg.fim > limitWeekHours.seg.fim ||
+            weekDays.seg.inicio > weekDays.seg.fim
+        ) {
             toast.error('Os horários da Segunda-feira devem estar dentro dos horários limites do estabelecimento');
             hasError = true;
         }
-        if (weekDays.ter.inicio < limitWeekHours.ter.inicio || weekDays.ter.fim > limitWeekHours.ter.fim) {
+        if (
+            weekDays.ter.inicio < limitWeekHours.ter.inicio ||
+            weekDays.ter.fim > limitWeekHours.ter.fim ||
+            weekDays.ter.inicio > weekDays.ter.fim
+        ) {
             toast.error('Os horários da Terça-feira devem estar dentro dos horários limites do estabelecimento!');
             hasError = true;
         }
-        if (weekDays.qua.inicio < limitWeekHours.qua.inicio || weekDays.qua.fim > limitWeekHours.qua.fim) {
+        if (
+            weekDays.qua.inicio < limitWeekHours.qua.inicio ||
+            weekDays.qua.fim > limitWeekHours.qua.fim ||
+            weekDays.qua.inicio > weekDays.qua.fim
+        ) {
             toast.error('Os horários da Quarta-feira devem estar dentro dos horários limites do estabelecimento!');
             hasError = true;
         }
-        if (weekDays.qui.inicio < limitWeekHours.qui.inicio || weekDays.qui.fim > limitWeekHours.qui.fim) {
+        if (
+            weekDays.qui.inicio < limitWeekHours.qui.inicio ||
+            weekDays.qui.fim > limitWeekHours.qui.fim ||
+            weekDays.qui.inicio > weekDays.qui.fim
+        ) {
             toast.error('Os horários da Quinta-feira devem estar dentro dos horários limites do estabelecimento!');
             hasError = true;
         }
-        if (weekDays.sex.inicio < limitWeekHours.sex.inicio || weekDays.sex.fim > limitWeekHours.sex.fim) {
+        if (
+            weekDays.sex.inicio < limitWeekHours.sex.inicio ||
+            weekDays.sex.fim > limitWeekHours.sex.fim ||
+            weekDays.sex.inicio > weekDays.sex.fim
+        ) {
             toast.error('Os horários da Sexta-feira devem estar dentro dos horários limites do estabelecimento!');
             hasError = true;
         }
-        if (weekDays.sab.inicio < limitWeekHours.sab.inicio || weekDays.sab.fim > limitWeekHours.sab.fim) {
-            toast.error('Os horários do Sábado devem estar dentro dos horários limites do estabelecimento!');
-            hasError = true;
+        if (workOnSaturday) {
+            updateLimitSaturday();
+            if (
+                weekDays.sab.inicio < limitWeekHours.sab.inicio ||
+                weekDays.sab.fim > limitWeekHours.sab.fim ||
+                weekDays.sab.inicio > weekDays.sab.fim
+            ) {
+                toast.error('Os horários do Sábado devem estar dentro dos horários limites do estabelecimento!');
+                hasError = true;
+            }
         }
         return hasError;
-    }, [weekDays, limitWeekHours]);
+    }, [workOnSaturday, limitWeekHours, weekDays, updateLimitSaturday]);
 
     const mountScheduleToSave = useCallback(() => {
         const scheduleArr: any = [];
@@ -757,45 +792,46 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                     </div>
                                 </Col>
                             </Row>
-
-                            <Row>
-                                <Col xs={6} sm={6} md={6} lg={6}>
-                                    <p>Sábado (Início)</p>
-                                    <div
-                                        style={{
-                                            padding: '2px',
-                                            width: '100%',
-                                        }}
-                                    >
-                                        <TimePicker
-                                            showSecond={false}
-                                            onChange={(e) => handleWeekData(e, DAY_OF_WEEK.SabadoInicio)}
-                                            className="timePicker"
-                                            inputReadOnly
-                                            value={weekDays?.sab.inicio}
-                                            allowEmpty={false}
-                                        />
-                                    </div>
-                                </Col>
-                                <Col xs={6} sm={6} md={6} lg={6}>
-                                    <p>Sábado (Fim)</p>
-                                    <div
-                                        style={{
-                                            padding: '2px',
-                                            width: '100%',
-                                        }}
-                                    >
-                                        <TimePicker
-                                            showSecond={false}
-                                            onChange={(e) => handleWeekData(e, DAY_OF_WEEK.SabadoFim)}
-                                            className="timePicker"
-                                            inputReadOnly
-                                            value={weekDays?.sab.fim}
-                                            allowEmpty={false}
-                                        />
-                                    </div>
-                                </Col>
-                            </Row>
+                            {workOnSaturday && (
+                                <Row>
+                                    <Col xs={6} sm={6} md={6} lg={6}>
+                                        <p>Sábado (Início)</p>
+                                        <div
+                                            style={{
+                                                padding: '2px',
+                                                width: '100%',
+                                            }}
+                                        >
+                                            <TimePicker
+                                                showSecond={false}
+                                                onChange={(e) => handleWeekData(e, DAY_OF_WEEK.SabadoInicio)}
+                                                className="timePicker"
+                                                inputReadOnly
+                                                value={weekDays?.sab.inicio}
+                                                allowEmpty={false}
+                                            />
+                                        </div>
+                                    </Col>
+                                    <Col xs={6} sm={6} md={6} lg={6}>
+                                        <p>Sábado (Fim)</p>
+                                        <div
+                                            style={{
+                                                padding: '2px',
+                                                width: '100%',
+                                            }}
+                                        >
+                                            <TimePicker
+                                                showSecond={false}
+                                                onChange={(e) => handleWeekData(e, DAY_OF_WEEK.SabadoFim)}
+                                                className="timePicker"
+                                                inputReadOnly
+                                                value={weekDays?.sab.fim}
+                                                allowEmpty={false}
+                                            />
+                                        </div>
+                                    </Col>
+                                </Row>
+                            )}
                             {(!edit || changeImg || !clerkData.image) && (
                                 <Container>
                                     <div
