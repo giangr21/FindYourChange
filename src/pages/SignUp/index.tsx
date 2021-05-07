@@ -499,7 +499,7 @@ const SignUp: React.FC = () => {
                         </Button>
                     </Form>
 
-                    <Link to="/">
+                    <Link to="/signIn">
                         <FiArrowLeft />
                         Voltar para login
                     </Link>

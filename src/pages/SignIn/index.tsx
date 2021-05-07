@@ -1,10 +1,11 @@
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { FiLock, FiLogIn, FiMail } from 'react-icons/fi';
+import { FiLock, FiMail } from 'react-icons/fi';
 import * as Yup from 'yup';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { ArrowLeft, ArrowRight } from 'baseui/icon';
 import logoImg from '../../assets/logoPrincipalMobile.png';
 import Button from '../../components/FormComponents/Button';
 import Input from '../../components/FormComponents/Input';
@@ -108,10 +109,16 @@ const SignIn: React.FC = () => {
 
                         <Link to="/forgotPassword">Esqueci minha senha</Link>
                     </Form>
-                    <Link to="/signup">
-                        <FiLogIn />
-                        Criar Conta
-                    </Link>
+                    <div className="links">
+                        <Link to="/signup">
+                            <ArrowRight size={25} />
+                            Criar Conta
+                        </Link>
+                        <Link to="/">
+                            <ArrowLeft size={25} />
+                            Voltar
+                        </Link>
+                    </div>
                 </AnimationContainer>
             </Content>
             <Background />

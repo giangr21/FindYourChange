@@ -43,7 +43,7 @@ export const AnimationContainer = styled.div`
     animation: ${appearFromLeft} 1s;
 
     form {
-        margin: 80px 0;
+        margin: 80px 0px 30px 0px;
         width: 340px;
         text-align: center;
 
@@ -81,21 +81,25 @@ export const AnimationContainer = styled.div`
         }
     }
 
-    > a {
-        color: #ff9000;
-        display: block;
-        margin-top: 24px;
-        text-decoration: none;
-        transition: color 0.2s;
+    .links {
         display: flex;
-        align-items: center;
+        flex-direction: column;
+        a {
+            color: #ff9000;
+            display: block;
+            margin-top: 24px;
+            text-decoration: none;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
 
-        svg {
-            margin-right: 16px;
-        }
+            svg {
+                margin-right: 16px;
+            }
 
-        &:hover {
-            color: ${shade(0.2, '#ff9000')};
+            &:hover {
+                color: ${shade(0.2, '#ff9000')};
+            }
         }
     }
 
