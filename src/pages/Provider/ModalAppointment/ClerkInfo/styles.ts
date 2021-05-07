@@ -13,6 +13,7 @@ export const Container = styled.div<ContainerProps>`
     border-radius: 11px;
     border: ${(props) => (props.isSelectedClerk ? '2px solid #ff9000' : '')};
     padding: 15px 10px;
+    margin-bottom: 10px;
 
     svg {
         margin: 0px 5px;
@@ -21,8 +22,8 @@ export const Container = styled.div<ContainerProps>`
     }
 
     img {
-        width: 56px;
-        height: 56px;
+        width: 66px;
+        height: 66px;
         border-radius: 50%;
         border-color: #ff9000;
     }
@@ -34,16 +35,16 @@ export const Container = styled.div<ContainerProps>`
         color: #2a2a2a;
         height: 100%;
         width: 100%;
+        font-weight: 500;
+
         span {
             align-items: center;
             margin: auto 0;
-            /* margin-bottom: 5px; */
         }
 
-        small {
-            svg {
-                margin-right: 10px;
-            }
+        .row {
+            display: flex;
+            align-items: center;
         }
     }
 `;

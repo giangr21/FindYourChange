@@ -13,13 +13,18 @@ const ClerkInfo: React.FC<ClerkProps> = ({ clerk, isSelectedClerk }): any => (
     <Container isSelectedClerk={isSelectedClerk}>
         <img src={`data:image/png;base64,${clerk.avatar}`} alt="" />
         <div className="name">
-            <span>
-                <RiMapPinUserLine /> {clerk.name}
-            </span>
-            <small>
-                <HiOutlinePhone />
-                {clerk.phone}
-            </small>
+            <div className="row">
+                <span>
+                    <RiMapPinUserLine size={25} />
+                </span>
+                <span>{clerk.name}</span>
+            </div>
+            <div className="row">
+                <small>
+                    <HiOutlinePhone size={25} />
+                </small>
+                <small>{clerk.phone}</small>
+            </div>
         </div>
     </Container>
 );

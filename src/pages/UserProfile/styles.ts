@@ -7,7 +7,7 @@ export const Container = styled.div`
     height: calc(100vh - 230px);
     max-width: 1200px;
     margin: 0 auto;
-    padding: 3px;
+    padding: 5px;
 `;
 
 export const Row = styled(Rows)`

@@ -1,25 +1,31 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    padding: 5px 5px;
+    padding: 5px 5px 22px 5px;
     width: 100%;
     overflow-y: auto;
+
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #f4ede8;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #ff9000;
+        border-radius: 20px;
+        border: 3px solid #ff9000;
+    }
 `;
 
 export const Header = styled.div`
     display: flex;
     height: 40px;
-    align-items: center;
-    justify-content: space-between;
 
     h1 {
         font-weight: 600;
         font-size: 20px;
         color: var(--color-primary);
-    }
-
-    svg {
-        cursor: pointer;
     }
 `;
 

@@ -36,12 +36,6 @@ export const Content = styled.div`
         font-weight: 200;
         padding-bottom: 15px;
     }
-
-    span {
-        color: #e82b43;
-        font-weight: 600;
-        margin-left: 10px;
-    }
 `;
 
 export const Footer = styled.div`

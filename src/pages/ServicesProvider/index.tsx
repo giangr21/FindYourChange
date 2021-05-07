@@ -328,9 +328,15 @@ const Index: React.FC = () => {
                                                         {provider.addressCity} / {provider.addressArea}
                                                     </span>
                                                     <span className="servicesAvailable">
-                                                        {provider.isTattoo && 'Tatuagem'}
-                                                        {provider.isBarber && ' / Barbeiro'}
-                                                        {provider.isPiercing && ' / Piercing'}
+                                                        {provider.isTattoo &&
+                                                            `Tatuagem ${
+                                                                provider.isBarber || provider.isPiercing
+                                                                    ? '/ '
+                                                                    : ''
+                                                            }`}
+                                                        {provider.isBarber &&
+                                                            `Barbeiro ${provider.isPiercing ? '/ ' : ''}`}
+                                                        {provider.isPiercing && 'Piercing'}
                                                     </span>
                                                 </ProviderInfo>
                                                 <ProviderServiceContent>

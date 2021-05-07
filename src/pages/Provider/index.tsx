@@ -3,7 +3,7 @@ import { FormHandles } from '@unform/core';
 import { toast } from 'react-toastify';
 import { Tabs, Tab, FILL } from 'baseui/tabs-motion';
 import { MdCheck, MdEdit } from 'react-icons/md';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 
 import IconButton from '../../components/FormComponents/Button/IconButton';
 import {
@@ -43,6 +43,7 @@ export interface ProviderData {
 const Index: React.FC = () => {
     const { user, isAuthenticated } = useAuth();
     const location = useLocation();
+    const history = useHistory();
     const tabRef2 = useRef<any>();
     const formRef = useRef<FormHandles>(null);
 
@@ -65,9 +66,10 @@ const Index: React.FC = () => {
             })
             .catch((e) => {
                 toast.error('Houve um erro ao buscar dados!');
+                history.push('/allServicesProvider');
                 console.log(e);
             });
-    }, [location.pathname]);
+    }, [location.pathname, history]);
 
     useEffect(() => {
         getProvider();
@@ -137,9 +139,10 @@ const Index: React.FC = () => {
                                 {provider.addressCity} / {provider.addressArea}
                             </span>
                             <span className="servicesAvailable">
-                                {provider.isTattoo && 'Tatuagem'}
-                                {provider.isBarber && ' / Barbeiro'}
-                                {provider.isPiercing && ' / Piercing'}
+                                {provider.isTattoo &&
+                                    `Tatuagem ${provider.isBarber || provider.isPiercing ? '/ ' : ''}`}
+                                {provider.isBarber && `Barbeiro ${provider.isPiercing ? '/ ' : ''}`}
+                                {provider.isPiercing && 'Piercing'}
                             </span>
                         </ProviderInfoHeader>
                     </Header>

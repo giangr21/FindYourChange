@@ -20,7 +20,7 @@ export const Results = styled.div`
     color: #f4ede8;
     width: 100%;
     height: 100%;
-    padding: 7px 15px;
+    padding: 7px;
     border-radius: 10px;
 
     display: flex;
@@ -169,7 +169,7 @@ export const SearchContainer = styled.div<FilterProps>`
     border-radius: 10px;
     transition: all ease 0.7s;
 
-    padding: 20px 10px;
+    padding: 10px;
     align-items: center;
 
     p {

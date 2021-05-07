@@ -600,7 +600,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                             </Container>
                             <Row>
                                 <Col xs={6} sm={6} md={6} lg={6}>
-                                    <p>Segunda-Feira (Início)</p>
+                                    <p>Segunda (Início)</p>
                                     <div
                                         style={{
                                             padding: '2px',
@@ -618,7 +618,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                     </div>
                                 </Col>
                                 <Col xs={6} sm={6} md={6} lg={6}>
-                                    <p>Segunda-Feira (Fim)</p>
+                                    <p>Segunda (Fim)</p>
                                     <div
                                         style={{
                                             padding: '2px',
@@ -639,7 +639,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
 
                             <Row>
                                 <Col xs={6} sm={6} md={6} lg={6}>
-                                    <p>Terça-Feira (Início)</p>
+                                    <p>Terça (Início)</p>
                                     <div
                                         style={{
                                             padding: '2px',
@@ -657,7 +657,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                     </div>
                                 </Col>
                                 <Col xs={6} sm={6} md={6} lg={6}>
-                                    <p>Terça-Feira (Fim)</p>
+                                    <p>Terça (Fim)</p>
                                     <div
                                         style={{
                                             padding: '2px',
@@ -678,7 +678,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
 
                             <Row>
                                 <Col xs={6} sm={6} md={6} lg={6}>
-                                    <p>Quarta-Feira (Início)</p>
+                                    <p>Quarta (Início)</p>
                                     <div
                                         style={{
                                             padding: '2px',
@@ -696,7 +696,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                     </div>
                                 </Col>
                                 <Col xs={6} sm={6} md={6} lg={6}>
-                                    <p>Quarta-Feira (Fim)</p>
+                                    <p>Quarta (Fim)</p>
                                     <div
                                         style={{
                                             padding: '2px',
@@ -717,7 +717,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
 
                             <Row>
                                 <Col xs={6} sm={6} md={6} lg={6}>
-                                    <p>Quinta-Feira (Início)</p>
+                                    <p>Quinta (Início)</p>
                                     <div
                                         style={{
                                             padding: '2px',
@@ -735,7 +735,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                     </div>
                                 </Col>
                                 <Col xs={6} sm={6} md={6} lg={6}>
-                                    <p>Quinta-Feira (Fim)</p>
+                                    <p>Quinta (Fim)</p>
                                     <div
                                         style={{
                                             padding: '2px',
@@ -756,7 +756,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
 
                             <Row>
                                 <Col xs={6} sm={6} md={6} lg={6}>
-                                    <p>Sexta-Feira (Início)</p>
+                                    <p>Sexta (Início)</p>
                                     <div
                                         style={{
                                             padding: '2px',
@@ -774,7 +774,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                     </div>
                                 </Col>
                                 <Col xs={6} sm={6} md={6} lg={6}>
-                                    <p>Sexta-Feira (Fim)</p>
+                                    <p>Sexta (Fim)</p>
                                     <div
                                         style={{
                                             padding: '2px',

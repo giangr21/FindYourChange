@@ -141,6 +141,7 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                         height: '600px',
                         display: 'flex',
                         flexDirection: 'column',
+                        borderRadius: '11px',
                     },
                 },
             }}
@@ -151,14 +152,22 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                 }}
             >
                 <Header>
-                    <h1>Agendamento</h1>
+                    <h1>Agendamento </h1>
+                    <small
+                        style={{
+                            color: '#2a2a2a',
+                            marginLeft: '5px',
+                        }}
+                    >
+                        ({serviceInfo ? serviceInfo.title : ''})
+                    </small>
                 </Header>
             </ModalHeader>
             <Container>
                 <Content>
                     <Clerks>
                         <FormControl
-                            label={() => 'Selecione um atendente'}
+                            label={() => 'Selecione um Atendente: '}
                             overrides={{
                                 Label: {
                                     style: () => ({
@@ -190,7 +199,7 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                     </Clerks>
                     <AppointmentInfo>
                         <FormControl
-                            label={() => 'Selecione uma Data'}
+                            label={() => 'Selecione uma Data: '}
                             overrides={{
                                 Label: {
                                     style: () => ({
@@ -224,7 +233,7 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                             />
                         </FormControl>
                         <FormControl
-                            label={() => 'Selecione um Horário'}
+                            label={() => 'Selecione um Horário:'}
                             overrides={{
                                 Label: {
                                     style: () => ({
@@ -256,7 +265,7 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                             />
                         </FormControl>
                         <FormControl
-                            label={() => 'Comentários Adicionais'}
+                            label={() => 'Comentários Adicionais:'}
                             overrides={{
                                 Label: {
                                     style: () => ({

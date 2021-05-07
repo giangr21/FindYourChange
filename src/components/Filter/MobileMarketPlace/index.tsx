@@ -35,7 +35,7 @@ const MobileHeader: React.FC<MobileProps> = ({
             overrides={{
                 Root: {
                     style: {
-                        zIndex: '1',
+                        zIndex: '10',
                     },
                 },
                 DrawerBody: {
