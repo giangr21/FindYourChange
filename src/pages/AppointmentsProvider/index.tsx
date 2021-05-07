@@ -84,7 +84,11 @@ const Index: React.FC = () => {
                                 <StyledHeadCell>Valor</StyledHeadCell>
                                 <StyledHeadCell>Status</StyledHeadCell>
                                 {appointments.map((appointment: any) => (
-                                    <AppointmentsProviderRow key={appointment.id} data={appointment} />
+                                    <AppointmentsProviderRow
+                                        key={appointment.id}
+                                        data={appointment}
+                                        dataAberta={false}
+                                    />
                                 ))}
                             </StyledTable>
                         </div>

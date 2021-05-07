@@ -6,20 +6,24 @@ import { StyledBodyCell } from '../../../components/Table/styles';
 
 interface AppointmentsProviderRow {
     data: any;
+    dataAberta: boolean;
 }
 
-const AppointmentsProviderRow: React.FC<AppointmentsProviderRow> = ({ data }) => {
+const AppointmentsProviderRow: React.FC<AppointmentsProviderRow> = ({ data, dataAberta }) => {
+    const dataAppointment = moment(data.dateAppointment);
+    const dataAtual = moment(Date.now());
+    if (dataAppointment >= dataAtual) {
+        dataAberta = true;
+    } else {
+        dataAberta = false;
+    }
     return (
         <React.Fragment key={data.id}>
             <StyledBodyCell>{data.service.title}</StyledBodyCell>
             <StyledBodyCell>{data.clerk.name}</StyledBodyCell>
-            <StyledBodyCell>{data.dateAppointment}</StyledBodyCell>
+            <StyledBodyCell>{dataAppointment.format('DD/MM/YYYY - HH:mm')}</StyledBodyCell>
             <StyledBodyCell>{data.service.value}</StyledBodyCell>
-            {data.dateAppointment >= moment(Date.now()) ? (
-                <StyledBodyCell>Aberto</StyledBodyCell>
-            ) : (
-                <StyledBodyCell>Concluído</StyledBodyCell>
-            )}
+            {dataAberta ? <StyledBodyCell>Aberto</StyledBodyCell> : <StyledBodyCell>Concluído</StyledBodyCell>}
         </React.Fragment>
     );
 };
