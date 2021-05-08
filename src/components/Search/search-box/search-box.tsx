@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchIcon } from './SearchIcon';
+import { SearchIcon } from './searchIcon';
 import { StyledForm, StyledInput, StyledCategoryName, StyledSearchButton } from './search-box.style';
 
 interface Props {
