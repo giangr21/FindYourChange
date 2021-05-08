@@ -31,7 +31,7 @@ import Input from '../../components/FormComponents/Input/MainSearchInput';
 import { ProductData } from '../ConfigProductsProvider';
 import api from '../../services/api';
 import Loading from '../../components/Loading';
-import { Row as Rows, Col as Column } from '../../components/FlexBox/FlexBox';
+import { Row as Rows, Col as Column } from '../../components/FlexBox/flexBox';
 import PaginationButton from '../../components/FormComponents/Button/PaginationButton';
 import FilterMobile from '../../components/Filter/MobileMarketPlace';
 import { useMedia } from '../../util/use-media';

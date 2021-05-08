@@ -7,7 +7,7 @@ import { withStyle } from 'baseui';
 import { BsDot } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { MdDeleteForever } from 'react-icons/md';
-import { Row as Rows, Col as Column } from '../../components/FlexBox/FlexBox';
+import { Row as Rows, Col as Column } from '../../components/FlexBox/flexBox';
 import IconButton from '../../components/FormComponents/Button/IconButton';
 import IconButtonProvider from '../../components/FormComponents/Button/IconButtonProvider';
 import {

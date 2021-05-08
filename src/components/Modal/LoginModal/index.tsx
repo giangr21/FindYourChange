@@ -13,7 +13,7 @@ import Button from '../../FormComponents/Button';
 import Input from '../../FormComponents/Input';
 import getValidationErrors from '../../../util/getValidationErrors';
 
-import { useAuth } from '../../../hooks/Auth';
+import { useAuth } from '../../../hooks/auth';
 
 interface ModalProps {
     children?: any;

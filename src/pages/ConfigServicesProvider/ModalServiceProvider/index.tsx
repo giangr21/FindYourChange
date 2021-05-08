@@ -10,7 +10,7 @@ import * as Yup from 'yup';
 import { withStyle } from 'baseui';
 import { toast } from 'react-toastify';
 
-import { Row as Rows, Col as Column } from '../../../components/FlexBox/FlexBox';
+import { Row as Rows, Col as Column } from '../../../components/FlexBox/flexBox';
 import { Form, Container, Header, Footer, Content } from './styles';
 import Input from '../../../components/FormComponents/Input/InputModal';
 import Modal from '../../../components/Modal';
@@ -19,7 +19,7 @@ import IconButton from '../../../components/FormComponents/Button/IconButton';
 import api from '../../../services/api';
 import getValidationErrors from '../../../util/getValidationErrors';
 import Loading from '../../../components/Loading';
-import { useAuth } from '../../../hooks/Auth';
+import { useAuth } from '../../../hooks/auth';
 import { useMedia } from '../../../util/use-media';
 
 interface ModalProps {

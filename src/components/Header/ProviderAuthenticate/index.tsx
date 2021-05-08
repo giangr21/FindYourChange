@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FiPower } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { Header, HeaderContent, Profile } from './styles';
-import { useAuth } from '../../../hooks/Auth';
+import { useAuth } from '../../../hooks/auth';
 import api from '../../../services/api';
 
 const Index: React.FC = () => {
@@ -25,7 +25,7 @@ const Index: React.FC = () => {
             <HeaderContent>
                 <div className="links">
                     <Link to="/homeProvider">Dashboard</Link>
-                    <Link to="/appointmentsProvider">Agendamentos</Link>
+                    {/* <Link to="/appointmentsProvider">Agendamentos</Link> */}
                     <Link to="/configSchedulesProvider">Horários</Link>
                     <Link to="/configServicesProvider">Serviços</Link>
                     <Link to="/configProductsProvider">Produtos</Link>

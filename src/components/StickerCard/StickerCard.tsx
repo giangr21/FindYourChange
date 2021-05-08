@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
-import { IosArrowUp } from './Icons/IosArrowUp';
-import { IosArrowDown } from './Icons/IosArrowDown';
+import { IosArrowUp } from './Icons/iosArrowUp';
+import { IosArrowDown } from './Icons/iosArrowDown';
 import {
     Card,
     TopInfo,
@@ -13,7 +13,7 @@ import {
     Note,
     Text,
     Link,
-} from './StickerCard.style';
+} from './stickerCard.style';
 
 const StickerCard = ({
     title,

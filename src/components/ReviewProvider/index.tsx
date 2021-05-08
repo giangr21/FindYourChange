@@ -8,7 +8,7 @@ import { useLocation } from 'react-router-dom';
 import { Container, HeaderReview, NewRecommendation, Reviews, Review } from './styles';
 import IconButton from '../FormComponents/Button/IconButton';
 import api from '../../services/api';
-import { useAuth } from '../../hooks/Auth';
+import { useAuth } from '../../hooks/auth';
 
 interface Review {
     id: string;

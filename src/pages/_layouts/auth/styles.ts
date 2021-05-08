@@ -19,7 +19,7 @@ export const Wrapper = styled.div<WrapperProps>`
         }
     }
 
-    .content {
+    /* .content {
         height: ${(props) => (props.mobile ? 'calc(100% - 80px)' : 'calc(100% - 104px)')};
-    }
+    } */
 `;

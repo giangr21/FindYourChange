@@ -15,7 +15,7 @@ import Radio from '../../../components/FormComponents/Radio';
 import api from '../../../services/api';
 import getValidationErrors from '../../../util/getValidationErrors';
 import Select from '../../../components/FormComponents/Select';
-import { useAuth } from '../../../hooks/Auth';
+import { useAuth } from '../../../hooks/auth';
 import Loading from '../../../components/Loading';
 import { useMedia } from '../../../util/use-media';
 

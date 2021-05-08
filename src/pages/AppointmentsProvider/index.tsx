@@ -5,7 +5,7 @@ import { Container, SubHeader } from './styles';
 import api from '../../services/api';
 import Loading from '../../components/Loading';
 import { StyledHeadCell, StyledTable } from '../../components/Table/styles';
-import { useAuth } from '../../hooks/Auth';
+import { useAuth } from '../../hooks/auth';
 import AppointmentsProviderRow from './AppointmentsProviderRow';
 
 export interface AppointmentData {

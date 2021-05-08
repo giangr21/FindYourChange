@@ -18,7 +18,7 @@ import api from '../../../services/api';
 import getValidationErrors from '../../../util/getValidationErrors';
 import Loading from '../../../components/Loading';
 import Select from '../../../components/FormComponents/Select';
-import { useAuth } from '../../../hooks/Auth';
+import { useAuth } from '../../../hooks/auth';
 import { useMedia } from '../../../util/use-media';
 
 interface ModalProps {

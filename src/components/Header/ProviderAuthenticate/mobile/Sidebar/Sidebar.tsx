@@ -11,10 +11,10 @@ import { withRouter } from 'react-router-dom';
 // import { BookIcon } from 'assets/icons/BookIcon';
 // import { CouponIcon } from 'assets/icons/CouponIcon';
 // import { PencilIcon } from 'assets/icons/PencilIcon';
-import { SidebarWrapper, NavLink, MenuWrapper, Svg, LogoutBtn } from './Sidebar.style';
-import { useAuth } from '../../../../../hooks/Auth';
-import { LogoutIcon } from '../Icons/LogoutIcon';
-import { DashboardIcon } from '../Icons/DashboardIcon';
+import { SidebarWrapper, NavLink, MenuWrapper, Svg, LogoutBtn } from './sidebar.style';
+import { useAuth } from '../../../../../hooks/auth';
+import { LogoutIcon } from '../Icons/logoutIcon';
+import { DashboardIcon } from '../Icons/dashboardIcon';
 
 const sidebarMenus = [
     {

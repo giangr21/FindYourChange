@@ -10,7 +10,7 @@ import ModalClerkProvider from './ModalClerkProvider';
 import api from '../../services/api';
 import Loading from '../../components/Loading';
 import { StyledHeadCell, StyledTable } from '../../components/Table/styles';
-import { useAuth } from '../../hooks/Auth';
+import { useAuth } from '../../hooks/auth';
 
 export interface ClerkData {
     id: string;

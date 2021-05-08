@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import Drawer, { ANCHOR } from '../../../Drawer/Drawer';
+import Drawer, { ANCHOR } from '../../../Drawer/drawer';
 import logo from '../../../../assets/logoPrincipalMobile.png';
 
 import { DrawerWrapper, DrawerIcon, CloseButton, TopbarWrapper } from './styles';
 import Logo from '../../../Logo/logo';
-import { MenuIcon } from './Icons/MenuIcon';
-import { ArrowLeftRound } from './Icons/ArrowLeftRound';
-import Sidebar from './Sidebar/Sidebar';
+import { MenuIcon } from './Icons/menuIcon';
+import { ArrowLeftRound } from './Icons/arrowLeftRound';
+import Sidebar from './Sidebar/sidebar';
 import NavUserImg from '../../NavUserImg';
 
 const MobileHeader: React.FC = () => {

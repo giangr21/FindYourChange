@@ -35,10 +35,8 @@ const Product: React.FC = () => {
             .get(`/products/${idProduct}`)
             .then(async (response) => {
                 console.log(response.data);
-                if (response.data.productImage) {
-                    const imgNamePhotoData = await api.get(`storage/base64/${response.data.productImage}`);
-                    setImgPhotoMin(imgNamePhotoData.data);
-                }
+                const imgNamePhotoData = await api.get(`storage/base64/${response.data.productImage}`);
+                setImgPhotoMin(imgNamePhotoData.data);
                 setProduct(response.data);
                 setLoading(false);
             })

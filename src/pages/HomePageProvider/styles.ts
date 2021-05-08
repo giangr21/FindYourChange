@@ -5,25 +5,35 @@ export const Container = styled.div``;
 
 export const InfoHeader = styled.div`
     max-width: 1120px;
-    margin: 18px auto;
+    margin: 18px;
+    @media (min-width: 1200px) {
+        margin: 18px auto;
+    }
 `;
 
 export const Content = styled.main`
-    @media (max-width: 990px) {
-        display: none;
-    }
     max-width: 1120px;
     margin: 0px auto;
-    padding: 30px 0px;
+    padding: 20px 0px;
     display: flex;
+
+    @media (max-width: 1200px) {
+        margin: 0px 18px;
+    }
+
+    @media (max-width: 990px) {
+        flex-direction: column;
+    }
 `;
 
 export const Schedule = styled.div`
     flex: 1;
     margin-right: 120px;
+
     h1 {
-        font-size: 36px;
+        font-size: 34px;
     }
+
     p {
         margin-top: 8px;
         color: #ff9000;
@@ -43,6 +53,11 @@ export const Schedule = styled.div`
             background: #ff9000;
             margin: 0 8px;
         }
+    }
+
+    @media (max-width: 990px) {
+        order: 2;
+        margin-right: 0px;
     }
 `;
 
@@ -65,7 +80,15 @@ export const Section = styled.section`
 `;
 
 export const Calendar = styled.aside`
+    @media (max-width: 990px) {
+        margin: 0px auto 20px;
+    }
+
     width: 380px;
+
+    @media (max-width: 410px) {
+        width: 100%;
+    }
     .DayPicker {
         background: #28262e;
         border-radius: 10px;

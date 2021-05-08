@@ -20,7 +20,7 @@ import api from '../../../services/api';
 import getValidationErrors from '../../../util/getValidationErrors';
 import InputMask from '../../../components/FormComponents/Input/InputModalMask';
 import Loading from '../../../components/Loading';
-import { useAuth } from '../../../hooks/Auth';
+import { useAuth } from '../../../hooks/auth';
 import { useMedia } from '../../../util/use-media';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires

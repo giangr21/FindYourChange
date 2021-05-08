@@ -9,7 +9,7 @@ import { ArrowLeft, ArrowRight } from 'baseui/icon';
 import logoImg from '../../assets/logoPrincipalMobile.png';
 import Button from '../../components/FormComponents/Button';
 import Input from '../../components/FormComponents/Input';
-import { useAuth } from '../../hooks/Auth';
+import { useAuth } from '../../hooks/auth';
 import getValidationErrors from '../../util/getValidationErrors';
 import { Background, Container, Content, AnimationContainer, Row } from './styles';
 import Radio from '../../components/FormComponents/Radio';

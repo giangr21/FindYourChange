@@ -44,5 +44,17 @@ export const Container = styled.div`
         section {
             display: flex;
         }
+
+        @media (max-width: 440px) {
+            flex-direction: column;
+
+            img {
+                margin-bottom: 7px;
+            }
+
+            section {
+                text-align: center;
+            }
+        }
     }
 `;

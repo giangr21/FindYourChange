@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route as ReactDOMRoute, RouteProps as ReactDOMRouteProps, Redirect } from 'react-router-dom';
-import { useAuth } from '../hooks/Auth';
+import { useAuth } from '../hooks/auth';
 import DefaultLayout from '../pages/_layouts/default';
 import AuthLayout from '../pages/_layouts/auth';
 
