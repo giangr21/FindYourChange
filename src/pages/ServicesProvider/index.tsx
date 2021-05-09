@@ -61,7 +61,7 @@ const Index: React.FC = () => {
     const location = useLocation();
     const [loading, setLoading] = useState(true);
     const [providers, setProviders] = useState([]);
-    const [showFilter, setShowFilter] = useState(true);
+    const [showFilter, setShowFilter] = useState(!mobile);
     const [page, setPage] = useState(1);
     const [cities, setCities] = useState([]);
 

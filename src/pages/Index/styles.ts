@@ -112,6 +112,65 @@ export const SearchWrapper = styled.div(
     }),
 );
 
+export const BoxMobile = styled.div`
+    @media only screen and (min-width: 850px) {
+        display: none;
+    }
+    width: 100%;
+
+    .underHeader {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 370px;
+        span {
+            margin-bottom: 20px;
+            letter-spacing: 0.1px;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0px 20px;
+            font-size: 18px;
+        }
+
+        .services {
+            padding: 0px 20px;
+            display: flex;
+            justify-content: center;
+
+            .service {
+                small {
+                    line-height: 16px;
+                    text-align: center;
+                    overflow: hidden;
+                    width: 89px;
+                    display: block;
+                    color: #fff;
+                    margin: 0 auto;
+                    font-weight: 500;
+                    letter-spacing: 0.5px;
+                }
+            }
+        }
+    }
+
+    background: rgb(49, 46, 56);
+    background: linear-gradient(100deg, rgba(49, 46, 56, 1) 0%, rgba(255, 144, 0, 1) 90%);
+`;
+
+export const IconService = styled.div`
+    width: 102px;
+    height: 102px;
+    border-radius: 50%;
+    background: hsla(0, 0%, 100%, 0.08);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    text-align: center;
+    margin: 0px 10px 5px;
+`;
+
 export const Container = styled.div`
     height: 100%;
     width: 100%;
@@ -122,14 +181,23 @@ export const Recommendation = styled.div`
     max-width: 1200px;
     margin: 0 auto;
     padding-top: 20px;
-    height: 360px;
+    /* height: 360px; */
     /* max-height: 500px; */
     background-color: #ffffff;
 
     .title {
         color: #3a3a3a;
         font-weight: 500;
-        font-size: 30px;
+        font-size: 28px;
+        padding-left: 10px;
+        width: 100%;
+        margin-bottom: 5px;
+
+        @media only screen and (max-width: 850px) {
+            padding-left: 0px;
+            display: flex;
+            justify-content: center;
+        }
     }
 
     .separator {
@@ -144,6 +212,12 @@ export const RecommendationContent = styled.div`
     justify-content: center;
     flex-direction: row;
     color: #3a3a3a;
+
+    @media only screen and (max-width: 850px) {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 `;
 
 export const RecommendationCard = styled.div`
@@ -151,8 +225,13 @@ export const RecommendationCard = styled.div`
     flex-direction: column;
     width: 300px;
     cursor: pointer;
-    /* text-align: center; */
     align-items: center;
+    padding: 0px 5px;
+    margin-bottom: 15px;
+
+    @media only screen and (max-width: 850px) {
+        margin-bottom: 10px;
+    }
 
     img {
         width: 275px;

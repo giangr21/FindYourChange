@@ -28,7 +28,7 @@ export const Button = styled.button<ButtonProps>`
 
     color: #fff;
     border: 0;
-    border-radius: 4px;
+    border-radius: 7px;
 
     background: ${(props) => props.background || ''} !important;
 

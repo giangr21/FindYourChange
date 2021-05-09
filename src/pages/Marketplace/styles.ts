@@ -224,9 +224,9 @@ export const ContentSearch = styled(Unform)`
     }
 
     input[type='radio']:after {
-        width: 10px;
-        height: 10px;
-        border-radius: 10px;
+        width: 16px;
+        height: 16px;
+        border-radius: 11px;
         top: -2px;
         left: -1px;
         position: relative;
@@ -238,9 +238,9 @@ export const ContentSearch = styled(Unform)`
     }
 
     input[type='radio']:checked:after {
-        width: 10px;
-        height: 10px;
-        border-radius: 10px;
+        width: 16px;
+        height: 16px;
+        border-radius: 11px;
         top: -2px;
         left: -1px;
         position: relative;

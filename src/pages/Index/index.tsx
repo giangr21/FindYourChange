@@ -2,8 +2,11 @@
 import React, { useEffect, useState } from 'react';
 
 import { useHistory } from 'react-router-dom';
+import { FaSearch } from 'react-icons/fa';
 import {
     Box,
+    BoxMobile,
+    IconService,
     Image,
     Content,
     Title,
@@ -21,6 +24,11 @@ import card3 from '../../assets/reco3.png';
 import imageUrl from '../../assets/background.jpg';
 import Search from '../../components/Search';
 import api from '../../services/api';
+import { Tattoo } from './IconsMobile/iconTattoo';
+import { Barber } from './IconsMobile/iconBarber';
+import { Piercing } from './IconsMobile/iconPiercing';
+import Input from '../../components/FormComponents/Input/MainSearchInputMobile';
+import Header from '../../components/Header';
 
 const Index: React.FC = () => {
     const history = useHistory();
@@ -56,6 +64,33 @@ const Index: React.FC = () => {
                     </SearchWrapper>
                 </Content>
             </Box>
+            <BoxMobile>
+                <Header />
+                <div className="underHeader">
+                    <span> Agende online os serviços mais próximos de você..</span>
+                    <Input icon={FaSearch} placeholder="Pesquisar Serviço " />
+                    <div className="services">
+                        <div className="service">
+                            <IconService>
+                                <Barber />
+                            </IconService>
+                            <small>Barbearia</small>
+                        </div>
+                        <div className="service">
+                            <IconService>
+                                <Tattoo />
+                            </IconService>
+                            <small>Tatuagem</small>
+                        </div>
+                        <div className="service">
+                            <IconService>
+                                <Piercing />
+                            </IconService>
+                            <small>Piercing</small>
+                        </div>
+                    </div>
+                </div>
+            </BoxMobile>
             <Container>
                 <Recommendation>
                     <span className="title">Serviços Recomendados</span>

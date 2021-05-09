@@ -16,17 +16,17 @@ api.interceptors.request.use(
 );
 
 api.interceptors.response.use(undefined, (err) => {
-    const {
-        config,
-        response: { status },
-    } = err;
-    if (status === 401) {
-        localStorage.removeItem('@FYC:token');
-        localStorage.removeItem('@FYC:user');
-        window.location.reload();
-        window.alert('Faça seu login novamente!');
+    if (err && err.response) {
+        const {
+            response: { status },
+        } = err;
+        if (status === 401) {
+            localStorage.removeItem('@FYC:token');
+            localStorage.removeItem('@FYC:user');
+            window.location.reload();
+            window.alert('Faça seu login novamente!');
+        }
     }
-
     return Promise.reject(err);
 });
 
