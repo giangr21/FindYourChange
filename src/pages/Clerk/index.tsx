@@ -73,11 +73,15 @@ const Index: React.FC = () => {
         getClerks();
     }, [getBusinessHours, getClerks]);
 
-    const toggleModal = useCallback((): void => {
+    const handleOpenModals = useCallback((): boolean => {
         const clerkSchedule = schedules.map((day: any) => {
             return day.dayOfWeek;
         });
-        if (DAYS_OF_WEEK.every((elem: string) => clerkSchedule.includes(elem))) {
+        return DAYS_OF_WEEK.every((elem: string) => clerkSchedule.includes(elem));
+    }, []);
+
+    const toggleModal = useCallback((): void => {
+        if (handleOpenModals()) {
             setModalOpen((prevState) => !prevState);
             if (isEdit) {
                 setIsEdit(false);
@@ -86,7 +90,7 @@ const Index: React.FC = () => {
         } else {
             toast.error('É necessário cadastrar os horários do estabelecimento de Segunda a Sexta-Feira.');
         }
-    }, [isEdit, schedules]);
+    }, [handleOpenModals, isEdit]);
 
     const toggleModalDelete = useCallback((id?: string): void => {
         if (id) {
@@ -108,11 +112,18 @@ const Index: React.FC = () => {
         }
     }, [clerks, idClerk]);
 
-    const handleEdit = useCallback((id: string) => {
-        setModalOpen((prevState) => !prevState);
-        setIdClerk(id);
-        setIsEdit(true);
-    }, []);
+    const handleEdit = useCallback(
+        (id: string) => {
+            if (handleOpenModals()) {
+                setModalOpen((prevState) => !prevState);
+                setIdClerk(id);
+                setIsEdit(true);
+            } else {
+                toast.error('É necessário cadastrar os horários do estabelecimento de Segunda a Sexta-Feira.');
+            }
+        },
+        [handleOpenModals],
+    );
 
     return (
         <>
