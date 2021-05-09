@@ -11,7 +11,7 @@ import ModalDeleteProduct from '../../components/Modal/DeleteModal';
 import Filter from '../../components/Filter';
 import Input from '../../components/FormComponents/Input/InputModal';
 import Select from '../../components/FormComponents/Select';
-import { useAuth } from '../../hooks/auth';
+import { useAuth } from '../../hooks/authentication';
 import { StyledHeadCell, StyledTable } from '../../components/Table/styles';
 
 export interface ProductData {

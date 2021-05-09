@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { styled as styledBaseUi } from 'baseui';
 import { Form as Unform } from '@unform/web';
-import Images from '../../components/Image/Image';
+import Images from '../../components/Image';
 
 interface FilterProps {
     showFilter: boolean;

@@ -19,7 +19,7 @@ import {
 import api from '../../services/api';
 import ModalLogin from '../../components/Modal/LoginModal';
 import ModalHandleAppointment from './ModalAppointment';
-import { useAuth } from '../../hooks/auth';
+import { useAuth } from '../../hooks/authentication';
 import Loading from '../../components/Loading';
 import ReviewProvider from '../../components/ReviewProvider';
 import GalleryProvider from '../../components/GalleryProvider';

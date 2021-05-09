@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import React, { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { SearchBox } from './search-box/search-box';
+import { SearchBox } from './search-box';
 
 interface Props {
     minimal?: boolean;

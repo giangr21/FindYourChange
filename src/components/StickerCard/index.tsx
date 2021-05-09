@@ -1,19 +1,8 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
-import { IosArrowUp } from './Icons/iosArrowUp';
-import { IosArrowDown } from './Icons/iosArrowDown';
-import {
-    Card,
-    TopInfo,
-    TitleWrapper,
-    Title,
-    SubTitle,
-    IconBox,
-    Price,
-    Note,
-    Text,
-    Link,
-} from './stickerCard.style';
+import { IosArrowUp } from './Icons/iconArrowUp';
+import { IosArrowDown } from './Icons/iconArrowDown';
+import { Card, TopInfo, TitleWrapper, Title, SubTitle, IconBox, Price, Note, Text, Link } from './styles';
 
 const StickerCard = ({
     title,

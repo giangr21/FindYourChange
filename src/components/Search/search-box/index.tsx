@@ -1,6 +1,6 @@
 import React from 'react';
-import { SearchIcon } from './searchIcon';
-import { StyledForm, StyledInput, StyledCategoryName, StyledSearchButton } from './search-box.style';
+import { SearchIcon } from './iconSearch';
+import { StyledForm, StyledInput, StyledCategoryName, StyledSearchButton } from './styles';
 
 interface Props {
     onEnter: (e: React.SyntheticEvent) => void;
