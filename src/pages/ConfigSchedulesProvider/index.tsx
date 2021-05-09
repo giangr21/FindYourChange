@@ -8,7 +8,7 @@ import ScheduleRow from './ScheduleRow/index';
 import ModalScheduleProvider from './ModalScheduleProvider';
 import ModalScheduleDelete from '../../components/Modal/DeleteModal';
 import api from '../../services/api';
-import { useAuth } from '../../hooks/auth';
+import { useAuth } from '../../hooks/authentication';
 import Loading from '../../components/Loading';
 import { StyledHeadCell, StyledTable } from '../../components/Table/styles';
 

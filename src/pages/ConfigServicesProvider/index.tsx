@@ -3,7 +3,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { FaPlus, FaSearch } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { withStyle } from 'baseui';
-import { Row as Rows, Col as Column } from '../../components/FlexBox/flexBox';
+import { Row as Rows, Col as Column } from '../../components/FlexBox';
 
 import { Container, HeaderContainer, Content, SubHeader } from './styles';
 import IconButton from '../../components/FormComponents/Button/IconButton';
@@ -11,7 +11,7 @@ import ModalServiceProvider from './ModalServiceProvider';
 import ModalDeleteService from '../../components/Modal/DeleteModal';
 import ServiceCard from '../../components/ServiceCard';
 import api from '../../services/api';
-import { useAuth } from '../../hooks/auth';
+import { useAuth } from '../../hooks/authentication';
 import Loading from '../../components/Loading';
 import Filter from '../../components/Filter';
 import Input from '../../components/FormComponents/Input/InputModal';

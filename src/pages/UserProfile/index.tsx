@@ -21,7 +21,7 @@ import Button from '../../components/FormComponents/Button';
 import Input from '../../components/FormComponents/Input';
 import getValidationErrors from '../../util/getValidationErrors';
 import { Container, AvatarInput, Content, ContentAppointments, Appointments, Row, Col } from './styles';
-import { useAuth } from '../../hooks/auth';
+import { useAuth } from '../../hooks/authentication';
 import InputMask from '../../components/FormComponents/Input/InputMask';
 import Loading from '../../components/Loading';
 import IconButtonProvider from '../../components/FormComponents/Button/IconButtonProvider';

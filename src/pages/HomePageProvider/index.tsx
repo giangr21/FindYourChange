@@ -8,17 +8,17 @@ import DayPicker, { DayModifiers } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { withStyle } from 'baseui';
 import { useStyletron } from 'styletron-react';
-import { Row as Rows, Col as Column } from '../../components/FlexBox/flexBox';
+import { Row as Rows, Col as Column } from '../../components/FlexBox';
 
 import { Container, InfoHeader, Content, Schedule, Section, Calendar } from './styles';
-import { useAuth } from '../../hooks/auth';
+import { useAuth } from '../../hooks/authentication';
 import api from '../../services/api';
 import Loading from '../../components/Loading';
-import StickerCard from '../../components/StickerCard/stickerCard';
-import { CoinIcon } from '../../components/StickerCard/Icons/coinIcon';
-import { CartIconBig } from '../../components/StickerCard/Icons/cartIconBig';
-import { UserIcon } from '../../components/StickerCard/Icons/userIcon';
-import { DeliveryIcon } from '../../components/StickerCard/Icons/deliveryIcon';
+import StickerCard from '../../components/StickerCard';
+import { CoinIcon } from '../../components/StickerCard/Icons/iconCoin';
+import { CartIconBig } from '../../components/StickerCard/Icons/iconCard';
+import { UserIcon } from '../../components/StickerCard/Icons/iconUser';
+import { DeliveryIcon } from '../../components/StickerCard/Icons/iconDelivery';
 import NextAppointment from '../../components/DashboardAppointment/NextAppointment';
 import Appointment from '../../components/DashboardAppointment/Appointment';
 

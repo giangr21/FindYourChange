@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FiPower } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { Header, HeaderContent, Profile } from './styles';
-import { useAuth } from '../../../hooks/auth';
+import { useAuth } from '../../../hooks/authentication';
 import api from '../../../services/api';
 
 const Index: React.FC = () => {

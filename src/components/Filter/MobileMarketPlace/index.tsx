@@ -1,10 +1,10 @@
 import React from 'react';
 import { FaCheck, FaSearch } from 'react-icons/fa';
 import { MdDeleteForever } from 'react-icons/md';
-import Drawer, { ANCHOR } from '../../Drawer/drawer';
+import Drawer, { ANCHOR } from '../../Drawer';
 
 import { CloseButton, SidebarWrapper, ContentSearch } from './styles';
-import { ArrowLeftRound } from '../../Header/ProviderAuthenticate/mobile/Icons/arrowLeftRound';
+import { ArrowLeftRound } from '../../Header/ProviderAuthenticate/mobile/Icons/iconArrowLeft';
 import Input from '../../FormComponents/Input/MainSearchInput';
 import Radio from '../../FormComponents/Radio';
 import { FooterFilter } from '../../../pages/Marketplace/styles';
