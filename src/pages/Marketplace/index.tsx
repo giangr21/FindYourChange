@@ -162,8 +162,15 @@ const Index: React.FC = () => {
     );
 
     const handleFilter = useCallback(() => {
+        if (mobile) {
+            setTimeout(() => {
+                formRef.current?.setFieldValue('cities', 'Todas');
+                formRef.current?.setFieldValue('category', 'Todas');
+                formRef.current?.setFieldValue('price', 'Todos');
+            }, 300);
+        }
         setShowFilter((prevState) => !prevState);
-    }, []);
+    }, [mobile]);
 
     return (
         <Content>

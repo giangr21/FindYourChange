@@ -81,8 +81,6 @@ const MobileHeader: React.FC<MobileProps> = ({
                                 width: '100%',
                                 display: 'flex',
                                 flexDirection: 'column',
-                                // alignItems: 'center',
-                                // justifyContent: 'center',
                             }}
                             name="cities"
                             options={cities}

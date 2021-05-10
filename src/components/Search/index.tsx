@@ -19,7 +19,7 @@ const Search: React.FC<Props> = ({ onSubmit, ...props }) => {
             pathname: `/allServicesProvider/`,
             state: valueSearchBox,
         });
-    }, [valueSearchBox]);
+    }, [history, valueSearchBox]);
 
     const handleOnChange = useCallback((e: any) => {
         e.preventDefault();

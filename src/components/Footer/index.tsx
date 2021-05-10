@@ -13,7 +13,7 @@ const Index: React.FC = () => {
         <Container>
             <Content>
                 <Up mobile={mobile}>
-                    <Link to="/home">Início</Link>
+                    <Link to="/">Início</Link>
                     <Link to="/allServicesProvider">Navegar</Link>
                     <Link to="/about">Sobre Nós</Link>
                     <Link to="/homeProvider">Dashboard</Link>

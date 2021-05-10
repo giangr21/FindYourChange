@@ -158,6 +158,7 @@ const Index: React.FC = () => {
 
     useEffect(() => {
         if (location.state) {
+            console.log(location);
             getProviderByServiceName(location.state);
         } else {
             getProviders();
@@ -165,8 +166,15 @@ const Index: React.FC = () => {
     }, [page]);
 
     const handleFilter = useCallback(() => {
+        if (mobile) {
+            setTimeout(() => {
+                formRef.current?.setFieldValue('cities', 'Todas');
+                formRef.current?.setFieldValue('category', 'Todas');
+                formRef.current?.setFieldValue('price', 'Todos');
+            }, 300);
+        }
         setShowFilter((prevState) => !prevState);
-    }, []);
+    }, [mobile]);
 
     const handleClickProvider = useCallback(
         (id: string) => {

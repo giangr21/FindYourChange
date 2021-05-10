@@ -202,12 +202,7 @@ const Index: React.FC = () => {
                                                 <span>{serviceIsNotPopular.title}</span>
                                                 <p>{serviceIsNotPopular.description}</p>
                                             </div>
-                                            <div
-                                                style={{
-                                                    marginLeft: 'auto',
-                                                    marginRight: '10px',
-                                                }}
-                                            >
+                                            <div className="valueAndPrice">
                                                 <span>
                                                     {Intl.NumberFormat('pt-BR', {
                                                         style: 'currency',
