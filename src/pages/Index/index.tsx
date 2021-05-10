@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable func-names */
 import React, { useEffect, useState } from 'react';
 
@@ -70,19 +72,43 @@ const Index: React.FC = () => {
                     <span> Agende online os serviços mais próximos de você..</span>
                     <Input icon={FaSearch} placeholder="Pesquisar Serviço " />
                     <div className="services">
-                        <div className="service">
+                        <div
+                            onClick={() => {
+                                history.push({
+                                    pathname: `/allServicesProvider/`,
+                                    state: 'isBarber',
+                                });
+                            }}
+                            className="service"
+                        >
                             <IconService>
                                 <Barber />
                             </IconService>
                             <small>Barbearia</small>
                         </div>
-                        <div className="service">
+                        <div
+                            onClick={() => {
+                                history.push({
+                                    pathname: `/allServicesProvider/`,
+                                    state: 'isTattoo',
+                                });
+                            }}
+                            className="service"
+                        >
                             <IconService>
                                 <Tattoo />
                             </IconService>
                             <small>Tatuagem</small>
                         </div>
-                        <div className="service">
+                        <div
+                            onClick={() => {
+                                history.push({
+                                    pathname: `/allServicesProvider/`,
+                                    state: 'isPiercing',
+                                });
+                            }}
+                            className="service"
+                        >
                             <IconService>
                                 <Piercing />
                             </IconService>

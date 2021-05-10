@@ -16,8 +16,7 @@ export const Up = styled.div<IsMobile>`
     a {
         text-decoration: none;
         font-size: 13px;
-        font-weight: 500;
-        color: black;
+        color: #fff;
         margin: ${(props) => (props.mobile ? '0px 10px' : '0px 20px')};
     }
 `;
@@ -44,13 +43,13 @@ export const Left = styled.div<IsMobile>`
     p {
         font-size: ${(props) => (props.mobile ? '10px' : '12px')};
         font-weight: 500;
-        color: black;
+        color: #fff;
         text-align: center;
     }
 
     img {
         height: ${(props) => (props.mobile ? '50px' : '70px')};
-        margin-right: 20px;
+        margin-right: 10px;
         margin-left: 10px;
     }
 `;

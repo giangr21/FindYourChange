@@ -205,6 +205,18 @@ export const ContentSearch = styled(Unform)`
     overflow-y: auto;
     padding: 0px 3px;
 
+    ::-webkit-scrollbar {
+        width: 2px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #f4ede8;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #ff9000;
+        border-radius: 20px;
+        border: 3px solid #ff9000;
+    }
+
     .separator {
         height: 2px;
         background-color: #3a3a3a;

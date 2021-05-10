@@ -123,6 +123,7 @@ export const BoxMobile = styled.div`
         flex-direction: column;
         justify-content: center;
         height: 370px;
+
         span {
             margin-bottom: 20px;
             letter-spacing: 0.1px;
