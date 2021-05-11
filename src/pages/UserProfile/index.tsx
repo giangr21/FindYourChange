@@ -236,7 +236,7 @@ const UserProfile: React.FC = () => {
                             overrides={{
                                 TabPanel: {
                                     style: () => ({
-                                        height: mobile ? '93%' : '100%',
+                                        height: mobile ? '90%' : '100%',
                                         padding: '5px',
                                     }),
                                 },
@@ -313,7 +313,7 @@ const UserProfile: React.FC = () => {
                             overrides={{
                                 TabPanel: {
                                     style: () => ({
-                                        height: mobile ? '93%' : '100%',
+                                        height: mobile ? '90%' : '100%',
                                         padding: '5px',
                                     }),
                                 },
@@ -498,7 +498,7 @@ const UserProfile: React.FC = () => {
                             overrides={{
                                 TabPanel: {
                                     style: () => ({
-                                        height: mobile ? '93%' : '100%',
+                                        height: mobile ? '90%' : '100%',
                                         padding: '5px',
                                     }),
                                 },

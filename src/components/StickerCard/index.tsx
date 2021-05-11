@@ -14,6 +14,7 @@ const StickerCard = ({
     note,
     link,
     linkText,
+    onClick,
 }: any): any => {
     return (
         <Card>
@@ -45,7 +46,7 @@ const StickerCard = ({
                 ''
             )}
             {link !== '' && (
-                <Link href={link} target="_blank">
+                <Link onClick={() => onClick()} href={link}>
                     {linkText}
                 </Link>
             )}

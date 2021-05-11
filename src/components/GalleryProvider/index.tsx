@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useCallback, useState } from 'react';
-import { toast } from 'react-toastify';
 import { Col, Row } from 'react-styled-flexboxgrid';
 import { Container } from './styles';
 import api from '../../services/api';

@@ -153,14 +153,7 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
             >
                 <Header>
                     <h1>Agendamento </h1>
-                    <small
-                        style={{
-                            color: '#2a2a2a',
-                            marginLeft: '5px',
-                        }}
-                    >
-                        ({serviceInfo ? serviceInfo.title : ''})
-                    </small>
+                    <small>({serviceInfo ? serviceInfo.title : ''})</small>
                 </Header>
             </ModalHeader>
             <Container>
@@ -307,7 +300,7 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                 <InfoModal
                     isOpen={resumeConfirmationModal}
                     setIsOpen={toggleResumeModal}
-                    width="425px"
+                    width={mobile ? '100%' : '425px'}
                     height="390px"
                 >
                     <AppointmentResume>

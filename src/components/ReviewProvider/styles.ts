@@ -28,6 +28,7 @@ export const Review = styled.div`
     margin: 15px 0px;
     padding: 10px 15px;
     border-radius: 10px;
+    overflow-y: auto;
 
     span {
         color: #ff9000;

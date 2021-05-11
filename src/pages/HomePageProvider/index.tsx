@@ -8,6 +8,7 @@ import DayPicker, { DayModifiers } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { withStyle } from 'baseui';
 import { useStyletron } from 'styletron-react';
+import { useHistory } from 'react-router-dom';
 import { Row as Rows, Col as Column } from '../../components/FlexBox';
 
 import { Container, InfoHeader, Content, Schedule, Section, Calendar } from './styles';
@@ -66,6 +67,7 @@ const Row = withStyle(Rows, () => ({
 
 const HomePageProvider: React.FC = () => {
     const { user } = useAuth();
+    const history = useHistory();
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [monthAvailability, setMonthAvailability] = useState<MonthAvailability[]>([]);
@@ -146,7 +148,7 @@ const HomePageProvider: React.FC = () => {
     }, [currentMonth, monthAvailability]);
 
     const selectedDateAsText = useMemo(() => {
-        return format(selectedDate, "'Dia' dd 'de' MMM", {
+        return format(selectedDate, "'Dia' dd 'de' MMMM", {
             locale: ptBR,
         });
     }, [selectedDate]);
@@ -188,8 +190,8 @@ const HomePageProvider: React.FC = () => {
                             icon={<CoinIcon />}
                             price={dashboardInfo.services}
                             note=""
-                            link="#"
-                            linkText="Mais Detalhes"
+                            link="/configServicesProvider"
+                            linkText="Todos os serviços"
                         />
                     </Col>
                     <Col lg={3} sm={6} xs={12} className={mb30}>
@@ -199,8 +201,8 @@ const HomePageProvider: React.FC = () => {
                             icon={<DeliveryIcon />}
                             price={dashboardInfo.products}
                             note=""
-                            link="#"
-                            linkText="Mais Detalhes"
+                            link="/configProductsProvider"
+                            linkText="Todos os produtos"
                         />
                     </Col>
                     <Col lg={3} sm={6} xs={12}>
@@ -210,8 +212,8 @@ const HomePageProvider: React.FC = () => {
                             icon={<CartIconBig />}
                             price={dashboardInfo.appointments}
                             note=""
-                            link="#"
-                            linkText="Mais Detalhes"
+                            link="/appointmentsProvider"
+                            linkText="Histórico Completo"
                         />
                     </Col>
                     <Col lg={3} sm={6} xs={12}>
@@ -221,6 +223,12 @@ const HomePageProvider: React.FC = () => {
                             icon={<UserIcon />}
                             price={dashboardInfo.providerRecommendations}
                             note=""
+                            onClick={() => {
+                                history.push({
+                                    pathname: `/provider/${user.id}`,
+                                    state: 'redirectToProviderRecommendations',
+                                });
+                            }}
                             link="#"
                             linkText="Mais Detalhes"
                         />
@@ -234,7 +242,13 @@ const HomePageProvider: React.FC = () => {
                     <p>
                         {isToday(selectedDate) && <span>Hoje</span>}
                         <span>{selectedDateAsText}</span>
-                        <span>{selectedWeekDay}</span>
+                        <span
+                            style={{
+                                textTransform: 'capitalize',
+                            }}
+                        >
+                            {selectedWeekDay}
+                        </span>
                     </p>
 
                     {isToday(selectedDate) && nextAppointment && (
