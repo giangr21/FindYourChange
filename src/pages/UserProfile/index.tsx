@@ -5,7 +5,6 @@ import { FiCamera, FiLock, FiMail, FiUser } from 'react-icons/fi';
 import { Tabs, Tab, ORIENTATION, FILL } from 'baseui/tabs-motion';
 import { ThemeProvider, createTheme, lightThemePrimitives } from 'baseui';
 import { Card, StyledBody, StyledAction } from 'baseui/card';
-import { Button as ButtonBaseUi } from 'baseui/button';
 import ReactStars from 'react-rating-stars-component';
 import { ListItem, ListItemLabel, ARTWORK_SIZES } from 'baseui/list';
 import { ArrowRight } from 'baseui/icon';
@@ -16,17 +15,29 @@ import 'moment/locale/pt-br';
 
 import { useHistory } from 'react-router-dom';
 import { FaAngleDoubleRight, FaPhoneAlt } from 'react-icons/fa';
+import { MdDeleteForever } from 'react-icons/md';
 import api from '../../services/api';
 import Button from '../../components/FormComponents/Button';
 import Input from '../../components/FormComponents/Input';
 import getValidationErrors from '../../util/getValidationErrors';
-import { Container, AvatarInput, Content, ContentAppointments, Appointments, Row, Col } from './styles';
+import {
+    Container,
+    AvatarInput,
+    Content,
+    ContentAppointments,
+    Appointments,
+    Row,
+    Col,
+    UserReviews,
+} from './styles';
 import { useAuth } from '../../hooks/authentication';
 import InputMask from '../../components/FormComponents/Input/InputMask';
 import Loading from '../../components/Loading';
 import IconButtonProvider from '../../components/FormComponents/Button/IconButtonProvider';
+import { useMedia } from '../../util/use-media';
 
 const UserProfile: React.FC = () => {
+    const mobile = useMedia('(max-width: 760px)');
     const formRef = useRef<FormHandles>(null);
     const history = useHistory();
     const { user } = useAuth();
@@ -204,7 +215,7 @@ const UserProfile: React.FC = () => {
                         onChange={({ activeKey }) => {
                             setTabNumber(activeKey);
                         }}
-                        orientation={ORIENTATION.vertical}
+                        orientation={mobile ? ORIENTATION.horizontal : ORIENTATION.vertical}
                         fill={FILL.fixed}
                         activateOnFocus
                         overrides={{
@@ -221,8 +232,18 @@ const UserProfile: React.FC = () => {
                             },
                         }}
                     >
-                        <Tab title="Editar Cadastro">
-                            <Content>
+                        <Tab
+                            overrides={{
+                                TabPanel: {
+                                    style: () => ({
+                                        height: mobile ? '93%' : '100%',
+                                        padding: '5px',
+                                    }),
+                                },
+                            }}
+                            title="Editar Cadastro"
+                        >
+                            <Content center={!mobile}>
                                 <Form initialData={profileInfo} ref={formRef} onSubmit={handleSubmit}>
                                     <h1>Minha Conta</h1>
                                     <AvatarInput>
@@ -278,12 +299,27 @@ const UserProfile: React.FC = () => {
                                             />
                                         </Col>
                                     </Row>
-
-                                    <Button type="submit">Confirmar mudanças</Button>
+                                    <div
+                                        style={{
+                                            marginBottom: '35px',
+                                        }}
+                                    >
+                                        <Button type="submit">Confirmar mudanças</Button>
+                                    </div>
                                 </Form>
                             </Content>
                         </Tab>
-                        <Tab title="Agendamentos">
+                        <Tab
+                            overrides={{
+                                TabPanel: {
+                                    style: () => ({
+                                        height: mobile ? '93%' : '100%',
+                                        padding: '5px',
+                                    }),
+                                },
+                            }}
+                            title="Agendamentos"
+                        >
                             <ContentAppointments>
                                 <h1
                                     style={{
@@ -298,6 +334,7 @@ const UserProfile: React.FC = () => {
                                             <Card
                                                 overrides={{
                                                     Root: { style: { width: '100%', borderRadius: '10px' } },
+                                                    Contents: { style: { margin: '10px' } },
                                                 }}
                                                 title={appointment.service.title}
                                             >
@@ -457,13 +494,18 @@ const UserProfile: React.FC = () => {
                                 </Row>
                             </ContentAppointments>
                         </Tab>
-                        <Tab title="Reviews">
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                }}
-                            >
+                        <Tab
+                            overrides={{
+                                TabPanel: {
+                                    style: () => ({
+                                        height: mobile ? '93%' : '100%',
+                                        padding: '5px',
+                                    }),
+                                },
+                            }}
+                            title="Reviews"
+                        >
+                            <UserReviews>
                                 <h1
                                     style={{
                                         margin: '0 auto 20px',
@@ -509,26 +551,18 @@ const UserProfile: React.FC = () => {
                                                     />
                                                 </StyledBody>
                                                 <StyledAction>
-                                                    <ButtonBaseUi
-                                                        overrides={{
-                                                            BaseButton: {
-                                                                style: {
-                                                                    width: '100%',
-                                                                    background: '#ff9000',
-                                                                    borderRadius: '10px',
-                                                                },
-                                                            },
-                                                        }}
-                                                        onClick={() => handleDeleteReview(review.id)}
-                                                    >
-                                                        Excluir Registro
-                                                    </ButtonBaseUi>
+                                                    <IconButtonProvider
+                                                        icon={MdDeleteForever}
+                                                        title="Excluir Registro"
+                                                        background="#ff9000"
+                                                        action={() => handleDeleteReview(review.id)}
+                                                    />
                                                 </StyledAction>
                                             </Card>
                                         </Col>
                                     ))}
                                 </Row>
-                            </div>
+                            </UserReviews>
                         </Tab>
                     </Tabs>
                 </ThemeProvider>
