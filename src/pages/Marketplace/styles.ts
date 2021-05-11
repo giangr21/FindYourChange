@@ -150,13 +150,6 @@ export const ProductPrice = styled.span`
     }
 `;
 
-export const Pagination = styled.div`
-    height: 40px;
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 5px;
-`;
-
 export const SearchContainer = styled.div<FilterProps>`
     display: flex;
     flex-direction: column;

@@ -101,8 +101,12 @@ const Index: React.FC = () => {
                     console.log(err);
                 }
             }
+
+            if (mobile) {
+                setShowFilter((prevState) => !prevState);
+            }
         },
-        [page, renderEstablishmentsList],
+        [page, mobile, renderEstablishmentsList],
     );
 
     const clearFilter = useCallback(async () => {

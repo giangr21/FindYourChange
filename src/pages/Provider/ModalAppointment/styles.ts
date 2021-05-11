@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    padding: 5px 5px 22px 5px;
+    padding: 5px 5px 10px 5px;
     width: 100%;
     overflow-y: auto;
 
@@ -19,13 +19,16 @@ export const Container = styled.div`
 `;
 
 export const Header = styled.div`
-    display: flex;
     height: 40px;
 
     h1 {
         font-weight: 600;
         font-size: 20px;
         color: var(--color-primary);
+    }
+
+    small {
+        color: '#2a2a2a';
     }
 `;
 

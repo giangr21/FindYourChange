@@ -3,6 +3,7 @@
 import React from 'react';
 import { FaWindowClose } from 'react-icons/fa';
 import ReactModal from 'react-modal';
+import { useMedia } from '../../../util/use-media';
 import { Container, Header } from './styles';
 
 interface ModalProps {
@@ -13,6 +14,8 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen, imageUrl }) => {
+    const mobile = useMedia('(max-width: 760px)');
+
     return (
         <ReactModal
             shouldCloseOnOverlayClick={!false}
@@ -30,7 +33,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen, imageUrl }) => {
                     background: '#fff',
                     color: 'black',
                     borderRadius: '8px',
-                    width: 'auto',
+                    width: mobile ? '100%' : 'auto',
                     border: 'none',
                     padding: '10px',
                     height: '75%',

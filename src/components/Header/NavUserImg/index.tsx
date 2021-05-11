@@ -32,9 +32,6 @@ const NavUserImg: React.FC = () => {
                                 <NavLink to="/allServicesProvider" exact={false} onClick={close}>
                                     Navegar
                                 </NavLink>
-                                <NavLink to="/about" exact={false} onClick={close}>
-                                    Sobre nós
-                                </NavLink>
                             </>
                         )}
                         {user.isProvider && (
