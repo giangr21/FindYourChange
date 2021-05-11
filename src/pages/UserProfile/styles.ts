@@ -2,6 +2,10 @@ import { shade } from 'polished';
 import styled from 'styled-components';
 import { Row as Rows, Col as Cols } from 'react-styled-flexboxgrid';
 
+interface ContentProps {
+    center: boolean;
+}
+
 export const Container = styled.div`
     width: 100%;
     height: calc(100vh - 230px);
@@ -39,6 +43,30 @@ export const ContentAppointments = styled.div`
     height: 100%;
     overflow-y: auto;
     padding: 0px 20px;
+
+    h1 {
+        text-align: center;
+    }
+
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #f4ede8;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #ff9000;
+        border-radius: 20px;
+        border: 3px solid #ff9000;
+    }
+`;
+
+export const UserReviews = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     ::-webkit-scrollbar {
         width: 5px;
@@ -97,7 +125,7 @@ export const Appointments = styled.div`
     }
 `;
 
-export const Content = styled.div`
+export const Content = styled.div<ContentProps>`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -107,17 +135,20 @@ export const Content = styled.div`
     overflow-y: auto;
 
     form {
-        margin: 80px 0 30px;
-        padding: 0px 10px;
-        width: 70%;
-        text-align: center;
+        height: 100%;
+        width: 90%;
         display: flex;
         flex-direction: column;
+        padding: 0px 10px;
+        text-align: center;
+        justify-content: ${(props) => (props.center ? 'center' : undefined)};
+
         h1 {
             font-size: 20px;
             text-align: left;
             margin-bottom: 24px;
         }
+
         button {
             background: #ff9000;
             height: 56px;
@@ -133,6 +164,7 @@ export const Content = styled.div`
                 background: ${shade(0.2, '#ff9000')};
             }
         }
+
         a {
             color: #f4ede8;
             display: block;
