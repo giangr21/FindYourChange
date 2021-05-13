@@ -68,21 +68,13 @@ const Index: React.FC = () => {
     const [dateTime, setDateTime] = useState('');
 
     const renderEstablishmentsList = useCallback(async (establishmentsList: any) => {
-        const providersArr: any = [];
-        const providerServices: any = [];
         for (let index = 0; index < establishmentsList.data.length; index++) {
-            const { provider, service } = establishmentsList.data[index];
-            console.log(service);
-            const servicesIsArray = service instanceof Array;
-            if (!servicesIsArray) {
-                providerServices.push(service);
-            }
-            provider.services = servicesIsArray ? service : providerServices;
+            const provider = establishmentsList.data[index];
 
             for (let i = 0; i < provider.services.length; i++) {
-                const currService = provider.services[i];
-                const valueToDiscount = currService.value * (currService.disccount / 100);
-                currService.totalValueWithDisccount = (currService.value - valueToDiscount).toFixed(2);
+                const service = provider.services[i];
+                const valueToDiscount = service.value * (service.disccount / 100);
+                service.totalValueWithDisccount = (service.value - valueToDiscount).toFixed(2);
             }
 
             if (provider.providerImages.length > 0) {
@@ -92,18 +84,15 @@ const Index: React.FC = () => {
 
                 provider.defaultImg = imgBase64;
             }
-            providersArr.push(provider);
         }
 
-        console.log(providersArr);
         setLoading(false);
-        setProviders(providersArr);
+        setProviders(establishmentsList.data);
     }, []);
 
     const formFilterSubmit = useCallback(
         async (filter: any) => {
             setLoading(true);
-            console.log(filter);
             try {
                 filter.dateTime = dateTime;
                 await api.post('/provider', { ...filter, page }).then(async (response) => {
@@ -157,6 +146,7 @@ const Index: React.FC = () => {
 
     async function getProviders(): Promise<void> {
         await api.post('/provider', { page }).then(async (result) => {
+            console.log(result.data, 'first');
             await renderEstablishmentsList(result);
         });
     }
@@ -176,7 +166,6 @@ const Index: React.FC = () => {
 
     useEffect(() => {
         if (location.state) {
-            console.log(location);
             getProviderByServiceName(location.state);
         } else {
             getProviders();
@@ -322,11 +311,13 @@ const Index: React.FC = () => {
                                     title="Limpar"
                                     background="#777777"
                                     action={clearFilter}
+                                    type="button"
                                 />
                                 <IconButton
                                     icon={FaCheck}
                                     title="Aplicar"
                                     background="#00A57C"
+                                    type="button"
                                     action={() => formRef.current?.submitForm()}
                                 />
                             </FooterFilter>
