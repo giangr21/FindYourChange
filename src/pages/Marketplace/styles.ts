@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { styled as styledBaseUi } from 'baseui';
 import { Form as Unform } from '@unform/web';
-import Images from '../../components/Image/Image';
+import Images from '../../components/Image';
 
 interface FilterProps {
     showFilter: boolean;
@@ -150,13 +150,6 @@ export const ProductPrice = styled.span`
     }
 `;
 
-export const Pagination = styled.div`
-    height: 40px;
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 5px;
-`;
-
 export const SearchContainer = styled.div<FilterProps>`
     display: flex;
     flex-direction: column;
@@ -205,6 +198,18 @@ export const ContentSearch = styled(Unform)`
     overflow-y: auto;
     padding: 0px 3px;
 
+    ::-webkit-scrollbar {
+        width: 2px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #f4ede8;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #ff9000;
+        border-radius: 20px;
+        border: 3px solid #ff9000;
+    }
+
     .separator {
         height: 2px;
         background-color: #3a3a3a;
@@ -224,9 +229,9 @@ export const ContentSearch = styled(Unform)`
     }
 
     input[type='radio']:after {
-        width: 10px;
-        height: 10px;
-        border-radius: 10px;
+        width: 16px;
+        height: 16px;
+        border-radius: 11px;
         top: -2px;
         left: -1px;
         position: relative;
@@ -238,9 +243,9 @@ export const ContentSearch = styled(Unform)`
     }
 
     input[type='radio']:checked:after {
-        width: 10px;
-        height: 10px;
-        border-radius: 10px;
+        width: 16px;
+        height: 16px;
+        border-radius: 11px;
         top: -2px;
         left: -1px;
         position: relative;

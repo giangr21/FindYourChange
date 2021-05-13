@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 
 import IconButton from '../FormComponents/Button/IconButton';
 import { Container, HeaderFilter, Form, FooterFilter } from './styles';
-import { useAuth } from '../../hooks/auth';
+import { useAuth } from '../../hooks/authentication';
 // import Select from '../Select';
 
 interface FilterProps {

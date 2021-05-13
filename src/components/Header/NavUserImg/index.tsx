@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import Popover, { PLACEMENT } from '../../Popover/popover';
+import Popover, { PLACEMENT } from '../../Popover';
 import { NavLink, UserDropdowItem, LogoutBtn, ProfileImg, Image } from './styles';
-import { useAuth } from '../../../hooks/auth';
+import { useAuth } from '../../../hooks/authentication';
 import api from '../../../services/api';
 import { useMedia } from '../../../util/use-media';
 
@@ -31,9 +31,6 @@ const NavUserImg: React.FC = () => {
                                 </NavLink>
                                 <NavLink to="/allServicesProvider" exact={false} onClick={close}>
                                     Navegar
-                                </NavLink>
-                                <NavLink to="/about" exact={false} onClick={close}>
-                                    Sobre nós
                                 </NavLink>
                             </>
                         )}

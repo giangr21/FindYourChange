@@ -1,5 +1,5 @@
 import { styled } from 'baseui';
-import Images from '../Image/Image';
+import Images from '../Image';
 
 export const ProductCardWrapper = styled('div', ({ $theme }) => ({
     height: '100%',

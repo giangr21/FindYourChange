@@ -8,7 +8,7 @@ import { BsDot } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { MdDeleteForever } from 'react-icons/md';
 import moment from 'moment';
-import { Row as Rows, Col as Column } from '../../components/FlexBox/flexBox';
+import { Row as Rows, Col as Column } from '../../components/FlexBox';
 import IconButton from '../../components/FormComponents/Button/IconButton';
 import IconButtonProvider from '../../components/FormComponents/Button/IconButtonProvider';
 import {
@@ -62,7 +62,7 @@ const Index: React.FC = () => {
     const location = useLocation();
     const [loading, setLoading] = useState(true);
     const [providers, setProviders] = useState<any>([]);
-    const [showFilter, setShowFilter] = useState(true);
+    const [showFilter, setShowFilter] = useState(!mobile);
     const [page, setPage] = useState(1);
     const [cities, setCities] = useState([]);
     const [dateTime, setDateTime] = useState('');
@@ -115,8 +115,12 @@ const Index: React.FC = () => {
                     console.log(err);
                 }
             }
+
+            if (mobile) {
+                setShowFilter((prevState) => !prevState);
+            }
         },
-        [dateTime, page, renderEstablishmentsList],
+        [page, dateTime, mobile, renderEstablishmentsList],
     );
 
     const clearFilter = useCallback(async () => {
@@ -172,6 +176,7 @@ const Index: React.FC = () => {
 
     useEffect(() => {
         if (location.state) {
+            console.log(location);
             getProviderByServiceName(location.state);
         } else {
             getProviders();
@@ -179,8 +184,15 @@ const Index: React.FC = () => {
     }, [page]);
 
     const handleFilter = useCallback(() => {
+        if (mobile) {
+            setTimeout(() => {
+                formRef.current?.setFieldValue('cities', 'Todas');
+                formRef.current?.setFieldValue('category', 'Todas');
+                formRef.current?.setFieldValue('price', 'Todos');
+            }, 300);
+        }
         setShowFilter((prevState) => !prevState);
-    }, []);
+    }, [mobile]);
 
     const handleClickProvider = useCallback(
         (id: string) => {

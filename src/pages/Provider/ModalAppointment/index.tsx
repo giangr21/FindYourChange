@@ -14,11 +14,11 @@ import { Check } from 'baseui/icon';
 import { MdCheck, MdClose } from 'react-icons/md';
 import { FaCheck } from 'react-icons/fa';
 import api from '../../../services/api';
-import { Row as Rows, Col as Column } from '../../../components/FlexBox/flexBox';
+import { Row as Rows, Col as Column } from '../../../components/FlexBox';
 import InfoModal from '../../../components/Modal/InfoModal';
 import { Container, Header, Content, Clerks, AppointmentInfo, AppointmentResume, Footer } from './styles';
 import { useMedia } from '../../../util/use-media';
-import { useAuth } from '../../../hooks/auth';
+import { useAuth } from '../../../hooks/authentication';
 import ClerkInfo from './ClerkInfo';
 import IconButton from '../../../components/FormComponents/Button/IconButton';
 import Loading from '../../../components/Loading';
@@ -153,14 +153,7 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
             >
                 <Header>
                     <h1>Agendamento </h1>
-                    <small
-                        style={{
-                            color: '#2a2a2a',
-                            marginLeft: '5px',
-                        }}
-                    >
-                        ({serviceInfo ? serviceInfo.title : ''})
-                    </small>
+                    <small>({serviceInfo ? serviceInfo.title : ''})</small>
                 </Header>
             </ModalHeader>
             <Container>
@@ -307,7 +300,7 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                 <InfoModal
                     isOpen={resumeConfirmationModal}
                     setIsOpen={toggleResumeModal}
-                    width="425px"
+                    width={mobile ? '100%' : '425px'}
                     height="390px"
                 >
                     <AppointmentResume>

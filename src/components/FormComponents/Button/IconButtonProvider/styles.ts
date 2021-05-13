@@ -9,9 +9,9 @@ export const Container = styled.div`
 `;
 
 export const Button = styled.button<ButtonProps>`
-    width: 50%;
     margin: 0 auto;
     height: 36px;
+    padding: 10px;
 
     margin-top: 0px !important;
     font-size: 15px;

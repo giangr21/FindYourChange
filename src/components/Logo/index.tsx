@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 // import Router from 'next/router';
-import { LogoBox, LogoImage } from './logo.style';
+import { LogoBox, LogoImage } from './styles';
 
 type LogoProps = {
     imageUrl: string;

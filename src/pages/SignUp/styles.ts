@@ -176,11 +176,9 @@ export const AnimationContainer = styled.div`
 `;
 
 export const Background = styled.div`
-    /* @media (min-width: 1024px) {
-    } */
-        flex: 1;
-        background: url(${signUpBackground}) no-repeat center;
-        background-size: cover;
+    flex: 1;
+    background: url(${signUpBackground}) no-repeat center;
+    background-size: cover;
 `;
 
 export const Row = styled.div`

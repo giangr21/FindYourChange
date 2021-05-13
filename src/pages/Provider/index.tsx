@@ -19,7 +19,7 @@ import {
 import api from '../../services/api';
 import ModalLogin from '../../components/Modal/LoginModal';
 import ModalHandleAppointment from './ModalAppointment';
-import { useAuth } from '../../hooks/auth';
+import { useAuth } from '../../hooks/authentication';
 import Loading from '../../components/Loading';
 import ReviewProvider from '../../components/ReviewProvider';
 import GalleryProvider from '../../components/GalleryProvider';
@@ -54,6 +54,10 @@ const Index: React.FC = () => {
     const [activeKy, setActiveKy] = useState<any>('0');
     const [newRecommendation, setNewRecommendation] = useState(false);
     const [specificServiceInfo, setSpecificServiceInfo] = useState({});
+    const [latlng, setLatLng] = useState({
+        lat: 0,
+        lng: 0,
+    });
 
     const getProvider = useCallback(async () => {
         const splitedPathName = location.pathname.split('/');
@@ -62,14 +66,25 @@ const Index: React.FC = () => {
             .get(`/provider/specificProvider/${idProvider}`)
             .then(async (response) => {
                 setProvider(response.data);
+                await api
+                    .get(`https://olog-api.jclan.com.br/street/${response.data.addressZipCode}`)
+                    .then((rsp) => {
+                        setLatLng({
+                            lat: Number(rsp.data.latitude),
+                            lng: Number(rsp.data.longitude),
+                        });
+                    });
                 setLoading(false);
+                if (location.state === 'redirectToProviderRecommendations') {
+                    tabRef2.current.click();
+                }
             })
             .catch((e) => {
                 toast.error('Houve um erro ao buscar dados!');
                 history.push('/allServicesProvider');
                 console.log(e);
             });
-    }, [location.pathname, history]);
+    }, [location.pathname, location.state, history]);
 
     useEffect(() => {
         getProvider();
@@ -176,12 +191,7 @@ const Index: React.FC = () => {
                                                 <span>{serviceIsPopular.title}</span>
                                                 <p>{serviceIsPopular.description}</p>
                                             </div>
-                                            <div
-                                                style={{
-                                                    marginLeft: 'auto',
-                                                    marginRight: '10px',
-                                                }}
-                                            >
+                                            <div className="valueAndPrice">
                                                 <span>
                                                     {Intl.NumberFormat('pt-BR', {
                                                         style: 'currency',
@@ -207,12 +217,7 @@ const Index: React.FC = () => {
                                                 <span>{serviceIsNotPopular.title}</span>
                                                 <p>{serviceIsNotPopular.description}</p>
                                             </div>
-                                            <div
-                                                style={{
-                                                    marginLeft: 'auto',
-                                                    marginRight: '10px',
-                                                }}
-                                            >
+                                            <div className="valueAndPrice">
                                                 <span>
                                                     {Intl.NumberFormat('pt-BR', {
                                                         style: 'currency',
@@ -232,7 +237,13 @@ const Index: React.FC = () => {
                                         </ProviderService>
                                     ))}
                                 </Tab>
-                                <Tab tabRef={tabRef2} title="RECOMENDAÇÕES">
+                                <Tab
+                                    overrides={{
+                                        TabPanel: { style: { padding: '5px' } },
+                                    }}
+                                    tabRef={tabRef2}
+                                    title="RECOMENDAÇÕES"
+                                >
                                     <ReviewProvider
                                         providerRecommendations={provider.providerRecommendations}
                                         newRecommendation={newRecommendation}
@@ -257,9 +268,13 @@ const Index: React.FC = () => {
                             </Tabs>
                         </ProviderInfo>
                         <InfoContainer>
-                            <img
-                                src="https://i0.wp.com/www.cssscript.com/wp-content/uploads/2018/03/Simple-Location-Picker.png?fit=561%2C421&ssl=1"
-                                alt=""
+                            <iframe
+                                title="map"
+                                src={`https://maps.google.com/maps?q=${latlng.lat},${latlng.lng}&hl=es;z=14&amp;&output=embed`}
+                                width="100%"
+                                height="250px"
+                                frameBorder="0"
+                                allowFullScreen
                             />
                             <p>Aberto hoje 08:00 - 18:00</p>
                             <div className="separator" />

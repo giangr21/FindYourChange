@@ -1,19 +1,8 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
-import { IosArrowUp } from './Icons/iosArrowUp';
-import { IosArrowDown } from './Icons/iosArrowDown';
-import {
-    Card,
-    TopInfo,
-    TitleWrapper,
-    Title,
-    SubTitle,
-    IconBox,
-    Price,
-    Note,
-    Text,
-    Link,
-} from './stickerCard.style';
+import { IosArrowUp } from './Icons/iconArrowUp';
+import { IosArrowDown } from './Icons/iconArrowDown';
+import { Card, TopInfo, TitleWrapper, Title, SubTitle, IconBox, Price, Note, Text, Link } from './styles';
 
 const StickerCard = ({
     title,
@@ -25,6 +14,7 @@ const StickerCard = ({
     note,
     link,
     linkText,
+    onClick,
 }: any): any => {
     return (
         <Card>
@@ -56,7 +46,7 @@ const StickerCard = ({
                 ''
             )}
             {link !== '' && (
-                <Link href={link} target="_blank">
+                <Link onClick={() => onClick()} href={link}>
                     {linkText}
                 </Link>
             )}

@@ -1,33 +1,15 @@
 import React, { useState } from 'react';
-import Drawer, { ANCHOR } from '../../../Drawer/drawer';
-import logo from '../../../../assets/logoPrincipalMobile.png';
-
+import Drawer, { ANCHOR } from '../../../Drawer';
 import { DrawerWrapper, DrawerIcon, CloseButton, TopbarWrapper } from './styles';
-import Logo from '../../../Logo/logo';
-import { MenuIcon } from './Icons/menuIcon';
-import { ArrowLeftRound } from './Icons/arrowLeftRound';
-import Sidebar from './Sidebar/sidebar';
+import { MenuIcon } from './Icons/iconMenu';
+import { ArrowLeftRound } from './Icons/iconArrowLeft';
+import Sidebar from './Sidebar';
 import NavUserImg from '../../NavUserImg';
 
 const MobileHeader: React.FC = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
     return (
-        // <MobileHeaderWrapper>
-        //     <MobileHeaderInnerWrapper className={className}>
-        //         <DrawerWrapper>
-        //             <MobileDrawer />
-        //         </DrawerWrapper>
-
-        //         <LogoWrapper>
-        //             <Logo imageUrl={logo} alt="shop logo" />
-        //         </LogoWrapper>
-
-        //         <SearchWrapper onClick={() => {}} className="searchIconWrapper">
-        //             <FiSearch color="#ff9000" />
-        //         </SearchWrapper>
-        //     </MobileHeaderInnerWrapper>
-        // </MobileHeaderWrapper>
         <TopbarWrapper>
             <DrawerWrapper>
                 <DrawerIcon onClick={() => setIsDrawerOpen(true)}>

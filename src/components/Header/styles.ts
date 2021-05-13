@@ -1,21 +1,23 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-    padding: 10px;
-    height: 90px;
-    max-height: 90px;
-    background-color: #ff9000;
+interface HeaderProps {
+    hideBackgroundColor: boolean;
+}
+
+export const Container = styled.div<HeaderProps>`
+    background-color: ${(props) => (props.hideBackgroundColor ? '#ff9000' : null)};
 `;
 
-export const Content = styled.div`
-    height: 100%;
+export const Content = styled.div<HeaderProps>`
+    height: 90px;
     max-width: 1200px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     text-align: center;
     margin: auto;
-    background-color: #ff9000;
+    padding: 0px 20px;
+    background-color: ${(props) => (props.hideBackgroundColor ? '#ff9000' : null)};
 `;
 
 export const Right = styled.div`

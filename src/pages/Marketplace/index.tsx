@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { FaArrowLeft, FaArrowRight, FaCheck, FaSearch } from 'react-icons/fa';
+import { FaArrowRight, FaCheck, FaSearch } from 'react-icons/fa';
 import { FormHandles } from '@unform/core';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
@@ -21,7 +21,6 @@ import {
     ProductMeta,
     ProductPriceWrapper,
     ProductPrice,
-    Pagination,
     SearchContainer,
     ContentSearch,
     FooterFilter,
@@ -31,8 +30,7 @@ import Input from '../../components/FormComponents/Input/MainSearchInput';
 import { ProductData } from '../ConfigProductsProvider';
 import api from '../../services/api';
 import Loading from '../../components/Loading';
-import { Row as Rows, Col as Column } from '../../components/FlexBox/flexBox';
-import PaginationButton from '../../components/FormComponents/Button/PaginationButton';
+import { Row as Rows, Col as Column } from '../../components/FlexBox';
 import FilterMobile from '../../components/Filter/MobileMarketPlace';
 import { useMedia } from '../../util/use-media';
 
@@ -162,8 +160,16 @@ const Index: React.FC = () => {
     );
 
     const handleFilter = useCallback(() => {
+        if (mobile) {
+            setTimeout(() => {
+                formRef.current?.setFieldValue('cities', 'Todas');
+                formRef.current?.setFieldValue('category', 'Todas');
+                formRef.current?.setFieldValue('price', 'Todos');
+                formRef.current?.setFieldValue('productState', 'Todos');
+            }, 300);
+        }
         setShowFilter((prevState) => !prevState);
-    }, []);
+    }, [mobile]);
 
     return (
         <Content>
@@ -354,18 +360,6 @@ const Index: React.FC = () => {
                             ))}
                         </Row>
                     </ContentResults>
-                    <Pagination>
-                        <PaginationButton
-                            disabled={page === 1}
-                            icon={FaArrowLeft}
-                            onClick={() => setPage(page - 1)}
-                        />
-                        <PaginationButton
-                            disabled={products.length < 15}
-                            icon={FaArrowRight}
-                            onClick={() => setPage(page + 1)}
-                        />
-                    </Pagination>
                 </Results>
             ) : (
                 <Loading

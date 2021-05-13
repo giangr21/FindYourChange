@@ -14,6 +14,10 @@ export const Content = styled.div`
 `;
 
 export const InfoContainer = styled.div`
+    @media only screen and (max-width: 850px) {
+        display: none;
+    }
+
     display: flex;
     flex-direction: column;
     margin-right: 5px;
@@ -32,9 +36,7 @@ export const InfoContainer = styled.div`
         height: 200px;
         margin-bottom: 15px;
     }
-    /* flex-direction: column; */
     text-align: center;
-    /* justify-content: center; */
 
     p {
         color: #312e38;
@@ -97,7 +99,7 @@ export const ProviderInfo = styled.div`
 
 export const ProviderService = styled.div`
     width: 100%;
-    height: 55px;
+    height: 60px;
     background: #f3f4f4;
     border-radius: 10px;
     margin: 10px 0px;
@@ -113,6 +115,23 @@ export const ProviderService = styled.div`
     p {
         color: #5a5a5a;
         font-size: 12px;
+    }
+
+    .valueAndPrice {
+        margin-left: auto;
+        margin-right: 10px;
+    }
+
+    @media only screen and (max-width: 850px) {
+        flex-direction: column;
+        height: 170px;
+        text-align: center;
+        justify-content: center;
+        /* margin: auto 10px; */
+
+        .valueAndPrice {
+            margin: 10px 0px;
+        }
     }
 `;
 
