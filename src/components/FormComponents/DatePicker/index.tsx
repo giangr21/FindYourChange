@@ -8,7 +8,7 @@ import { Container } from '../Input/InputModal/styles';
 import '../Input/InputModal/style.css';
 import './style.css';
 
-interface Props extends Omit<ReactDatePickerProps, 'onChange'> {
+interface Props extends Omit<ReactDatePickerProps, ''> {
     name: string;
 }
 const DatePicker: React.FC<Props> = ({ name, ...rest }) => {
@@ -66,7 +66,6 @@ const DatePicker: React.FC<Props> = ({ name, ...rest }) => {
             showTimeInput
             ref={datepickerRef}
             selected={date}
-            onChange={setDate}
             className="input-area"
             // customInput={<CustomInput />}
             placeholderText="Qualquer Data"
