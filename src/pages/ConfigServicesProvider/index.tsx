@@ -16,6 +16,7 @@ import Loading from '../../components/Loading';
 import Filter from '../../components/Filter';
 import Input from '../../components/FormComponents/Input/InputModal';
 import { useMedia } from '../../util/use-media';
+import Select from '../../components/FormComponents/Select';
 
 export interface ServiceData {
     id?: string;
@@ -210,10 +211,57 @@ const Index: React.FC = () => {
             </Content>
             <Filter showFilter={showFilter} submitFilter={submitFilter}>
                 <div className="space">
-                    <Input name="name" placeholder="Nome" />
+                    <Input name="serviceName" placeholder="Nome do Serviço" />
                 </div>
                 <div className="space">
                     <Input name="value" placeholder="Preço" />
+                </div>
+                <div className="space">
+                    <Select
+                        name="category"
+                        fieldValue="value"
+                        fieldLabel="label"
+                        label="Categoria"
+                        className="react-select-container"
+                        defaultValue={{ value: 'Todas', label: 'Todas' }}
+                        options={[
+                            { value: 'Todas', label: 'Todas' },
+                            { value: 'Barbearia', label: 'Barbearia' },
+                            { value: 'Tatuagem', label: 'Tatuagem' },
+                            { value: 'BodyPiercing', label: 'Body Piercing' },
+                        ]}
+                    />
+                </div>
+                <div className="space">
+                    <Select
+                        name="timeService"
+                        fieldValue="value"
+                        fieldLabel="label"
+                        label="Tempo de Serviço"
+                        className="react-select-container"
+                        defaultValue={{ value: 'Todos', label: 'Todos' }}
+                        options={[
+                            { value: 'Todos', label: 'Todos' },
+                            { value: '30min', label: '30min' },
+                            { value: '1h', label: '1h' },
+                            { value: 'Acima de 2h', label: 'Acima de 2h' },
+                        ]}
+                    />
+                </div>
+                <div className="space">
+                    <Select
+                        name="typeService"
+                        fieldValue="value"
+                        fieldLabel="label"
+                        label="Serviço Popular"
+                        className="react-select-container"
+                        defaultValue={{ value: 'Todos', label: 'Todos' }}
+                        options={[
+                            { value: 'Todos', label: 'Todos' },
+                            { value: 'Popular', label: 'Popular' },
+                            { value: 'Não Popular', label: 'Não Popular' },
+                        ]}
+                    />
                 </div>
             </Filter>
         </Container>
