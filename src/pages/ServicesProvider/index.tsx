@@ -7,7 +7,6 @@ import { withStyle } from 'baseui';
 import { BsDot } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { MdDeleteForever } from 'react-icons/md';
-import moment from 'moment';
 import { Row as Rows, Col as Column } from '../../components/FlexBox';
 import IconButton from '../../components/FormComponents/Button/IconButton';
 import IconButtonProvider from '../../components/FormComponents/Button/IconButtonProvider';
@@ -27,7 +26,6 @@ import {
     DiscountedPrice,
     Pagination,
 } from './styles';
-import DatePicker from '../../components/FormComponents/DatePicker';
 import Radio from '../../components/FormComponents/Radio';
 
 import api from '../../services/api';
@@ -65,7 +63,6 @@ const Index: React.FC = () => {
     const [showFilter, setShowFilter] = useState(!mobile);
     const [page, setPage] = useState(1);
     const [cities, setCities] = useState([]);
-    const [dateTime, setDateTime] = useState('');
 
     const renderEstablishmentsList = useCallback(async (establishmentsList: any) => {
         for (let index = 0; index < establishmentsList.data.length; index++) {
@@ -94,7 +91,6 @@ const Index: React.FC = () => {
         async (filter: any) => {
             setLoading(true);
             try {
-                filter.dateTime = dateTime;
                 await api.post('/provider', { ...filter, page }).then(async (response) => {
                     await renderEstablishmentsList(response);
                 });
@@ -109,7 +105,7 @@ const Index: React.FC = () => {
                 setShowFilter((prevState) => !prevState);
             }
         },
-        [page, dateTime, mobile, renderEstablishmentsList],
+        [page, mobile, renderEstablishmentsList],
     );
 
     const clearFilter = useCallback(async () => {
@@ -146,7 +142,6 @@ const Index: React.FC = () => {
 
     async function getProviders(): Promise<void> {
         await api.post('/provider', { page }).then(async (result) => {
-            console.log(result.data, 'first');
             await renderEstablishmentsList(result);
         });
     }
@@ -192,11 +187,6 @@ const Index: React.FC = () => {
         [history],
     );
 
-    const handleAvailability = useCallback((e) => {
-        const formattedDate = moment(e).format('YYYY-MM-DD HH:mm');
-        setDateTime(formattedDate);
-    }, []);
-
     return (
         <Container>
             <Content>
@@ -213,19 +203,12 @@ const Index: React.FC = () => {
                     <SearchContainer showFilter={showFilter}>
                         <ContentSearch ref={formRef} onSubmit={formFilterSubmit}>
                             <p>Filtrar Resultado</p>
-                            <span>Disponibilidade: </span>
                             <div
                                 style={{
                                     marginTop: '5px',
                                 }}
                             >
-                                <DatePicker
-                                    name="availability"
-                                    placeholderText={dateTime || 'Qualquer data'}
-                                    onChange={(e) => {
-                                        handleAvailability(e);
-                                    }}
-                                />
+                                <Input name="serviceName" icon={FaSearch} placeholder="Nome do Serviço" />
                             </div>
                             <div className="separator" />
                             <div
