@@ -26,7 +26,6 @@ import {
     DiscountedPrice,
     Pagination,
 } from './styles';
-import DatePicker from '../../components/FormComponents/DatePicker';
 import Radio from '../../components/FormComponents/Radio';
 
 import api from '../../services/api';
@@ -60,7 +59,7 @@ const Index: React.FC = () => {
     const history = useHistory();
     const location = useLocation();
     const [loading, setLoading] = useState(true);
-    const [providers, setProviders] = useState([]);
+    const [providers, setProviders] = useState<any>([]);
     const [showFilter, setShowFilter] = useState(!mobile);
     const [page, setPage] = useState(1);
     const [cities, setCities] = useState([]);
@@ -162,7 +161,6 @@ const Index: React.FC = () => {
 
     useEffect(() => {
         if (location.state) {
-            console.log(location);
             getProviderByServiceName(location.state);
         } else {
             getProviders();
@@ -205,13 +203,12 @@ const Index: React.FC = () => {
                     <SearchContainer showFilter={showFilter}>
                         <ContentSearch ref={formRef} onSubmit={formFilterSubmit}>
                             <p>Filtrar Resultado</p>
-                            <span>Disponibilidade: </span>
                             <div
                                 style={{
                                     marginTop: '5px',
                                 }}
                             >
-                                <DatePicker name="availability" placeholderText="Qualquer data" />
+                                <Input name="serviceName" icon={FaSearch} placeholder="Nome do Serviço" />
                             </div>
                             <div className="separator" />
                             <div
@@ -297,11 +294,13 @@ const Index: React.FC = () => {
                                     title="Limpar"
                                     background="#777777"
                                     action={clearFilter}
+                                    type="button"
                                 />
                                 <IconButton
                                     icon={FaCheck}
                                     title="Aplicar"
                                     background="#00A57C"
+                                    type="button"
                                     action={() => formRef.current?.submitForm()}
                                 />
                             </FooterFilter>
