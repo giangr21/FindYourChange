@@ -14,6 +14,7 @@ const Input: React.FC<InputProps> = ({ name, containerStyle = {}, icon: Icon, ..
 
     const [isFocused, setIsFocused] = useState(false);
     const [isFilled, setIsFilled] = useState(false);
+    const [fixFocus, setFixFocus] = useState(true);
 
     const { fieldName, defaultValue, error, registerField } = useField(name);
 
@@ -23,6 +24,10 @@ const Input: React.FC<InputProps> = ({ name, containerStyle = {}, icon: Icon, ..
             ref: inputRef.current,
             path: 'value',
         });
+
+        setTimeout(() => {
+            setFixFocus(false);
+        }, 500);
     }, [fieldName, registerField]);
 
     const handleInputBlur = useCallback(() => {
@@ -52,6 +57,7 @@ const Input: React.FC<InputProps> = ({ name, containerStyle = {}, icon: Icon, ..
                 ref={inputRef}
                 autoComplete="no"
                 {...rest}
+                disabled={fixFocus}
             />
         </Container>
     );

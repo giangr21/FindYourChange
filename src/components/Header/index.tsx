@@ -28,7 +28,7 @@ const Index: React.FC = () => {
                     {!mobile && (
                         <>
                             <Link to="/">Início</Link>
-                            <Link to="/allServicesProvider">Navegar</Link>
+                            <Link to="/allServicesProvider">Estabelecimentos</Link>
                             <Link to="/about">Sobre nós</Link>
                         </>
                     )}

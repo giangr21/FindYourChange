@@ -84,7 +84,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
                     width: mobile ? '100%' : '800px',
                     border: 'none',
                     padding: '10px',
-                    height: mobile ? '60%' : '550px',
+                    height: mobile ? '70%' : '550px',
                     display: 'flex',
                 },
                 overlay: {
