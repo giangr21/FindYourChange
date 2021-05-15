@@ -40,7 +40,7 @@ const UserProfile: React.FC = () => {
     const mobile = useMedia('(max-width: 760px)');
     const formRef = useRef<FormHandles>(null);
     const history = useHistory();
-    const { user } = useAuth();
+    const { user, updateSimpleUser } = useAuth();
     const [loading, setLoading] = useState(true);
     const [profileInfo, setProfileInfo] = useState<any>({});
     const [appointments, setAppointments] = useState<any>([]);
@@ -122,19 +122,14 @@ const UserProfile: React.FC = () => {
 
                 await api.put('/user', data);
 
-                // updateSimpleUser({
-                //     name: data.name,
-                //     lastName: data.lastName,
-                //     email: data.email,
-                //     phone: data.phone,
-                //     avatar: data.avatar,
-                //     id: data.id,
-                // });
+                updateSimpleUser(data);
 
                 toast.success('Perfil atualizado com sucesso!');
 
-                history.push('/userProfile');
-                setProfileInfo(data);
+                if (profileAvatar) {
+                    delete data.avatar;
+                }
+                setProfileInfo({ ...profileInfo, ...data });
             } catch (err) {
                 if (err instanceof Yup.ValidationError) {
                     const errors = getValidationErrors(err);
@@ -144,7 +139,7 @@ const UserProfile: React.FC = () => {
                 toast.error('Houve um erro! Tente novamente.');
             }
         },
-        [user.id, history, profileAvatar],
+        [user.id, profileAvatar, updateSimpleUser, profileInfo],
     );
 
     useEffect(() => {
