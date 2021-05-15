@@ -90,6 +90,8 @@ const Index: React.FC = () => {
     const formFilterSubmit = useCallback(
         async (filter: any) => {
             setLoading(true);
+            if (mobile) setShowFilter((prevState) => !prevState);
+
             try {
                 await api.post('/provider', { ...filter, page }).then(async (response) => {
                     await renderEstablishmentsList(response);
@@ -99,10 +101,6 @@ const Index: React.FC = () => {
                     toast.error(`Houve uma falha ao filtrar`);
                     console.log(err);
                 }
-            }
-
-            if (mobile) {
-                setShowFilter((prevState) => !prevState);
             }
         },
         [page, mobile, renderEstablishmentsList],

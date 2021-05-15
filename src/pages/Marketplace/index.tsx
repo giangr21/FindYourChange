@@ -64,6 +64,8 @@ const Index: React.FC = () => {
     const formFilterSubmit = useCallback(
         async (filterT: any) => {
             setLoading(true);
+            if (mobile) setShowFilter((prevState) => !prevState);
+
             try {
                 await api.post('/products/provider/filter', filterT).then(async (response) => {
                     const { data } = response;
@@ -80,7 +82,6 @@ const Index: React.FC = () => {
                             auxProducts.push({ ...product });
                         }
                     }
-
                     setProducts(auxProducts);
                     setLoading(false);
                 });
@@ -89,9 +90,6 @@ const Index: React.FC = () => {
                     toast.error(`Houve uma falha ao filtrar`);
                     console.log(err);
                 }
-            }
-            if (mobile) {
-                setShowFilter((prevState) => !prevState);
             }
         },
         [mobile],
@@ -202,6 +200,7 @@ const Index: React.FC = () => {
                                 }}
                                 name="cities"
                                 options={cities}
+                                autoFocus
                             />
                         </div>
                         <div className="separator" />

@@ -30,20 +30,24 @@ const NavUserImg: React.FC = () => {
                                     Início
                                 </NavLink>
                                 <NavLink to="/allServicesProvider" exact={false} onClick={close}>
-                                    Navegar
+                                    Estabelecimentos
                                 </NavLink>
                             </>
                         )}
+
                         {user.isProvider && (
                             <NavLink to="/homeProvider" exact={false} onClick={close}>
                                 Dashboard
                             </NavLink>
                         )}
-                        {!user.isProvider && (
-                            <NavLink to="/userProfile" exact={false} onClick={close}>
-                                Editar Conta
-                            </NavLink>
-                        )}
+
+                        <NavLink
+                            to={user.isProvider ? '/providerProfile' : '/userProfile'}
+                            exact={false}
+                            onClick={close}
+                        >
+                            Editar Conta
+                        </NavLink>
 
                         <LogoutBtn onClick={signOut}>Sair</LogoutBtn>
                     </UserDropdowItem>
@@ -65,7 +69,7 @@ const NavUserImg: React.FC = () => {
                 }}
             >
                 <ProfileImg>
-                    <Image src={`data:image/png;base64,${avatarImg}`} alt="user" />
+                    <Image src={`data:image/png;base64,${avatarImg}`} alt="" />
                 </ProfileImg>
             </Popover>
         </>
