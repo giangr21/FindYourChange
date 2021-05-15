@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useRef, useCallback } from 'react';
 
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
@@ -14,6 +14,7 @@ import Input from '../../FormComponents/Input';
 import getValidationErrors from '../../../util/getValidationErrors';
 
 import { useAuth } from '../../../hooks/authentication';
+import { useMedia } from '../../../util/use-media';
 
 interface ModalProps {
     children?: any;
@@ -26,13 +27,9 @@ interface SignInFormData {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
-    const [modalStatus, setModalStatus] = useState(isOpen);
+    const mobile = useMedia('(max-width: 760px)');
     const formRef = useRef<FormHandles>(null);
     const { signIn } = useAuth();
-
-    useEffect(() => {
-        setModalStatus(isOpen);
-    }, [isOpen]);
 
     const handleSubmit = useCallback(
         async (data: SignInFormData) => {
@@ -53,7 +50,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
                     isProvider: false,
                 });
 
-                return setModalStatus(false);
+                setIsOpen();
+                toast.success('Autenticação realizada com sucesso!!');
             } catch (err) {
                 console.log(err);
                 if (err instanceof Yup.ValidationError) {
@@ -64,13 +62,13 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
                 toast.error('Ocorreu um erro ao fazer login, cheque as credenciais.');
             }
         },
-        [signIn],
+        [setIsOpen, signIn],
     );
     return (
         <ReactModal
             shouldCloseOnOverlayClick={!false}
             onRequestClose={setIsOpen}
-            isOpen={modalStatus}
+            isOpen={isOpen}
             ariaHideApp={false}
             style={{
                 content: {
@@ -83,10 +81,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
                     background: '#fff',
                     color: 'black',
                     borderRadius: '8px',
-                    width: '800px',
+                    width: mobile ? '100%' : '800px',
                     border: 'none',
                     padding: '10px',
-                    height: '450px',
+                    height: mobile ? '60%' : '550px',
                     display: 'flex',
                 },
                 overlay: {
@@ -99,7 +97,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
                 <RightContainer>
                     <img src={logoImg} alt="logo" width="35%" />
                     <Form ref={formRef} onSubmit={handleSubmit}>
-                        <h2>Login</h2>
+                        <h2>Para realizar um agendamento é necessario estar logado.</h2>
                         <Row>
                             <Input name="email" icon={FiMail} placeholder="E-mail" />
                         </Row>

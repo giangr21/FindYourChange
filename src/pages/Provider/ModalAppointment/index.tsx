@@ -149,6 +149,8 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
             <ModalHeader
                 style={{
                     marginBottom: '0px',
+                    marginTop: '10px',
+                    height: '77px',
                 }}
             >
                 <Header>
@@ -166,6 +168,7 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                                     style: () => ({
                                         color: '#2a2a2a',
                                         marginBottom: '15px',
+                                        marginTop: '0px',
                                     }),
                                 },
                             }}

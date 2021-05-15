@@ -231,7 +231,7 @@ const UserProfile: React.FC = () => {
                             overrides={{
                                 TabPanel: {
                                     style: () => ({
-                                        height: mobile ? '90%' : '100%',
+                                        height: mobile ? '91.5%' : '100%',
                                         padding: '5px',
                                     }),
                                 },
