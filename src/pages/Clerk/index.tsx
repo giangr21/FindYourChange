@@ -78,7 +78,7 @@ const Index: React.FC = () => {
             return day.dayOfWeek;
         });
         return DAYS_OF_WEEK.every((elem: string) => clerkSchedule.includes(elem));
-    }, []);
+    }, [schedules]);
 
     const toggleModal = useCallback((): void => {
         if (handleOpenModals()) {
