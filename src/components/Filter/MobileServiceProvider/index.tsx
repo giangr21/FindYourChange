@@ -68,6 +68,8 @@ const MobileHeader: React.FC<MobileProps> = ({
             <SidebarWrapper>
                 <ContentSearch ref={formRef} onSubmit={formFilterSubmit}>
                     <p>Filtro Serviços</p>
+                    <Input name="serviceName" icon={FaSearch} placeholder="Nome do Serviço" />
+                    <div className="separator" />
                     <Input name="name" icon={FaSearch} placeholder="Nome do Estabelecimento" />
                     <div className="separator" />
                     <span>Cidades: </span>
