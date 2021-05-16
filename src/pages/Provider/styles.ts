@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+interface HeaderProps {
+    topValue: any;
+}
+
 export const Container = styled.div`
     height: 100%;
     width: 100%;
@@ -153,7 +157,7 @@ export const Header = styled.div`
     }
 `;
 
-export const ProviderInfoHeader = styled.div`
+export const ProviderInfoHeader = styled.div<HeaderProps>`
     position: absolute;
     width: 100%;
     padding: 0px 34px;
@@ -166,7 +170,8 @@ export const ProviderInfoHeader = styled.div`
     }
 
     @media only screen and (max-width: 600px) {
-        top: 23%;
+        top: ${(props) => props.topValue};
+        padding: 0px 7px;
     }
 
     span {

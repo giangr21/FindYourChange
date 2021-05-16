@@ -37,6 +37,26 @@ export const Content = styled.div`
     padding: 0px 20px;
 `;
 
+export const PreviewImage = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 5px 0px;
+    span {
+        color: #ff9000;
+    }
+
+    img {
+        border-radius: 11px;
+        margin: 10px auto;
+        height: 50%;
+        width: 50%;
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+    }
+`;
+
 export const Clerks = styled.div`
     width: 100%;
     margin: 10px 0px;
