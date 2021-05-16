@@ -50,29 +50,22 @@ const ProductAction: React.FC<ProductActionProps> = ({ productValues }) => {
                 <InstallmentsInfo>em 3x de R$ {installmentsNumber.toFixed(2)}</InstallmentsInfo>
             </PriceCard>
 
-            {/* <StockStatus>Estoque disponível</StockStatus> */}
-
             <MethodCard>
                 <CheckIcon />
 
                 <div>
                     <span className="title">Frete grátis</span>
                     <span className="details">Combine com o vendedor</span>
-                    <a href="#" className="more">
-                        Ver mais opções
-                    </a>
                 </div>
             </MethodCard>
 
             <Actions>
                 <Button solid>Comprar agora</Button>
-                {/* <Button>Adicionar ao carrinho</Button> */}
             </Actions>
 
             <Benefits>
                 <li>
                     <ShieldIcon />
-                    {/* <p>Compra Garantida, receba o produto que está esperando ou devolvemos seu dinheiro.</p> */}
                     <p>Compra Garantida.</p>
                 </li>
             </Benefits>

@@ -41,10 +41,13 @@ const GalleryProvider: React.FC<GalleryProps> = ({ providerImages }): any => {
                             <img
                                 style={{
                                     marginLeft: '10px',
-                                    width: '100%',
+                                    width: '98%',
                                     height: '150px',
                                     borderRadius: '2%',
                                     cursor: 'pointer',
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center center',
+                                    backgroundRepeat: 'no-repeat',
                                 }}
                                 src={`data:image/png;base64,${img.imageBase64}`}
                                 onClick={() => handleOnClick(img.image)}

@@ -65,6 +65,7 @@ const Index: React.FC = () => {
         await api
             .get(`/provider/specificProvider/${idProvider}`)
             .then(async (response) => {
+                console.log(response.data);
                 setProvider(response.data);
                 await api
                     .get(`https://olog-api.jclan.com.br/street/${response.data.addressZipCode}`)
@@ -132,6 +133,16 @@ const Index: React.FC = () => {
         [isAuthenticated, toggleModalAppointment, toggleModalLogin, user],
     );
 
+    const getTopValue = useCallback((): string => {
+        if (provider.legalName.length < 15) {
+            return '53%';
+        }
+        if (provider.legalName.length < 20) {
+            return '40%';
+        }
+        return '33%';
+    }, [provider]);
+
     return (
         <Container>
             {loading ? (
@@ -148,7 +159,7 @@ const Index: React.FC = () => {
                             }}
                             alt=""
                         />
-                        <ProviderInfoHeader>
+                        <ProviderInfoHeader topValue={getTopValue()}>
                             <span className="legalName">{provider.legalName}</span>
                             <span className="city">
                                 {provider.addressCity} / {provider.addressArea}
