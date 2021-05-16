@@ -26,7 +26,7 @@ export const Review = styled.div`
     width: 100%;
     background: #f3f4f4;
     margin: 15px 0px;
-    padding: 10px 15px;
+    padding: 10px 5px;
     border-radius: 10px;
     overflow-y: auto;
 

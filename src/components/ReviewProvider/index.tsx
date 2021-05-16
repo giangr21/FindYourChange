@@ -57,9 +57,7 @@ const ReviewProvider: React.FC<ReviewProps> = ({
                     provider: infosToCreateNewRecommendation.providerId,
                 })
                 .then(async (response) => {
-                    const { data: imgBase64 } = await api.get(
-                        `storage/base64/min/${infosToCreateNewRecommendation.userId}`,
-                    );
+                    const { data: imgBase64 } = await api.get(`storage/base64/min/${user.avatar}`);
 
                     toast.success('Recomendação criada com sucesso!');
 
@@ -197,6 +195,7 @@ const ReviewProvider: React.FC<ReviewProps> = ({
                                 style={{
                                     display: 'flex',
                                     alignItems: 'center',
+                                    margin: 'auto 0',
                                 }}
                             >
                                 <ReactStars
@@ -208,11 +207,11 @@ const ReviewProvider: React.FC<ReviewProps> = ({
                                 />
                                 <span
                                     style={{
-                                        marginLeft: '7px',
-                                        fontSize: '15px',
+                                        marginLeft: '4px',
+                                        fontSize: '14px',
                                     }}
                                 >
-                                    {recommendation.createdAt}
+                                    - {recommendation.createdAt}
                                 </span>
                             </div>
                             <div

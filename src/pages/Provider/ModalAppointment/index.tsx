@@ -16,7 +16,16 @@ import { FaCheck } from 'react-icons/fa';
 import api from '../../../services/api';
 import { Row as Rows, Col as Column } from '../../../components/FlexBox';
 import InfoModal from '../../../components/Modal/InfoModal';
-import { Container, Header, Content, Clerks, AppointmentInfo, AppointmentResume, Footer } from './styles';
+import {
+    Container,
+    Header,
+    Content,
+    PreviewImage,
+    Clerks,
+    AppointmentInfo,
+    AppointmentResume,
+    Footer,
+} from './styles';
 import { useMedia } from '../../../util/use-media';
 import { useAuth } from '../../../hooks/authentication';
 import ClerkInfo from './ClerkInfo';
@@ -150,7 +159,7 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                 style={{
                     marginBottom: '0px',
                     marginTop: '10px',
-                    height: '77px',
+                    height: '79px',
                 }}
             >
                 <Header>
@@ -160,6 +169,13 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
             </ModalHeader>
             <Container>
                 <Content>
+                    {serviceInfo && serviceInfo.image && (
+                        <PreviewImage>
+                            <span>Preview Imagem Serviço: </span>
+                            <img src={`data:image/png;base64,${serviceInfo.image}`} alt="" />
+                        </PreviewImage>
+                    )}
+
                     <Clerks>
                         <FormControl
                             label={() => 'Selecione um Atendente: '}

@@ -28,6 +28,10 @@ export const Row = styled.div`
 `;
 
 export const Panel = styled.div`
+    @media (max-width: 860px) {
+        display: none;
+    }
+
     background: #f4ede8;
     box-shadow: var(--panel-shadow);
     border-radius: 2%;
@@ -63,7 +67,7 @@ export const Section = styled.div`
 
     > h4 {
         font-size: 18px;
-        margin-bottom: 40px;
+        margin-bottom: 20px;
     }
     > div {
         display: flex;
@@ -106,3 +110,45 @@ export const Description = styled.div`
         line-height: 27px;
     }
 `;
+
+export const PanelMobile = styled.div`
+    @media (min-width: 860px) {
+        display: none;
+    }
+    height: 100%;
+    width: 100%;
+    background: #f4ede8;
+    box-shadow: var(--panel-shadow);
+    border-radius: 7px;
+    padding: 6px;
+`;
+
+export const HeaderMobile = styled.div`
+    display: flex;
+    flex-direction: column;
+    h1 {
+        width: 100%;
+        font-size: 26px;
+        font-weight: 600;
+    }
+`;
+
+export const ContentMobile = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0px;
+    /* align-items: center; */
+    /* justify-content: center; */
+    /* height: 500px; */
+
+    > img {
+        height: 99%;
+        width: 100%;
+        border-radius: 2%;
+    }
+`;
+
+// export const PanelMobile = styled.div`
+//     height: 100%;
+//     width: 100%;
+// `;
