@@ -114,7 +114,7 @@ const Profile: React.FC = () => {
                     lastName: data.lastName,
                     email: data.email,
                     phone: data.phone,
-                    avatar: data.avatar,
+                    avatar: data.avatar ? data.avatar : user.avatar,
                     id: data.id,
                     isProvider: user.isProvider,
                     isBarber,

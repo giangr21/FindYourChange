@@ -33,6 +33,7 @@ interface AuthContextData {
     signIn(credentials: SignInCredentials): Promise<any>;
     signOut(): void;
     updateUser(user: User): void;
+    updateSimpleUser(user: any): void;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -100,14 +101,29 @@ const AuthProvider: React.FC = ({ children }) => {
 
     const updateUser = useCallback(
         (user: User) => {
+            const updatedUser = { ...data.user, ...user };
+            setData({
+                token: data.token,
+                user: updatedUser,
+            });
+
             localStorage.setItem('@FYC:user', JSON.stringify(user));
+        },
+        [data.token, data.user],
+    );
+
+    const updateSimpleUser = useCallback(
+        (user: any) => {
+            const updatedUser = { ...data.user, ...user };
 
             setData({
                 token: data.token,
-                user,
+                user: updatedUser,
             });
+
+            localStorage.setItem('@FYC:user', JSON.stringify(updatedUser));
         },
-        [data.token, setData],
+        [data.token, data.user],
     );
 
     return (
@@ -117,6 +133,7 @@ const AuthProvider: React.FC = ({ children }) => {
                 signIn,
                 signOut,
                 updateUser,
+                updateSimpleUser,
                 isAuthenticated,
             }}
         >

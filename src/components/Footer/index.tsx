@@ -5,18 +5,20 @@ import { Link } from 'react-router-dom';
 import { Container, Up, Down, Content, Left, Right } from './styles';
 import logo from '../../assets/logoPrincipalMobile.png';
 import { useMedia } from '../../util/use-media';
+import { useAuth } from '../../hooks/authentication';
 
 const Index: React.FC = () => {
     const mobile = useMedia('(max-width: 990px)');
+    const { user } = useAuth();
 
     return (
         <Container>
             <Content>
                 <Up mobile={mobile}>
                     <Link to="/">Início</Link>
-                    <Link to="/allServicesProvider">Navegar</Link>
+                    <Link to="/allServicesProvider">Estabelecimentos</Link>
                     <Link to="/about">Sobre Nós</Link>
-                    <Link to="/homeProvider">Dashboard</Link>
+                    {user && user.isProvider && <Link to="/homeProvider">Dashboard</Link>}
                 </Up>
                 <div
                     style={{

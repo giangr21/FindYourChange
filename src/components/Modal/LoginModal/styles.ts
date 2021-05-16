@@ -15,7 +15,7 @@ export const LeftContainer = styled.div`
     float: left;
     background: url(${signInBackgroundImg}) no-repeat center;
     background-size: cover;
-    width: 50%;
+    flex: 1;
 `;
 
 const appearFromRight = keyframes`
@@ -34,6 +34,11 @@ export const RightContainer = styled.div`
     flex-direction: column;
     float: right;
     width: 50%;
+    overflow: hidden;
+
+    @media (max-width: 760px) {
+        width: 100%;
+    }
 
     align-items: center;
     justify-content: center;
@@ -42,9 +47,13 @@ export const RightContainer = styled.div`
 
     form {
         text-align: center;
+        width: 80%;
 
         h2 {
             margin-bottom: 15px;
+            color: #fff;
+            padding: 0px 20px;
+            font-size: 1.2em;
         }
 
         button {

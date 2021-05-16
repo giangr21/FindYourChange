@@ -142,22 +142,34 @@ export const ProviderContent = styled.div`
 export const Header = styled.div`
     display: flex;
     flex-direction: column;
+    position: relative;
+    width: 100%;
+    height: 300px;
+
     img {
+        position: absolute;
         width: 100%;
         height: 300px;
     }
 `;
 
 export const ProviderInfoHeader = styled.div`
-    position: relative;
+    position: absolute;
     width: 100%;
     padding: 0px 34px;
-    top: -120px;
     display: flex;
     flex-direction: column;
+    top: 53%;
+
+    @media only screen and (max-width: 850px) {
+        top: 45%;
+    }
+
+    @media only screen and (max-width: 600px) {
+        top: 23%;
+    }
 
     span {
-        position: absolute;
         color: #fff;
         font-size: 16px;
         font-weight: 500;
@@ -169,14 +181,14 @@ export const ProviderInfoHeader = styled.div`
     }
 
     .city {
-        padding-top: 57px;
         font-size: 16px;
         font-weight: 400;
+        padding-top: 10px;
     }
 
     .servicesAvailable {
-        padding-top: 85px;
         font-size: 18px;
         font-weight: 400;
+        padding-top: 15px;
     }
 `;
