@@ -22,9 +22,10 @@ import {
 
 interface ProductActionProps {
     productValues: any;
+    buyProduct: () => any;
 }
 
-const ProductAction: React.FC<ProductActionProps> = ({ productValues }) => {
+const ProductAction: React.FC<ProductActionProps> = ({ productValues, buyProduct }) => {
     const decimalPrice = Number(productValues?.value);
     const centsPrice = productValues?.value.split('.')[1];
     const installmentsNumber = decimalPrice / 3;
@@ -60,7 +61,9 @@ const ProductAction: React.FC<ProductActionProps> = ({ productValues }) => {
             </MethodCard>
 
             <Actions>
-                <Button solid>Comprar agora</Button>
+                <Button onClick={buyProduct} solid>
+                    Comprar agora
+                </Button>
             </Actions>
 
             <Benefits>
