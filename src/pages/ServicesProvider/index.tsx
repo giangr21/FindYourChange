@@ -75,9 +75,7 @@ const Index: React.FC = () => {
             }
 
             if (provider.providerImages.length > 0) {
-                const { data: imgBase64 } = await api.get(
-                    `storage/base64/min/${provider.providerImages[0].image}`,
-                );
+                const { data: imgBase64 } = await api.get(`storage/base64/${provider.providerImages[0].image}`);
 
                 provider.defaultImg = imgBase64;
             }

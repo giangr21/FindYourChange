@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable func-names */
@@ -21,8 +22,6 @@ import {
 } from './styles';
 
 import card1 from '../../assets/reco1.png';
-import card2 from '../../assets/reco2.png';
-import card3 from '../../assets/reco3.png';
 import imageUrl from '../../assets/background.jpg';
 import Search from '../../components/Search';
 import api from '../../services/api';
@@ -42,6 +41,16 @@ const Index: React.FC = () => {
             await api
                 .get(`/providerRecommendation/populars/`)
                 .then(async (response) => {
+                    for (let index = 0; index < response.data.length; index++) {
+                        const recommendation = response.data[index];
+
+                        if (recommendation.provider.providerImages.length > 0) {
+                            const { data: imgBase64 } = await api.get(
+                                `storage/base64/${recommendation.provider.providerImages[0].image}`,
+                            );
+                            recommendation.defaultImg = imgBase64;
+                        }
+                    }
                     console.log(response);
                     setPopularRecommendations(response.data);
                     setLoading(false);
@@ -122,33 +131,30 @@ const Index: React.FC = () => {
                     <span className="title">Serviços Recomendados</span>
                     <div className="separator" />
                     <RecommendationContent>
-                        <RecommendationCard
-                            onClick={() => {
-                                history.push('/provider');
-                            }}
-                        >
-                            <img src={card1} alt="" />
-                            <span>De Angelo Barbearia</span>
-                            <p>Centro, Curitiba - PR 81000-000</p>
-                        </RecommendationCard>
-                        <RecommendationCard
-                            onClick={() => {
-                                history.push('/provider');
-                            }}
-                        >
-                            <img src={card2} alt="" />
-                            <span>Los Santos Tatuagens</span>
-                            <p>Centro, Itajaí - SC 82000-000</p>
-                        </RecommendationCard>
-                        <RecommendationCard
-                            onClick={() => {
-                                history.push('/provider');
-                            }}
-                        >
-                            <img src={card3} alt="" />
-                            <span>Retro Body Piercing</span>
-                            <p>Centro, Curitiba - PR 83000-000</p>
-                        </RecommendationCard>
+                        {popularRecommendations.map((popularRecommendation: any) => (
+                            <RecommendationCard
+                                key={popularRecommendation.id}
+                                onClick={() => {
+                                    history.push(`/provider/${popularRecommendation.provider.id}`);
+                                }}
+                            >
+                                {popularRecommendation.defaultImg && (
+                                    <img
+                                        src={`data:image/png;base64,${popularRecommendation.defaultImg}`}
+                                        alt=""
+                                    />
+                                )}
+                                <span>
+                                    {popularRecommendation.provider.legalName.length > 20
+                                        ? `${popularRecommendation.provider.legalName.substring(0, 20)}..`
+                                        : popularRecommendation.provider.legalName}{' '}
+                                </span>
+                                <p>
+                                    {popularRecommendation.provider.addressCity} -{' '}
+                                    {popularRecommendation.provider.phone}
+                                </p>
+                            </RecommendationCard>
+                        ))}
                     </RecommendationContent>
                 </Recommendation>
             </Container>

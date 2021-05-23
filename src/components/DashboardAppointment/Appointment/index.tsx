@@ -19,10 +19,14 @@ const Appointment: React.FC<AppointmentProps> = ({ appointmentInfo }): any => (
             <aside
                 style={{
                     flexDirection: 'column',
-                    marginLeft: '10px',
+                    marginLeft: '15px',
                 }}
             >
-                <section>
+                <section
+                    style={{
+                        marginBottom: '5px',
+                    }}
+                >
                     <h4 style={{ color: '#ff9000', marginRight: '7px' }}>Nome:</h4>
                     <h4
                         style={{
@@ -32,13 +36,21 @@ const Appointment: React.FC<AppointmentProps> = ({ appointmentInfo }): any => (
                         {appointmentInfo.user.name} {appointmentInfo.user.lastName}
                     </h4>
                 </section>
-                <section>
+                <section
+                    style={{
+                        marginBottom: '5px',
+                    }}
+                >
                     <h4 style={{ color: '#ff9000', marginRight: '7px' }}>Tipo Serviço:</h4>
                     <h4>{appointmentInfo.service.category}</h4>
                 </section>
                 {appointmentInfo.notes && appointmentInfo.notes !== '' && (
-                    <section>
-                        <h4 style={{ color: '#ff9000', marginRight: '7px' }}>Comentários:</h4>
+                    <section
+                        style={{
+                            marginBottom: '5px',
+                        }}
+                    >
+                        <h4 style={{ color: '#ff9000', margin: 'auto 7px auto 0px' }}>Comentários:</h4>
                         <h4>{appointmentInfo.notes}</h4>
                     </section>
                 )}

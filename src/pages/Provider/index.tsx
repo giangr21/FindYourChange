@@ -68,7 +68,7 @@ const Index: React.FC = () => {
                 console.log(response.data);
                 setProvider(response.data);
                 await api
-                    .get(`https://olog-api.jclan.com.br/street/${response.data.addressZipCode}`)
+                    .get(`https://ecommerce-api-dev.jclan.com.br/street/${response.data.addressZipCode}`)
                     .then((rsp) => {
                         setLatLng({
                             lat: Number(rsp.data.latitude),

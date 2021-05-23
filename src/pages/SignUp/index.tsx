@@ -176,7 +176,7 @@ const SignUp: React.FC = () => {
             toast.error('Digite um cep válido.');
         } else {
             await api
-                .get(`https://olog-api.jclan.com.br/street/${cep}`)
+                .get(`https://ecommerce-api-dev.jclan.com.br/street/${cep}`)
                 .then((response) => {
                     if (response.data !== '') {
                         formRef.current?.setFieldValue('addressArea', `${response.data.area.clearName}`);

@@ -31,6 +31,7 @@ import { useAuth } from '../../../hooks/authentication';
 import ClerkInfo from './ClerkInfo';
 import IconButton from '../../../components/FormComponents/Button/IconButton';
 import Loading from '../../../components/Loading';
+import { getWeekDayName } from '../../../util/getWeekDayName';
 
 export const Col = withStyle(Column, () => ({
     marginBottom: '20px',
@@ -64,12 +65,16 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
 }): any => {
     const mobile = useMedia('(max-width: 760px)');
     const { user } = useAuth();
-    const [dateAppointment, setDateAppointment] = useState<any>(new Date());
+    const [dateAppointment, setDateAppointment] = useState<any>(null);
     const [hourAppointment, setHourAppointment] = useState<any>();
-    const [selectedClerk, setSelectedClerk] = useState(null);
+    const [selectedClerk, setSelectedClerk] = useState<null | string>(null);
     const [notes, setNotes] = useState('');
     const [resumeConfirmationModal, setResumeConfirmationModal] = useState(false);
     const [resumeInformation, setResumeInformation] = useState<any>({});
+    const [workTimeClerk, setWorkTimeClerk] = useState({
+        min: '',
+        max: '',
+    });
     const [loadingNewAppointment, setLoadingNewAppointment] = useState(false);
 
     const toggleResumeModal = useCallback(() => {
@@ -115,13 +120,19 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                 })
                 .then(() => {
                     toast.success('Agendamento realizado com sucesso!!');
-                    setLoadingNewAppointment(false);
-                    toggleResumeModal();
                     setIsOpen();
                 })
-                .catch((e) => {
+                .catch((err) => {
+                    if (err.response && err.response.data && err.response.data.message) {
+                        return toast.error(err.response.data.message.message, {
+                            autoClose: 5000,
+                        });
+                    }
                     toast.error('Houve um erro ao realizar o agendamento, Tente novamente!!');
-                    console.log(e);
+                })
+                .finally(() => {
+                    setLoadingNewAppointment(false);
+                    toggleResumeModal();
                 });
         }
     }, [
@@ -135,6 +146,47 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
         toggleResumeModal,
         user.id,
     ]);
+
+    const getWorkTimeByWeekDay = useCallback(
+        async (weekDay: string, clerkId?: string) => {
+            await api
+                .get('clerk/getWorkTime/weekDay', {
+                    params: {
+                        weekDay,
+                        clerkId: clerkId || selectedClerk,
+                    },
+                })
+                .then((response) => {
+                    setWorkTimeClerk({
+                        min: response.data.hourStart,
+                        max: response.data.hourEnd,
+                    });
+                });
+        },
+        [selectedClerk],
+    );
+
+    const handleClickClerk = useCallback(
+        async (clerkId: string) => {
+            setSelectedClerk(clerkId);
+            if (selectedClerk !== null) {
+                await getWorkTimeByWeekDay(getWeekDayName(moment(dateAppointment).day()), clerkId);
+            }
+        },
+        [dateAppointment, getWorkTimeByWeekDay, selectedClerk],
+    );
+
+    const handleSelectDate = useCallback(
+        async (appointmentDate: any) => {
+            setDateAppointment(appointmentDate);
+            await getWorkTimeByWeekDay(getWeekDayName(moment(appointmentDate).day()));
+        },
+        [getWorkTimeByWeekDay],
+    );
+
+    function disableWeekends(date: any): any {
+        return date.getDay() !== 0;
+    }
 
     return (
         <Modal
@@ -159,7 +211,7 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                 style={{
                     marginBottom: '0px',
                     marginTop: '10px',
-                    height: '79px',
+                    height: '90px',
                 }}
             >
                 <Header>
@@ -198,7 +250,7 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                                             sm={6}
                                             md={6}
                                             lg={6}
-                                            onClick={() => setSelectedClerk(clerk.id)}
+                                            onClick={() => handleClickClerk(clerk.id)}
                                         >
                                             <ClerkInfo
                                                 clerk={clerk}
@@ -224,8 +276,10 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                             <DatePicker
                                 locale={pt}
                                 value={dateAppointment}
-                                onChange={({ date }) => setDateAppointment(date)}
+                                onChange={({ date }) => handleSelectDate(date)}
                                 formatString="dd '/' MMMM '/' yyyy"
+                                placeholder=" "
+                                filterDate={(date) => disableWeekends(date)}
                                 disabled={selectedClerk === null}
                                 mask={null}
                                 minDate={new Date()}
@@ -258,8 +312,10 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                             <TimePicker
                                 value={hourAppointment}
                                 onChange={(date) => setHourAppointment(date)}
-                                disabled={selectedClerk === null}
+                                disabled={dateAppointment === null}
                                 step={1800}
+                                minTime={new Date(`2021-05-22 ${workTimeClerk.min}`)}
+                                maxTime={new Date(`2021-05-22 ${workTimeClerk.max}`)}
                                 format="24"
                                 overrides={{
                                     Select: {
