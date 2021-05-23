@@ -73,6 +73,20 @@ const Product: React.FC = () => {
         getProduct();
     }, []);
 
+    const handleBuyProduct = useCallback(() => {
+        (window as any).mp.checkout({
+            tokenizer: {
+                totalAmount: Number(product.value),
+                backUrl: 'http://localhost:3333/products/checkout',
+            },
+            autoOpen: true,
+            theme: {
+                elementsColor: '#ff9000',
+                headerColor: '#ff9000',
+            },
+        });
+    }, [product]);
+
     return (
         <Container>
             {loading ? (
@@ -104,7 +118,7 @@ const Product: React.FC = () => {
                         </Column>
 
                         <Column>
-                            <ProductAction productValues={product} />
+                            <ProductAction buyProduct={handleBuyProduct} productValues={product} />
 
                             <SellerInfo sellerInfo={product.provider} />
 
@@ -177,7 +191,9 @@ const Product: React.FC = () => {
                                 </div>
                             </MethodCard>
                             <Actions>
-                                <Button solid>Comprar agora</Button>
+                                <Button onClick={handleBuyProduct} solid>
+                                    Comprar agora
+                                </Button>
                             </Actions>
 
                             <Benefits

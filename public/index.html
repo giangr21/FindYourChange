@@ -2,7 +2,7 @@
 <html lang="pt-br">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta name="theme-color" content="#3A3A3A" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500&display=swap" rel="stylesheet">
     <title>Find Your Change</title>
@@ -10,5 +10,10 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <script>
+        window.mp = new MercadoPago('TEST-a41de498-d8d5-452f-a8fe-e3de9eb949ff', { locale: 'pt-BR' });
+    </script>
   </body>
 </html>
