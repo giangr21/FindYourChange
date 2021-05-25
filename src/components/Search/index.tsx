@@ -28,12 +28,12 @@ const Search: React.FC<Props> = ({ onSubmit, ...props }) => {
 
     return (
         <SearchBox
-            onEnter={() => {}}
+            onEnter={handleSubmit}
             onChange={(e) => handleOnChange(e)}
             onSubmit={handleSubmit}
             value={valueSearchBox}
             name="search"
-            placeholder="Pesquise os serviços por aqui "
+            placeholder="Pesquise os serviços aqui "
             {...props}
         />
     );

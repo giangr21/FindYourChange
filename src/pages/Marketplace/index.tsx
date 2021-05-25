@@ -86,7 +86,7 @@ const Index: React.FC = () => {
                 });
             } catch (err) {
                 if (err) {
-                    toast.error(`Houve uma falha ao filtrar`);
+                    toast.error(`Houve uma falha ao buscar os produtos!`);
                     console.log(err);
                 }
             }
@@ -94,57 +94,35 @@ const Index: React.FC = () => {
         [mobile],
     );
 
-    const getProducts = useCallback(async () => {
-        await api
-            .get('/products/marketplace/all')
-            .then(async (response) => {
-                const { data } = response;
-                const auxProducts: any = [];
-
-                for (let index = 0; index < data.length; index++) {
-                    const product = data[index];
-                    if (product.productImage) {
-                        const { data: imgBase64 } = await api.get(`storage/base64/min/${product.productImage}`);
-                        auxProducts.push({ ...product, productImage: imgBase64 });
-                    } else {
-                        auxProducts.push({ ...product });
-                    }
-                }
-
-                formRef.current?.setFieldValue('category', 'Todas');
-                formRef.current?.setFieldValue('cities', 'Todas');
-                formRef.current?.setFieldValue('price', 'Todos');
-                formRef.current?.setFieldValue('productState', 'Todos');
-
-                setProducts(auxProducts);
-                setLoading(false);
-            })
-            .catch((e) => {
-                toast.error('Houve um erro ao buscar dados!');
-                console.log(e);
-            });
-    }, []);
-
-    const clearFilter = useCallback(() => {
+    const clearFilter = useCallback(async () => {
         formRef.current?.reset();
 
-        setTimeout(() => {
-            getProducts();
-        }, 300);
+        await formFilterSubmit({});
         if (mobile) {
             setShowFilter((prevState) => !prevState);
         }
-    }, [getProducts, mobile]);
-
-    const getCities = useCallback(async () => {
-        await api.get('/provider/cities/all').then((response) => {
-            setCities(response.data);
-        });
-    }, []);
+    }, [formFilterSubmit, mobile]);
 
     useEffect(() => {
+        const getCities = async (): Promise<void> => {
+            await api.get('/provider/cities/all').then((response) => {
+                setCities(response.data);
+            });
+        };
+
+        const getProducts = async (): Promise<void> => {
+            await formFilterSubmit({});
+        };
+
         getCities();
         getProducts();
+
+        setTimeout(() => {
+            formRef.current?.setFieldValue('category', 'Todas');
+            formRef.current?.setFieldValue('cities', 'Todas');
+            formRef.current?.setFieldValue('price', 'Todos');
+            formRef.current?.setFieldValue('productState', 'Todos');
+        }, 300);
     }, []);
 
     const handleClickProduct = useCallback(

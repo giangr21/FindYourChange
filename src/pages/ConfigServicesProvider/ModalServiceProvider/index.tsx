@@ -183,6 +183,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
                     description: Yup.string().required('Descrição obrigatória'),
                     value: Yup.string().required('Valor obrigatório'),
                     category: Yup.string().required('Categoria obrigatória'),
+                    time: Yup.string().required('Tempo obrigatório'),
                     isPopularService: Yup.boolean().required('Preenchimento obrigatório'),
                     clerks: Yup.array().required('Atendentes Obrigatorio'),
                 });
