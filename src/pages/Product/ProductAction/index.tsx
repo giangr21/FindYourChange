@@ -61,17 +61,39 @@ const ProductAction: React.FC<ProductActionProps> = ({ productValues, buyProduct
             </MethodCard>
 
             <Actions>
-                <Button onClick={buyProduct} solid>
-                    Comprar agora
-                </Button>
+                {productValues.quantity >= 1 ? (
+                    <Button onClick={buyProduct} solid>
+                        Comprar agora
+                    </Button>
+                ) : (
+                    <>
+                        <span
+                            style={{
+                                margin: '10px auto',
+                                color: '#c53030',
+                                fontWeight: 500,
+                            }}
+                        >
+                            Produto SEM ESTOQUE
+                        </span>
+                        <span
+                            style={{
+                                margin: '0 auto',
+                            }}
+                        >
+                            Entre em contato com o vendedor!
+                        </span>
+                    </>
+                )}
             </Actions>
-
-            <Benefits>
-                <li>
-                    <ShieldIcon />
-                    <p>Compra Garantida.</p>
-                </li>
-            </Benefits>
+            {productValues.quantity >= 1 && (
+                <Benefits>
+                    <li>
+                        <ShieldIcon />
+                        <p>Compra Garantida.</p>
+                    </li>
+                </Benefits>
+            )}
         </Container>
     );
 };
