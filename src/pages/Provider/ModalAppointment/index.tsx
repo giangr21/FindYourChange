@@ -178,8 +178,8 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
 
     const handleSelectDate = useCallback(
         async (appointmentDate: any) => {
-            setDateAppointment(appointmentDate);
             await getWorkTimeByWeekDay(getWeekDayName(moment(appointmentDate).day()));
+            setDateAppointment(appointmentDate);
         },
         [getWorkTimeByWeekDay],
     );
