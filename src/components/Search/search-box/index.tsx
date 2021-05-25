@@ -34,7 +34,7 @@ export const SearchBox: React.FC<Props> = ({
                 </>
             ) : (
                 <>
-                    <StyledCategoryName>Teste</StyledCategoryName>
+                    {/* <StyledCategoryName>Teste</StyledCategoryName> */}
                     <StyledInput type="search" onChange={onChange} value={value} name={name} {...rest} />
                     <StyledSearchButton type="button" onClick={onSubmit}>
                         <SearchIcon style={{ marginRight: 10 }} />
