@@ -225,6 +225,7 @@ export const RecommendationCard = styled.div`
     display: flex;
     flex-direction: column;
     width: 300px;
+    height: 250px;
     cursor: pointer;
     align-items: center;
     padding: 0px 5px;
@@ -236,6 +237,7 @@ export const RecommendationCard = styled.div`
 
     img {
         width: 275px;
+        max-height: 200px;
         border-radius: 10px;
     }
 
