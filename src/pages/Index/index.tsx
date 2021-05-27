@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable func-names */
 import React, { useEffect, useState } from 'react';
-
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useHistory } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
 import {
@@ -33,7 +33,7 @@ import Header from '../../components/Header';
 
 const Index: React.FC = () => {
     const history = useHistory();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [popularRecommendations, setPopularRecommendations] = useState([]);
 
     useEffect(() => {
@@ -43,7 +43,6 @@ const Index: React.FC = () => {
                 .then(async (response) => {
                     for (let index = 0; index < response.data.length; index++) {
                         const recommendation = response.data[index];
-
                         if (recommendation.provider.providerImages.length > 0) {
                             const { data: imgBase64 } = await api.get(
                                 `storage/base64/${recommendation.provider.providerImages[0].image}`,
@@ -51,7 +50,6 @@ const Index: React.FC = () => {
                             recommendation.defaultImg = imgBase64;
                         }
                     }
-                    console.log(response);
                     setPopularRecommendations(response.data);
                     setLoading(false);
                 })
@@ -131,30 +129,55 @@ const Index: React.FC = () => {
                     <span className="title">Serviços Recomendados</span>
                     <div className="separator" />
                     <RecommendationContent>
-                        {popularRecommendations.map((popularRecommendation: any) => (
-                            <RecommendationCard
-                                key={popularRecommendation.id}
-                                onClick={() => {
-                                    history.push(`/provider/${popularRecommendation.provider.id}`);
-                                }}
-                            >
-                                {popularRecommendation.defaultImg && (
-                                    <img
-                                        src={`data:image/png;base64,${popularRecommendation.defaultImg}`}
-                                        alt=""
-                                    />
-                                )}
-                                <span>
-                                    {popularRecommendation.provider.legalName.length > 20
-                                        ? `${popularRecommendation.provider.legalName.substring(0, 20)}..`
-                                        : popularRecommendation.provider.legalName}{' '}
-                                </span>
-                                <p>
-                                    {popularRecommendation.provider.addressCity} -{' '}
-                                    {popularRecommendation.provider.phone}
-                                </p>
-                            </RecommendationCard>
-                        ))}
+                        {loading ? (
+                            <>
+                                <RecommendationCard>
+                                    <SkeletonTheme color="#3A3A3A" highlightColor="#ff9000">
+                                        <Skeleton height="200px" width="300px" />
+                                    </SkeletonTheme>
+                                </RecommendationCard>
+                                <RecommendationCard
+                                    style={{
+                                        marginRight: '10px',
+                                        marginLeft: '10px',
+                                    }}
+                                >
+                                    <SkeletonTheme color="#3A3A3A" highlightColor="#ff9000">
+                                        <Skeleton height="200px" width="300px" />
+                                    </SkeletonTheme>
+                                </RecommendationCard>
+                                <RecommendationCard>
+                                    <SkeletonTheme color="#3A3A3A" highlightColor="#ff9000">
+                                        <Skeleton height="200px" width="300px" />
+                                    </SkeletonTheme>
+                                </RecommendationCard>
+                            </>
+                        ) : (
+                            popularRecommendations.map((popularRecommendation: any) => (
+                                <RecommendationCard
+                                    key={popularRecommendation.id}
+                                    onClick={() => {
+                                        history.push(`/provider/${popularRecommendation.provider.id}`);
+                                    }}
+                                >
+                                    {popularRecommendation.defaultImg && (
+                                        <img
+                                            src={`data:image/png;base64,${popularRecommendation.defaultImg}`}
+                                            alt=""
+                                        />
+                                    )}
+                                    <span>
+                                        {popularRecommendation.provider.legalName.length > 20
+                                            ? `${popularRecommendation.provider.legalName.substring(0, 20)}..`
+                                            : popularRecommendation.provider.legalName}{' '}
+                                    </span>
+                                    <p>
+                                        {popularRecommendation.provider.addressCity} -{' '}
+                                        {popularRecommendation.provider.phone}
+                                    </p>
+                                </RecommendationCard>
+                            ))
+                        )}
                     </RecommendationContent>
                 </Recommendation>
             </Container>
