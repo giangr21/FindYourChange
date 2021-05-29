@@ -29,7 +29,12 @@ const ProductRow: React.FC<ProductRow> = ({ data, handleDelete, handleEdit }) =>
     return (
         <React.Fragment key={data.id}>
             <StyledBodyCell>{data.name}</StyledBodyCell>
-            <StyledBodyCell>{data.value}</StyledBodyCell>
+            <StyledBodyCell>
+                {Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                }).format(Number(data.value))}
+            </StyledBodyCell>
             <StyledBodyCell>{data.quantity}</StyledBodyCell>
             <StyledBodyCell>{data.category}</StyledBodyCell>
             <StyledBodyCell>

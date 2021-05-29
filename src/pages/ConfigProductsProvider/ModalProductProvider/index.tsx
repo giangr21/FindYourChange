@@ -216,7 +216,7 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                                         marginBottom: '15px',
                                     }}
                                 >
-                                    <Input name="value" placeholder="Valor $" />
+                                    <Input type="number" name="value" placeholder="Valor $" />
                                 </div>
                             </Container>
                             <Container>
@@ -227,7 +227,7 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                                         marginBottom: '15px',
                                     }}
                                 >
-                                    <Input name="quantity" placeholder="Quantidade" />
+                                    <Input type="number" name="quantity" placeholder="Quantidade" />
                                 </div>
                             </Container>
                             <Container>

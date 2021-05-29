@@ -38,10 +38,9 @@ export const SubTitle = styled.span`
 export const AboutContainer = styled.div`
     max-width: 1200px;
     margin: 0 auto;
-    margin-top: 10px;
-    height: 700px;
-    max-height: 750px;
+    height: 100%;
     background-color: #ffffff;
+    padding: 20px;
 
     .title {
         color: #3a3a3a;

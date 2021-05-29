@@ -240,12 +240,14 @@ const Profile: React.FC = () => {
     const updateDefaultProviderImage = useCallback(async () => {
         try {
             const providerImage = profileInfo.providerImages[indexImgSelectedInCarousel];
-            await api.post(`providerImages/updateDefaultImage/${providerImage.id}`);
+            await api.post(`providerImages/updateDefaultImage/${providerImage.id}`, {
+                providerId: user.id,
+            });
             toast.success('Imagem Padrão atualizada com sucesso!!');
         } catch (e) {
             console.log(e);
         }
-    }, [indexImgSelectedInCarousel, profileInfo]);
+    }, [indexImgSelectedInCarousel, profileInfo.providerImages, user.id]);
 
     const deleteProviderImage = useCallback(async () => {
         const providerImage = profileInfo.providerImages[indexImgSelectedInCarousel];

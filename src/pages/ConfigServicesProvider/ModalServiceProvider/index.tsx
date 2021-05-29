@@ -35,7 +35,7 @@ interface ServiceData {
     title: string;
     description: string;
     value: number;
-    disccount: number;
+    disccount: any;
     category: string;
     time: string;
     image: string;
@@ -177,6 +177,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
     const submitService = useCallback(
         async (data: ServiceData) => {
             try {
+                console.log(data);
                 formRef.current?.setErrors({});
                 const schema = Yup.object().shape({
                     title: Yup.string().required('Título obrigatório'),
@@ -193,6 +194,10 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
 
                 if (serviceImg) {
                     data.image = serviceImg;
+                }
+
+                if (data.disccount === '') {
+                    data.disccount = 0;
                 }
 
                 data.provider = user.id;
@@ -309,10 +314,10 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
                             </Row>
                             <Row>
                                 <Col xs={12} sm={6} md={6} lg={6}>
-                                    <Input name="value" placeholder="Valor $" />
+                                    <Input type="number" name="value" placeholder="Valor $" />
                                 </Col>
                                 <Col xs={12} sm={6} md={6} lg={6}>
-                                    <Input name="disccount" placeholder="Desconto %" />
+                                    <Input type="number" name="disccount" placeholder="Desconto %" />
                                 </Col>
                             </Row>
                             <Row>
