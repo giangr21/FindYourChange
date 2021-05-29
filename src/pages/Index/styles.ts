@@ -181,9 +181,8 @@ export const Container = styled.div`
 export const Recommendation = styled.div`
     max-width: 1200px;
     margin: 0 auto;
-    padding-top: 20px;
-    /* height: 360px; */
-    /* max-height: 500px; */
+    padding-top: 40px;
+    padding-bottom: 40px;
     background-color: #ffffff;
 
     .title {

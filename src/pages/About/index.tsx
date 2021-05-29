@@ -1,5 +1,4 @@
-import React, { useRef } from 'react';
-import { FaArrowRight, FaSearch } from 'react-icons/fa';
+import React from 'react';
 
 import { Container, ImageContainer, Title, SubTitle, AboutContainer, AboutContent, Founders } from './styles';
 
@@ -11,7 +10,6 @@ const About: React.FC = () => {
                 <SubTitle>Saiba mais sobre o Find Your Change</SubTitle>
             </ImageContainer>
             <AboutContainer>
-                <br />
                 <span className="title">Quem somos?</span>
                 <div className="separator" />
                 <AboutContent>

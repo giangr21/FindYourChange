@@ -21,8 +21,9 @@ import {
     RecommendationContent,
 } from './styles';
 
-import card1 from '../../assets/reco1.png';
-import imageUrl from '../../assets/background.jpg';
+import imageUrl1 from '../../assets/HomeImgs/1.jpg';
+import imageUrl2 from '../../assets/HomeImgs/2.jpg';
+import imageUrl3 from '../../assets/HomeImgs/3.jpg';
 import Search from '../../components/Search';
 import api from '../../services/api';
 import { Tattoo } from './IconsMobile/iconTattoo';
@@ -35,8 +36,20 @@ const Index: React.FC = () => {
     const history = useHistory();
     const [loading, setLoading] = useState(true);
     const [popularRecommendations, setPopularRecommendations] = useState([]);
+    const [img, setImg] = useState<any>(null);
 
     useEffect(() => {
+        const getRandomImg = (): void => {
+            const array = [1, 2, 3];
+            const sortedArray = array.sort(() => 0.5 - Math.random());
+            if (sortedArray[0] === 1) {
+                setImg(imageUrl1);
+            } else if (sortedArray[0] === 2) {
+                setImg(imageUrl2);
+            } else {
+                setImg(imageUrl3);
+            }
+        };
         const getPopularRecommendations = async function (): Promise<void> {
             await api
                 .get(`/providerRecommendation/populars/`)
@@ -58,13 +71,14 @@ const Index: React.FC = () => {
                     console.log(e);
                 });
         };
+        getRandomImg();
         getPopularRecommendations();
     }, []);
 
     return (
         <>
             <Box display={['none', 'none', 'flex']}>
-                <Image backgroundImage={`url(${imageUrl})`} />
+                <Image backgroundImage={`url(${img})`} />
                 <Content>
                     <Title>Barbearia ? Tatuagem ? Piercing ?</Title>
                     <Description>Agende online os serviços mais próximos de você</Description>
