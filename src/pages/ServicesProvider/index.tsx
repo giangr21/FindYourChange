@@ -122,15 +122,16 @@ const Index: React.FC = () => {
     useEffect(() => {
         async function getCities(): Promise<void> {
             await api.get('/provider/cities/all').then((response) => {
-                const { data } = response;
-                setCities(data);
+                setCities(response.data);
+                setTimeout(() => {
+                    formRef.current?.setFieldValue('cities', 'Todas');
+                }, 300);
             });
         }
 
         getCities();
 
         setTimeout(() => {
-            formRef.current?.setFieldValue('cities', 'Todas');
             formRef.current?.setFieldValue('category', 'Todos');
             formRef.current?.setFieldValue('price', 'Todos');
         }, 500);
