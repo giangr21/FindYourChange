@@ -67,28 +67,24 @@ const Profile: React.FC = () => {
         async (data: any) => {
             try {
                 formRef.current?.setErrors({});
+
                 const schema = Yup.object().shape({
-                    oldPassword: Yup.string(),
-                    password: Yup.string().when('oldPassword', {
-                        is: (val) => !!val.length,
-                        then: Yup.string().required('Campo obrigatório!!'),
-                        otherwise: Yup.string(),
-                    }),
+                    password: Yup.string().required('Campo obrigatorio').max(60, 'Maximo 60 caracters'),
                     passwordConfirmation: Yup.string()
-                        .when('oldPassword', {
+                        .max(60, 'Maximo 60 caracters')
+                        .when('password', {
                             is: (val) => !!val.length,
-                            then: Yup.string().required('Campo obrigatório!!'),
+                            then: Yup.string().required('Campo obrigatorio!!'),
                             otherwise: Yup.string(),
                         })
-                        .oneOf([Yup.ref('password'), undefined], 'Confirmação incorreta'),
+                        .oneOf([Yup.ref('password'), undefined], 'Confirmaçao incorreta'),
                 });
 
                 await schema.validate(data, {
                     abortEarly: false,
                 });
 
-                if (data.oldPassword === '') {
-                    delete data.oldPassword;
+                if (data.password === '') {
                     delete data.password;
                     delete data.passwordConfirmation;
                 }
@@ -135,7 +131,17 @@ const Profile: React.FC = () => {
                 toast.error('Houve um erro! Tente novamente.');
             }
         },
-        [user.id, user.isProvider, isBarber, isTattoo, isPiercing, updateUser, history, profileAvatar],
+        [
+            user.id,
+            user.avatar,
+            user.isProvider,
+            isBarber,
+            isTattoo,
+            isPiercing,
+            profileAvatar,
+            updateUser,
+            history,
+        ],
     );
 
     const handleAvatarChange = useCallback(
@@ -190,7 +196,7 @@ const Profile: React.FC = () => {
                         formRef.current?.setFieldValue('addressCity', `${response.data.city.clearName}`);
                         formRef.current?.setFieldValue('addressCountry', 'Brasil');
                         formRef.current?.setFieldValue('addressStreet', `${response.data.clearPublicPlace}`);
-                        formRef.current?.setFieldValue('addressState', `${response.data.stateId}`);
+                        formRef.current?.setFieldValue('addressState', `${response.data.state}`);
 
                         const inputNumber = formRef.current?.getFieldRef('addressNumber');
                         if (inputNumber) {
@@ -356,34 +362,7 @@ const Profile: React.FC = () => {
                                     </Row>
 
                                     <Row>
-                                        <Col xs={12} sm={6} md={6} lg={6}>
-                                            <InputMask
-                                                icon={FaPhoneAlt}
-                                                mask="(99)99999-9999"
-                                                name="phone"
-                                                placeholder="Telefone"
-                                            />
-                                        </Col>
-                                        <Col xs={12} sm={6} md={6} lg={6}>
-                                            <Input
-                                                name="legalName"
-                                                icon={FiUser}
-                                                type="text"
-                                                placeholder="Nome Fantasia"
-                                            />
-                                        </Col>
-                                    </Row>
-
-                                    <Row>
-                                        <Col xs={12} sm={4} md={4} lg={4}>
-                                            <Input
-                                                name="oldPassword"
-                                                icon={FiLock}
-                                                type="password"
-                                                placeholder="Senha atual"
-                                            />
-                                        </Col>
-                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                        <Col xs={12} sm={3} md={3} lg={3}>
                                             <Input
                                                 name="password"
                                                 icon={FiLock}
@@ -391,12 +370,28 @@ const Profile: React.FC = () => {
                                                 placeholder="Nova senha"
                                             />
                                         </Col>
-                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                        <Col xs={12} sm={3} md={3} lg={3}>
                                             <Input
                                                 name="passwordConfirmation"
                                                 icon={FiLock}
                                                 type="password"
                                                 placeholder="Confirmar senha"
+                                            />
+                                        </Col>
+                                        <Col xs={12} sm={3} md={3} lg={3}>
+                                            <InputMask
+                                                icon={FaPhoneAlt}
+                                                mask="(99)99999-9999"
+                                                name="phone"
+                                                placeholder="Telefone"
+                                            />
+                                        </Col>
+                                        <Col xs={12} sm={3} md={3} lg={3}>
+                                            <Input
+                                                name="legalName"
+                                                icon={FiUser}
+                                                type="text"
+                                                placeholder="Nome Fantasia"
                                             />
                                         </Col>
                                     </Row>

@@ -85,27 +85,22 @@ const UserProfile: React.FC = () => {
             try {
                 formRef.current?.setErrors({});
                 const schema = Yup.object().shape({
-                    oldPassword: Yup.string(),
-                    password: Yup.string().when('oldPassword', {
-                        is: (val) => !!val.length,
-                        then: Yup.string().required('Campo obrigatório!!'),
-                        otherwise: Yup.string(),
-                    }),
+                    password: Yup.string().required('Campo obrigatorio').max(60, 'Maximo 60 caracters'),
                     passwordConfirmation: Yup.string()
-                        .when('oldPassword', {
+                        .max(60, 'Maximo 60 caracters')
+                        .when('password', {
                             is: (val) => !!val.length,
-                            then: Yup.string().required('Campo obrigatório!!'),
+                            then: Yup.string().required('Campo obrigatorio!!'),
                             otherwise: Yup.string(),
                         })
-                        .oneOf([Yup.ref('password'), undefined], 'Confirmação incorreta'),
+                        .oneOf([Yup.ref('password'), undefined], 'Confirmaçao incorreta'),
                 });
 
                 await schema.validate(data, {
                     abortEarly: false,
                 });
 
-                if (data.oldPassword === '') {
-                    delete data.oldPassword;
+                if (data.password === '') {
                     delete data.password;
                     delete data.passwordConfirmation;
                 }
@@ -249,22 +244,14 @@ const UserProfile: React.FC = () => {
                                         </label>
                                     </AvatarInput>
                                     <Row>
-                                        <Col xs={12} sm={3} md={3} lg={3}>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
                                             <Input name="name" icon={FiUser} placeholder="Nome" />
                                         </Col>
-                                        <Col xs={12} sm={3} md={3} lg={3}>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
                                             <Input name="lastName" icon={FiUser} placeholder="Sobrenome" />
                                         </Col>
-                                        <Col xs={12} sm={3} md={3} lg={3}>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
                                             <Input name="email" icon={FiMail} placeholder="E-mail" />
-                                        </Col>
-                                        <Col xs={12} sm={3} md={3} lg={3}>
-                                            <InputMask
-                                                icon={FaPhoneAlt}
-                                                mask="(99)99999-9999"
-                                                name="phone"
-                                                placeholder="Telefone"
-                                            />
                                         </Col>
                                     </Row>
 
@@ -272,14 +259,6 @@ const UserProfile: React.FC = () => {
                                         <Col xs={12} sm={4} md={4} lg={4}>
                                             <Input
                                                 name="password"
-                                                icon={FiLock}
-                                                type="password"
-                                                placeholder="Senha atual"
-                                            />
-                                        </Col>
-                                        <Col xs={12} sm={4} md={4} lg={4}>
-                                            <Input
-                                                name="oldPassword"
                                                 icon={FiLock}
                                                 type="password"
                                                 placeholder="Nova senha"
@@ -291,6 +270,14 @@ const UserProfile: React.FC = () => {
                                                 icon={FiLock}
                                                 type="password"
                                                 placeholder="Confirmar senha"
+                                            />
+                                        </Col>
+                                        <Col xs={12} sm={4} md={4} lg={4}>
+                                            <InputMask
+                                                icon={FaPhoneAlt}
+                                                mask="(99)99999-9999"
+                                                name="phone"
+                                                placeholder="Telefone"
                                             />
                                         </Col>
                                     </Row>

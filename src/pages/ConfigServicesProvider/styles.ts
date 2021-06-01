@@ -8,6 +8,18 @@ export const Container = styled.div`
     display: flex;
     flex-direction: row;
     overflow-x: hidden;
+
+    ::-webkit-scrollbar {
+        width: 2px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #f4ede8;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #ff9000;
+        border-radius: 20px;
+        border: 3px solid #ff9000;
+    }
 `;
 
 export const Content = styled.div`

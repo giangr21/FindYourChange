@@ -57,18 +57,6 @@ const Filter: React.FC<FilterProps> = ({ showFilter, submitFilter, conditionClea
             </HeaderFilter>
             <Form ref={formRef} onSubmit={formFilterSubmit}>
                 {children}
-                <div className="space">
-                    {/* <Select
-                        name="central"
-                        fieldValue="value"
-                        fieldLabel="label"
-                        label="Central"
-                        placeholder=""
-                        className="react-select-container"
-                        defaultValue={defaultOption}
-                        options={optionsSelect}
-                    /> */}
-                </div>
             </Form>
             <FooterFilter>
                 <IconButton icon={MdDeleteForever} title="Limpar" background="#777777" action={clearFilter} />

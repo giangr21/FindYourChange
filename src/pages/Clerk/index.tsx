@@ -158,7 +158,7 @@ const Index: React.FC = () => {
                                 padding: '0px 10px',
                             }}
                         >
-                            <StyledTable $gridTemplateColumns="minmax(150px, auto) minmax(150px, auto) minmax(150px, auto) minmax(150px, auto)">
+                            <StyledTable $gridTemplateColumns="minmax(150px, auto) minmax(250px, auto) minmax(150px, auto) minmax(150px, auto)">
                                 <StyledHeadCell>Atendente</StyledHeadCell>
                                 <StyledHeadCell>E-mail</StyledHeadCell>
                                 <StyledHeadCell>Telefone</StyledHeadCell>
