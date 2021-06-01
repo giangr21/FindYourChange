@@ -244,9 +244,9 @@ const Index: React.FC = () => {
                         defaultValue={{ value: 'Todos', label: 'Todos' }}
                         options={[
                             { value: 'Todos', label: 'Todos' },
-                            { value: '30min', label: '30min' },
-                            { value: '1h', label: '1h' },
-                            { value: 'Acima de 2h', label: 'Acima de 2h' },
+                            { value: '30', label: '30min' },
+                            { value: '60', label: '1h' },
+                            { value: '120', label: 'Acima de 2h' },
                         ]}
                     />
                 </div>
