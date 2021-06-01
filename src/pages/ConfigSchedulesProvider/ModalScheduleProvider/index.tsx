@@ -334,23 +334,6 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                                     />
                                 </div>
                             </Container>
-                            <p>Horário Fim</p>
-                            <Container>
-                                <div
-                                    style={{
-                                        padding: '2px',
-                                        width: '100%',
-                                    }}
-                                >
-                                    <TimePicker
-                                        showSecond={false}
-                                        onChange={(e) => onChangeHourEnd(e, false)}
-                                        className="timePicker"
-                                        inputReadOnly
-                                        value={hourEnd}
-                                    />
-                                </div>
-                            </Container>
                             <p>Horário Fim Almoço</p>
                             <Container>
                                 <div
@@ -365,6 +348,23 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                                         className="timePicker"
                                         inputReadOnly
                                         value={hourLunchEnd}
+                                    />
+                                </div>
+                            </Container>
+                            <p>Horário Fim</p>
+                            <Container>
+                                <div
+                                    style={{
+                                        padding: '2px',
+                                        width: '100%',
+                                    }}
+                                >
+                                    <TimePicker
+                                        showSecond={false}
+                                        onChange={(e) => onChangeHourEnd(e, false)}
+                                        className="timePicker"
+                                        inputReadOnly
+                                        value={hourEnd}
                                     />
                                 </div>
                             </Container>
