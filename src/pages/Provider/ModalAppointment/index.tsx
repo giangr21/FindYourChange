@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react';
+/* eslint-disable react/no-this-in-sfc */
+import React, { useCallback, useRef, useState } from 'react';
 import { DatePicker } from 'baseui/datepicker';
 import { TimePicker } from 'baseui/timepicker';
 import { FormControl } from 'baseui/form-control';
@@ -82,6 +83,14 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
     }, []);
 
     const handleNewAppointment = useCallback(() => {
+        if (!dateAppointment) {
+            return toast.error('Selecione a data do agendamento !');
+        }
+
+        if (!hourAppointment) {
+            return toast.error('Selecione a hora do agendamento !');
+        }
+
         toggleResumeModal();
         let { value } = serviceInfo;
         if (serviceInfo.disccount !== '' && serviceInfo.disccount !== '0') {
@@ -148,11 +157,12 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
     ]);
 
     const getWorkTimeByWeekDay = useCallback(
-        async (weekDay: string, clerkId?: string) => {
+        async (weekDay: string, selectedDate: string, clerkId?: string) => {
             await api
                 .get('clerk/getWorkTime/weekDay', {
                     params: {
                         weekDay,
+                        selectedDate,
                         clerkId: clerkId || selectedClerk,
                     },
                 })
@@ -170,7 +180,11 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
         async (clerkId: string) => {
             setSelectedClerk(clerkId);
             if (selectedClerk !== null) {
-                await getWorkTimeByWeekDay(getWeekDayName(moment(dateAppointment).day()), clerkId);
+                await getWorkTimeByWeekDay(
+                    getWeekDayName(moment(dateAppointment).day()),
+                    moment(dateAppointment).format('YYYY-MM-DD'),
+                    clerkId,
+                );
             }
         },
         [dateAppointment, getWorkTimeByWeekDay, selectedClerk],
@@ -178,7 +192,10 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
 
     const handleSelectDate = useCallback(
         async (appointmentDate: any) => {
-            await getWorkTimeByWeekDay(getWeekDayName(moment(appointmentDate).day()));
+            await getWorkTimeByWeekDay(
+                getWeekDayName(moment(appointmentDate).day()),
+                moment(appointmentDate).format('YYYY-MM-DD'),
+            );
             setDateAppointment(appointmentDate);
         },
         [getWorkTimeByWeekDay],
@@ -317,6 +334,7 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                                 minTime={new Date(`2021-05-22 ${workTimeClerk.min}`)}
                                 maxTime={new Date(`2021-05-22 ${workTimeClerk.max}`)}
                                 format="24"
+                                placeholder=" "
                                 overrides={{
                                     Select: {
                                         props: {

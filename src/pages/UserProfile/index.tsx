@@ -85,7 +85,7 @@ const UserProfile: React.FC = () => {
             try {
                 formRef.current?.setErrors({});
                 const schema = Yup.object().shape({
-                    password: Yup.string().required('Campo obrigatorio').max(60, 'Maximo 60 caracters'),
+                    password: Yup.string().max(60, 'Maximo 60 caracters'),
                     passwordConfirmation: Yup.string()
                         .max(60, 'Maximo 60 caracters')
                         .when('password', {

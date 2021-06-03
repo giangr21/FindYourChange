@@ -31,6 +31,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
     const mobile = useMedia('(max-width: 760px)');
     const { user } = useAuth();
     const [loading, setLoading] = useState(true);
+    const [loadingRequest, setLoadingRequest] = useState(false);
     const [initialScheduleData, setInitialScheduleData] = useState<any>(null);
     const formRef = useRef<FormHandles>(null);
     const [hourStart, setHourStart] = useState<any>(undefined);
@@ -222,6 +223,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                 }
 
                 scheduleData.provider = user.id;
+                setLoadingRequest(true);
 
                 if (edit) {
                     scheduleData.id = scheduleId;
@@ -241,6 +243,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                 }
 
                 toast.success(`Turno ${edit ? 'editado' : 'inserido'} com sucesso!`);
+                setLoadingRequest(false);
                 setIsOpen();
                 reloadSchedule();
             } catch (err) {
@@ -391,6 +394,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                         <IconButton
                             type="button"
                             icon={FiCheckSquare}
+                            disabled={loadingRequest}
                             title={edit ? 'Editar Turno' : 'Adicionar Turno'}
                             background="#2e656a"
                             action={() => formRef.current?.submitForm()}

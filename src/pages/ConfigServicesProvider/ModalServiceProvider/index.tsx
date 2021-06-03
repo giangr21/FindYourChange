@@ -72,6 +72,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
     const { user } = useAuth();
     const formRef = useRef<FormHandles>(null);
     const [loading, setLoading] = useState(true);
+    const [loadingRequest, setLoadingRequest] = useState(false);
     const [serviceData, setServiceData] = useState<any>(null);
     const [statusImgLogo, setStatusImgLogo] = useState<any>(null);
     const [imgPhotoMin, setImgPhotoMin] = useState<any>(null);
@@ -201,6 +202,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
                 }
 
                 data.provider = user.id;
+                setLoadingRequest(true);
 
                 if (edit) {
                     data.id = serviceId;
@@ -210,6 +212,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
                 }
 
                 toast.success(`Serviço ${edit ? 'editado' : 'criado'} com sucesso!`);
+                setLoadingRequest(false);
                 setIsOpen();
                 reloadService();
             } catch (err) {
@@ -439,6 +442,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
                         )}
                         <IconButton
                             type="button"
+                            disabled={loadingRequest}
                             icon={FiCheckSquare}
                             title={edit ? 'Editar Serviço' : 'Adicionar Serviço'}
                             background="#2e656a"

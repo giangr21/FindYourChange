@@ -107,6 +107,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
     const { user } = useAuth();
     const formRef = useRef<FormHandles>(null);
     const [loading, setLoading] = useState(true);
+    const [loadingRequest, setLoadingRequest] = useState(false);
     const [clerkData, setClerkData] = useState<any>(null);
     const [statusImgLogo, setStatusImgLogo] = useState<any>(null);
     const [imgPhotoMin, setImgPhotoMin] = useState<any>(null);
@@ -519,6 +520,8 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                 if (validateHours()) {
                     throw new Error('Horários inválidos!');
                 }
+
+                setLoadingRequest(true);
                 if (edit) {
                     data.id = clerkId;
                     await api.put('clerk', data);
@@ -534,6 +537,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                 }
 
                 toast.success(`Atendente ${edit ? 'editado' : 'inserido'} com sucesso!`);
+                setLoadingRequest(false);
                 setIsOpen();
                 reloadClerk();
             } catch (err) {
@@ -926,6 +930,7 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                         <IconButton
                             type="button"
                             icon={FiCheckSquare}
+                            disabled={loadingRequest}
                             title={edit ? 'Editar Atendente' : 'Adicionar Atendente'}
                             background="#2e656a"
                             action={() => formRef.current?.submitForm()}
