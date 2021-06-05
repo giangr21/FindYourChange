@@ -122,6 +122,7 @@ const SignUp: React.FC = () => {
                 data.isPiercing = isPiercing;
                 await api.post('provider/add', data);
                 history.push('/');
+                toast.success('Prestador de serviço criado com sucesso!');
             } catch (err) {
                 if (err instanceof Yup.ValidationError) {
                     const errors = getValidationErrors(err);
@@ -179,11 +180,12 @@ const SignUp: React.FC = () => {
                 .get(`https://ecommerce-api-dev.jclan.com.br/street/${cep}`)
                 .then((response) => {
                     if (response.data !== '') {
+                        console.log(response.data);
                         formRef.current?.setFieldValue('addressArea', `${response.data.area.clearName}`);
                         formRef.current?.setFieldValue('addressCity', `${response.data.city.clearName}`);
                         formRef.current?.setFieldValue('addressCountry', 'Brasil');
                         formRef.current?.setFieldValue('addressStreet', `${response.data.clearPublicPlace}`);
-                        formRef.current?.setFieldValue('addressState', `${response.data.stateId}`);
+                        formRef.current?.setFieldValue('addressState', `${response.data.state}`);
 
                         const inputNumber = formRef.current?.getFieldRef('addressNumber');
                         if (inputNumber) {

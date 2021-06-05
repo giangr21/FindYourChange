@@ -136,16 +136,16 @@ const HomePageProvider: React.FC = () => {
         getDashboardInfo();
     }, [selectedDate, user.id]);
 
-    const disabledDays = useMemo(() => {
-        const dates = monthAvailability
-            .filter((monthDay) => monthDay.available === false)
-            .map((monthDay) => {
-                const year = currentMonth.getFullYear();
-                const month = currentMonth.getMonth();
-                return new Date(year, month, monthDay.day);
-            });
-        return dates;
-    }, [currentMonth, monthAvailability]);
+    // const disabledDays = useMemo(() => {
+    //     const dates = monthAvailability
+    //         .filter((monthDay) => monthDay.available === false)
+    //         .map((monthDay) => {
+    //             const year = currentMonth.getFullYear();
+    //             const month = currentMonth.getMonth();
+    //             return new Date(year, month, monthDay.day);
+    //         });
+    //     return dates;
+    // }, [currentMonth, monthAvailability]);
 
     const selectedDateAsText = useMemo(() => {
         return format(selectedDate, "'Dia' dd 'de' MMMM", {
@@ -296,9 +296,9 @@ const HomePageProvider: React.FC = () => {
                         onMonthChange={handleMonthChange}
                         fromMonth={new Date()}
                         selectedDays={selectedDate}
-                        disabledDays={[{ daysOfWeek: [0, 6] }, ...disabledDays]}
+                        disabledDays={[{ daysOfWeek: [0, 7] }]}
                         modifiers={{
-                            available: { daysOfWeek: [1, 2, 3, 4, 5] },
+                            available: { daysOfWeek: [1, 2, 3, 4, 5, 6] },
                         }}
                     />
                 </Calendar>

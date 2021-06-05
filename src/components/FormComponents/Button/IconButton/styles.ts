@@ -49,7 +49,7 @@ export const Button = styled.button<ButtonProps>`
         `}
 
     &:disabled {
-        color: #666666;
+        color: #fff;
         cursor: not-allowed;
     }
 `;

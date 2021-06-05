@@ -35,17 +35,17 @@ const Index: React.FC = () => {
                     </Left>
                     <Right mobile={mobile}>
                         <div className="img">
-                            <label htmlFor="avatar">
+                            <label htmlFor="imgSocialMedia">
                                 <FaInstagram />
                             </label>
                         </div>
                         <div className="img">
-                            <label htmlFor="avatar">
+                            <label htmlFor="imgSocialMedia">
                                 <FaWhatsapp />
                             </label>
                         </div>
                         <div className="img">
-                            <label htmlFor="avatar">
+                            <label htmlFor="imgSocialMedia">
                                 <FaFacebookF />
                             </label>
                         </div>

@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable func-names */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useHistory } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
@@ -34,6 +34,7 @@ import Header from '../../components/Header';
 
 const Index: React.FC = () => {
     const history = useHistory();
+    const [valueSearchBox, setValueSearchBox] = useState('');
     const [loading, setLoading] = useState(true);
     const [popularRecommendations, setPopularRecommendations] = useState([]);
     const [img, setImg] = useState<any>(null);
@@ -42,6 +43,7 @@ const Index: React.FC = () => {
         const getRandomImg = (): void => {
             const array = [1, 2, 3];
             const sortedArray = array.sort(() => 0.5 - Math.random());
+
             if (sortedArray[0] === 1) {
                 setImg(imageUrl1);
             } else if (sortedArray[0] === 2) {
@@ -50,6 +52,7 @@ const Index: React.FC = () => {
                 setImg(imageUrl3);
             }
         };
+
         const getPopularRecommendations = async function (): Promise<void> {
             await api
                 .get(`/providerRecommendation/populars/`)
@@ -67,12 +70,24 @@ const Index: React.FC = () => {
                     setLoading(false);
                 })
                 .catch((e) => {
-                    // toast.error('Houve um erro ao buscar dados!');
                     console.log(e);
                 });
         };
+
         getRandomImg();
         getPopularRecommendations();
+    }, []);
+
+    const handleSubmit = useCallback(() => {
+        history.push({
+            pathname: `/allServicesProvider/`,
+            state: valueSearchBox,
+        });
+    }, [history, valueSearchBox]);
+
+    const handleOnChange = useCallback((e: any) => {
+        e.preventDefault();
+        setValueSearchBox(e.target.value);
     }, []);
 
     return (
@@ -83,7 +98,13 @@ const Index: React.FC = () => {
                     <Title>Barbearia ? Tatuagem ? Piercing ?</Title>
                     <Description>Agende online os serviços mais próximos de você</Description>
                     <SearchWrapper>
-                        <Search className="banner-search" shadow="0 21px 36px rgba(0,0,0,0.05)" />
+                        <Search
+                            valueSearchBox={valueSearchBox}
+                            setValueSearchBox={setValueSearchBox}
+                            handleSubmit={handleSubmit}
+                            className="banner-search"
+                            shadow="0 21px 36px rgba(0,0,0,0.05)"
+                        />
                     </SearchWrapper>
                 </Content>
             </Box>
@@ -91,7 +112,13 @@ const Index: React.FC = () => {
                 <Header />
                 <div className="underHeader">
                     <span> Agende online os serviços mais próximos de você..</span>
-                    <Input icon={FaSearch} placeholder="Pesquisar Serviço " />
+                    <Input
+                        icon={FaSearch}
+                        placeholder="Pesquisar Serviço "
+                        onChange={(e) => handleOnChange(e)}
+                        onClick={handleSubmit}
+                        value={valueSearchBox}
+                    />
                     <div className="services">
                         <div
                             onClick={() => {

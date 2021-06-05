@@ -45,6 +45,7 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
     const { user } = useAuth();
     const formRef = useRef<FormHandles>(null);
     const [loading, setLoading] = useState(true);
+    const [loadingRequest, setLoadingRequest] = useState(false);
     const [productData, setProductData] = useState<any>(null);
     const [statusImgLogo, setStatusImgLogo] = useState<any>(null);
     const [productImage, setProductImage] = useState<string | null>(null);
@@ -148,6 +149,7 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                 if (productImage) {
                     data.productImage = productImage;
                 }
+                setLoadingRequest(true);
 
                 if (edit) {
                     data.id = productId;
@@ -158,6 +160,7 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                 }
 
                 toast.success(`Produto ${edit ? 'editado' : 'inserido'} com sucesso!`);
+                setLoadingRequest(false);
                 setIsOpen();
                 reloadProduct();
             } catch (err) {
@@ -380,6 +383,7 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                         <IconButton
                             type="button"
                             icon={FiCheckSquare}
+                            disabled={loadingRequest}
                             title={edit ? 'Editar Produto' : 'Adicionar Produto'}
                             background="#2e656a"
                             action={() => formRef.current?.submitForm()}

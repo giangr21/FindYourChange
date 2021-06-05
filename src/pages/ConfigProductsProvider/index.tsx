@@ -184,6 +184,7 @@ const Index: React.FC = () => {
                         label="Estado do Produto"
                         className="react-select-container"
                         defaultValue={{ value: 'Todos', label: 'Todos' }}
+                        placeholder=""
                         options={[
                             { value: 'Todos', label: 'Todos' },
                             { value: 'Novo', label: 'Novo' },
@@ -197,6 +198,7 @@ const Index: React.FC = () => {
                         fieldValue="value"
                         fieldLabel="label"
                         label="Categoria"
+                        placeholder=""
                         className="react-select-container"
                         defaultValue={{ value: 'Todas', label: 'Todas' }}
                         options={[

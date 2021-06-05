@@ -222,6 +222,7 @@ const Index: React.FC = () => {
                         fieldValue="value"
                         fieldLabel="label"
                         label="Categoria"
+                        placeholder=""
                         className="react-select-container"
                         defaultValue={{ value: 'Todas', label: 'Todas' }}
                         options={[
@@ -238,13 +239,14 @@ const Index: React.FC = () => {
                         fieldValue="value"
                         fieldLabel="label"
                         label="Tempo de Serviço"
+                        placeholder=""
                         className="react-select-container"
                         defaultValue={{ value: 'Todos', label: 'Todos' }}
                         options={[
                             { value: 'Todos', label: 'Todos' },
-                            { value: '30min', label: '30min' },
-                            { value: '1h', label: '1h' },
-                            { value: 'Acima de 2h', label: 'Acima de 2h' },
+                            { value: '30', label: '30min' },
+                            { value: '60', label: '1h' },
+                            { value: '120', label: 'Acima de 2h' },
                         ]}
                     />
                 </div>
@@ -254,6 +256,7 @@ const Index: React.FC = () => {
                         fieldValue="value"
                         fieldLabel="label"
                         label="Serviço Popular"
+                        placeholder=""
                         className="react-select-container"
                         defaultValue={{ value: 'Todos', label: 'Todos' }}
                         options={[

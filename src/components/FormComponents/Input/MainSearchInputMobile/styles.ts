@@ -19,6 +19,7 @@ export const Container = styled.div`
         flex: 1;
         font-size: 14px;
         margin-left: 7px;
+        color: #fff;
 
         &::placeholder {
             color: #fff;
@@ -26,6 +27,6 @@ export const Container = styled.div`
     }
 
     svg {
-        margin-right: 16px;
+        margin-right: 6px;
     }
 `;
