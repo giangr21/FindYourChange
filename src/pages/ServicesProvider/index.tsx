@@ -349,7 +349,7 @@ const Index: React.FC = () => {
                                                 </ProviderInfo>
                                                 <ProviderServiceContent>
                                                     <ProviderServices>
-                                                        {provider.services.slice(0, 5).map((service: any) => (
+                                                        {provider.services.slice(0, 4).map((service: any) => (
                                                             <div className="service" key={service.id}>
                                                                 <div
                                                                     style={{

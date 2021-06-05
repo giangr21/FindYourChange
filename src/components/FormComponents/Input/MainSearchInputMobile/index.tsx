@@ -4,13 +4,14 @@ import { Container } from './styles';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     icon?: React.ComponentType<IconBaseProps>;
+    onClick: () => any;
 }
 
-const Input: React.FC<InputProps> = ({ icon: Icon, ...rest }) => {
+const Input: React.FC<InputProps> = ({ icon: Icon, onClick, ...rest }) => {
     return (
         <Container>
-            {Icon && <Icon size={20} />}
             <input autoComplete="no" {...rest} />
+            {Icon && <Icon size={20} onClick={onClick} />}
         </Container>
     );
 };
