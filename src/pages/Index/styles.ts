@@ -66,7 +66,7 @@ export const Description = styled.p(
     css({
         fontSize: [15, 19],
         color: '#fff',
-        marginBottom: [null, null, 30],
+        marginBottom: [null, null, 20],
         // display: ['block'],
         fontWeight: '500',
         lineHeight: 'body',
@@ -111,6 +111,37 @@ export const SearchWrapper = styled.div(
         justifyContent: 'center',
     }),
 );
+
+export const ServiceCard = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 40px;
+
+    .services {
+        padding: 0px 20px;
+        display: flex;
+        justify-content: center;
+        cursor: pointer;
+
+        .service {
+            small {
+                text-align: center;
+                overflow: hidden;
+                display: block;
+                color: #ff9000;
+                margin: 0 auto;
+                font-weight: 500;
+                letter-spacing: 0.5px;
+                font-size: 18px;
+                padding: 4px;
+                background: rgba(0, 0, 0, 0.5);
+                border-radius: 12px;
+                width: 60%;
+            }
+        }
+    }
+`;
 
 export const BoxMobile = styled.div`
     @media only screen and (min-width: 850px) {
@@ -157,6 +188,19 @@ export const BoxMobile = styled.div`
 
     background: rgb(49, 46, 56);
     background: linear-gradient(100deg, rgba(49, 46, 56, 1) 0%, rgba(255, 144, 0, 1) 90%);
+`;
+
+export const IconServiceDesktop = styled.div`
+    width: 142px;
+    height: 142px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    text-align: center;
+    margin: 0px 30px 7px;
 `;
 
 export const IconService = styled.div`

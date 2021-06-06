@@ -10,6 +10,7 @@ import {
     Box,
     BoxMobile,
     IconService,
+    IconServiceDesktop,
     Image,
     Content,
     Title,
@@ -19,6 +20,7 @@ import {
     Recommendation,
     RecommendationCard,
     RecommendationContent,
+    ServiceCard,
 } from './styles';
 
 import imageUrl1 from '../../assets/HomeImgs/1.jpg';
@@ -95,7 +97,6 @@ const Index: React.FC = () => {
             <Box display={['none', 'none', 'flex']}>
                 <Image backgroundImage={`url(${img})`} />
                 <Content>
-                    <Title>Barbearia ? Tatuagem ? Piercing ?</Title>
                     <div
                         style={{
                             padding: 20,
@@ -122,6 +123,52 @@ const Index: React.FC = () => {
                             shadow="0 21px 36px rgba(0,0,0,0.05)"
                         />
                     </SearchWrapper>
+                    <ServiceCard>
+                        <div className="services">
+                            <div
+                                onClick={() => {
+                                    history.push({
+                                        pathname: `/allServicesProvider/`,
+                                        state: 'isBarber',
+                                    });
+                                }}
+                                className="service"
+                            >
+                                <IconServiceDesktop>
+                                    <Barber width="92px" height="92px" color="#fff" />
+                                </IconServiceDesktop>
+                                <small>Barbearia</small>
+                            </div>
+                            <div
+                                onClick={() => {
+                                    history.push({
+                                        pathname: `/allServicesProvider/`,
+                                        state: 'isTattoo',
+                                    });
+                                }}
+                                className="service"
+                            >
+                                <IconServiceDesktop>
+                                    <Tattoo width="92px" height="92px" color="#fff" />
+                                </IconServiceDesktop>
+                                <small>Tatuagem</small>
+                            </div>
+                            <div
+                                onClick={() => {
+                                    history.push({
+                                        pathname: `/allServicesProvider/`,
+                                        state: 'isPiercing',
+                                    });
+                                }}
+                                className="service"
+                            >
+                                <IconServiceDesktop>
+                                    <Piercing width="92px" height="92px" color="#fff" />
+                                </IconServiceDesktop>
+                                <small>Piercing</small>
+                            </div>
+                        </div>
+                    </ServiceCard>
                 </Content>
             </Box>
             <BoxMobile>
@@ -146,7 +193,7 @@ const Index: React.FC = () => {
                             className="service"
                         >
                             <IconService>
-                                <Barber />
+                                <Barber width="62px" height="62px" color="#fff" />
                             </IconService>
                             <small>Barbearia</small>
                         </div>
@@ -160,7 +207,7 @@ const Index: React.FC = () => {
                             className="service"
                         >
                             <IconService>
-                                <Tattoo />
+                                <Tattoo width="62px" height="62px" color="#fff" />
                             </IconService>
                             <small>Tatuagem</small>
                         </div>
@@ -174,7 +221,7 @@ const Index: React.FC = () => {
                             className="service"
                         >
                             <IconService>
-                                <Piercing />
+                                <Piercing width="62px" height="62px" color="#fff" />
                             </IconService>
                             <small>Piercing</small>
                         </div>
