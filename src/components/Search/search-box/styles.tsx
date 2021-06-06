@@ -7,14 +7,11 @@ export const StyledForm = styled.form<any>(
         css({
             display: 'flex',
             alignItems: 'center',
-            borderRadius: '6px',
+            borderRadius: '12px',
             overflow: 'hidden',
             width: props.minimal ? '100%' : 700,
-            color: '#77798C',
-            backgroundColor: props.minimal ? '#F7F7F7' : '#ffffff',
-            borderWidth: props.minimal ? '1px' : '0',
-            borderStyle: 'solid',
-            borderColor: props.minimal ? `#f1f1f1` : '#ffffff',
+            color: '#fff',
+            background: 'rgba(0,0,0,.4)',
 
             input: {
                 pl: props.minimal ? 0 : 20,
@@ -29,8 +26,8 @@ export const StyledInput = styled.input(
         fontSize: 'base',
         pr: 20,
         height: 48,
-        color: '#77798C',
-        backgroundColor: 'inherit',
+        color: '#fff',
+        background: 'rgba(0,0,0,.4)',
         appearance: 'none',
     }),
     {
@@ -39,9 +36,11 @@ export const StyledInput = styled.input(
             outline: 0,
         },
 
+        '::placeholder': { color: '#fff', fontWeight: 500 },
+
         '&::-webkit-input-placeholder, &::-moz-placeholder, &::-moz-placeholder, &::-ms-input-placeholder': {
             fontSize: '15px',
-            color: '#77798C',
+            color: '#fff',
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
         },

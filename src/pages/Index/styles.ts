@@ -53,7 +53,7 @@ export const Content = styled.div(
 );
 export const Title = styled.h2(
     css({
-        fontSize: [17, 30, 45],
+        fontSize: [17, 30, 60],
         color: '#ff9000',
         fontWeight: '700',
     }),
@@ -65,12 +65,12 @@ export const Title = styled.h2(
 export const Description = styled.p(
     css({
         fontSize: [15, 19],
-        color: '#3A3A3A',
-        marginBottom: [null, null, 60],
-        display: ['block'],
-        fontWeight: '400',
+        color: '#fff',
+        marginBottom: [null, null, 30],
+        // display: ['block'],
+        fontWeight: '500',
         lineHeight: 'body',
-        textAlign: ['left', 'left', 'center'],
+        // textAlign: ['left', 'left', 'center'],
 
         '@media (max-width: 990px)': {
             width: '100%',

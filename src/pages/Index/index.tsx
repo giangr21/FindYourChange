@@ -96,7 +96,23 @@ const Index: React.FC = () => {
                 <Image backgroundImage={`url(${img})`} />
                 <Content>
                     <Title>Barbearia ? Tatuagem ? Piercing ?</Title>
-                    <Description>Agende online os serviços mais próximos de você</Description>
+                    <div
+                        style={{
+                            padding: 20,
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <Description
+                            style={{
+                                padding: 20,
+                                background: 'rgba(0,0,0,.5)',
+                                borderRadius: '12px',
+                            }}
+                        >
+                            Agende online os serviços mais próximos de você..
+                        </Description>
+                    </div>
                     <SearchWrapper>
                         <Search
                             valueSearchBox={valueSearchBox}

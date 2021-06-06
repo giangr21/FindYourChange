@@ -26,7 +26,7 @@ const Search: React.FC<Props> = ({ valueSearchBox, setValueSearchBox, handleSubm
             onSubmit={handleSubmit}
             value={valueSearchBox}
             name="search"
-            placeholder="Pesquise os serviços aqui "
+            placeholder="Pesquise um serviço"
             {...props}
         />
     );
