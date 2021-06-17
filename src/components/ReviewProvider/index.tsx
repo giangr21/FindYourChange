@@ -9,6 +9,7 @@ import { Container, HeaderReview, NewRecommendation, Reviews, Review } from './s
 import IconButton from '../FormComponents/Button/IconButton';
 import api from '../../services/api';
 import { useAuth } from '../../hooks/authentication';
+import { useMedia } from '../../util/use-media';
 
 interface Review {
     id: string;
@@ -43,6 +44,7 @@ const ReviewProvider: React.FC<ReviewProps> = ({
     const [valueTextArea, setValueTextArea] = useState('');
     const [newRatingStars, setNewRatingStars] = useState(0);
     const { user, isAuthenticated } = useAuth();
+    const mobile = useMedia('(max-width: 850px)');
 
     const handleNewReview = useCallback(async () => {
         if (valueTextArea.trim() === '' || !valueTextArea) {
@@ -116,11 +118,13 @@ const ReviewProvider: React.FC<ReviewProps> = ({
                             display: 'flex',
                             alignItems: 'center',
                             margin: '10px 0px',
+                            flexDirection: mobile ? 'column' : 'row',
+                            textAlign: 'center',
                         }}
                     >
                         <span
                             style={{
-                                marginRight: '7px',
+                                marginRight: '14px',
                             }}
                         >
                             Selecione a quantidade de estrelas para a recomendação:
