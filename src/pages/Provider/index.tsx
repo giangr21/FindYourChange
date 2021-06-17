@@ -23,6 +23,7 @@ import { useAuth } from '../../hooks/authentication';
 import Loading from '../../components/Loading';
 import ReviewProvider from '../../components/ReviewProvider';
 import GalleryProvider from '../../components/GalleryProvider';
+import { useMedia } from '../../util/use-media';
 
 export interface ProviderData {
     id: string;
@@ -46,6 +47,7 @@ const Index: React.FC = () => {
     const history = useHistory();
     const tabRef2 = useRef<any>();
     const formRef = useRef<FormHandles>(null);
+    const mobile = useMedia('(max-width: 850px)');
 
     const [loading, setLoading] = useState(true);
     const [provider, setProvider] = useState<any>({});
@@ -255,6 +257,22 @@ const Index: React.FC = () => {
                                     tabRef={tabRef2}
                                     title="RECOMENDAÇÕES"
                                 >
+                                    {user && !newRecommendation && !user.isProvider && mobile && (
+                                        <div
+                                            style={{
+                                                margin: '10px auto',
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                            }}
+                                        >
+                                            <IconButton
+                                                icon={MdEdit}
+                                                title="Nova recomendaçao"
+                                                background="#ff9000"
+                                                action={handleNewReview}
+                                            />
+                                        </div>
+                                    )}
                                     <ReviewProvider
                                         providerRecommendations={provider.providerRecommendations}
                                         newRecommendation={newRecommendation}

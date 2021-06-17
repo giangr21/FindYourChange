@@ -37,7 +37,7 @@ const GalleryProvider: React.FC<GalleryProps> = ({ providerImages }): any => {
             <Container>
                 <Row>
                     {providerImages.map((img) => (
-                        <Col key={img.id} xs={12} sm={6} md={4} lg={4}>
+                        <Col key={img.id} xs={12} sm={6} md={12} lg={12}>
                             <img
                                 style={{
                                     marginLeft: '10px',
