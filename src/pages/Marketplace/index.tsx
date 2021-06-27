@@ -101,6 +101,12 @@ const Index: React.FC = () => {
         if (mobile) {
             setShowFilter((prevState) => !prevState);
         }
+        setTimeout(() => {
+            formRef.current?.setFieldValue('cities', 'Todas');
+            formRef.current?.setFieldValue('category', 'Todas');
+            formRef.current?.setFieldValue('price', 'Todos');
+            formRef.current?.setFieldValue('productState', 'Todos');
+        }, 300);
     }, [formFilterSubmit, mobile]);
 
     useEffect(() => {
@@ -121,6 +127,7 @@ const Index: React.FC = () => {
         getProducts();
 
         setTimeout(() => {
+            formRef.current?.setFieldValue('cities', 'Todas');
             formRef.current?.setFieldValue('category', 'Todas');
             formRef.current?.setFieldValue('price', 'Todos');
             formRef.current?.setFieldValue('productState', 'Todos');

@@ -4,7 +4,7 @@ import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import ReactModal from 'react-modal';
 import { FiLock, FiLogIn, FiMail } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { Container, LeftContainer, RightContainer, Row } from './styles';
@@ -29,6 +29,7 @@ interface SignInFormData {
 const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
     const mobile = useMedia('(max-width: 760px)');
     const formRef = useRef<FormHandles>(null);
+    const location = useLocation();
     const { signIn } = useAuth();
 
     const handleSubmit = useCallback(
@@ -109,7 +110,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
 
                         <Link to="/forgotPassword">Esqueci minha senha</Link>
                     </Form>
-                    <Link to="/signup">
+                    <Link to={{ pathname: '/signup', state: { prevPath: location.pathname } }}>
                         <FiLogIn />
                         Criar Conta
                     </Link>
