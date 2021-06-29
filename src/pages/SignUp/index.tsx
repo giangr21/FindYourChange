@@ -57,8 +57,9 @@ const SignUp: React.FC = () => {
     const [isTattoo, setIsTattoo] = useState(false);
     const [isPiercing, setIsPiercing] = useState(false);
     const [statusImgLogo, setStatusImgLogo] = useState<any>(null);
+    const [prevPathProvider, setPrevPathProvider] = useState(false);
 
-    const history = useHistory();
+    const history: any = useHistory();
 
     const handleSubmitUser = useCallback(
         async (data: SignUpUserData) => {
@@ -135,6 +136,9 @@ const SignUp: React.FC = () => {
     );
 
     useEffect(() => {
+        if (history.location && history.location.state && history.location.state.prevPath.includes('/provider/')) {
+            setPrevPathProvider(true);
+        }
         setTimeout(() => {
             formRef.current?.setFieldValue('isProvider', 'false');
         }, 500);
@@ -501,9 +505,9 @@ const SignUp: React.FC = () => {
                         </Button>
                     </Form>
 
-                    <Link to="/signIn">
+                    <Link to={prevPathProvider ? history.location.state.prevPath : '/signIn'}>
                         <FiArrowLeft />
-                        Voltar para login
+                        {prevPathProvider ? 'Voltar para estabelecimento' : 'Voltar para login'}
                     </Link>
                 </AnimationContainer>
             </Content>

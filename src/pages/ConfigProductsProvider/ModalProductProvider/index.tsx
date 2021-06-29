@@ -10,6 +10,7 @@ import 'rc-time-picker/assets/index.css';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { BsCheckAll } from 'react-icons/bs';
+import axios from 'axios';
 import { Form, Container, Header, Footer, Content } from './styles';
 import Input from '../../../components/FormComponents/Input/InputModal';
 import Modal from '../../../components/Modal';
@@ -121,6 +122,21 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                         setStatusImgLogo(null);
                     });
             }
+        }
+    }, []);
+
+    const handleMercadoPago = useCallback(async (id: string) => {
+        const response = await axios.get(`https://api.mercadopago.com/v1/payments/${id}`, {
+            headers: {
+                Authorization: 'Bearer TEST-6807718697390524-051723-9d40471e78db261b65f02e1c7c74bab7-154938818',
+            },
+        });
+        const myjson = JSON.stringify(response.data, null, 2);
+        const x = window.open();
+        if (x) {
+            x.document.open();
+            x.document.write(`<html><body><pre>${myjson}</pre></body></html>`);
+            x.document.close();
         }
     }, []);
 
@@ -374,7 +390,15 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                     )}
                 </Content>
                 <Footer>
-                    <div />
+                    <div
+                        style={{
+                            cursor: 'pointer',
+                            fontSize: '10px',
+                        }}
+                        onClick={() => handleMercadoPago(productData.lastMercadoPagoId)}
+                    >
+                        {productData && productData.lastMercadoPagoId}
+                    </div>
                     <div
                         style={{
                             display: 'flex',
