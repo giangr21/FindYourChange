@@ -3,7 +3,7 @@ export function getWeekDayName(weekDay: number): string {
         case 1:
             return 'Segunda-Feira';
         case 2:
-            return 'Terca-Feira';
+            return 'Terça-Feira';
         case 3:
             return 'Quarta-Feira';
         case 4:
