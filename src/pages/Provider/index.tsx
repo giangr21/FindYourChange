@@ -67,7 +67,6 @@ const Index: React.FC = () => {
         await api
             .get(`/provider/specificProvider/${idProvider}`)
             .then(async (response) => {
-                console.log(response.data);
                 setProvider(response.data);
                 await api
                     .get(`https://ecommerce-api-dev.jclan.com.br/street/${response.data.addressZipCode}`)

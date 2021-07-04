@@ -57,7 +57,6 @@ const Product: React.FC = () => {
         await api
             .get(`/products/${idProduct}`)
             .then(async (response) => {
-                console.log(response.data);
                 const imgNamePhotoData = await api.get(`storage/base64/${response.data.productImage}`);
                 setImgPhotoMin(imgNamePhotoData.data);
                 setProduct(response.data);

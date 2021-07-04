@@ -178,7 +178,6 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
     const submitService = useCallback(
         async (data: ServiceData) => {
             try {
-                console.log(data);
                 formRef.current?.setErrors({});
                 const schema = Yup.object().shape({
                     title: Yup.string().required('Título obrigatório'),
