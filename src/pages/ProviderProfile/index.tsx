@@ -231,6 +231,11 @@ const Profile: React.FC = () => {
                     .then(async (response) => {
                         const { data } = await api.get(`storage/base64/min/${imgId}`);
                         profileInfo.providerImages.push({ id: response.data, base64Img: data });
+                        if (profileInfo.providerImages.length === 0) {
+                            await api.post(`providerImages/updateDefaultImage/${response.data}`, {
+                                providerId: user.id,
+                            });
+                        }
                         toast.success('Imagem inserida com sucesso!!');
                         setTimeout(() => {
                             setStatusImgLogo(null);
@@ -599,7 +604,9 @@ const Profile: React.FC = () => {
                                                         />
                                                     </label>
                                                 )}
-                                                {statusImgLogo === true && <span>Carregando...</span>}
+                                                {statusImgLogo === true && (
+                                                    <span style={{ marginLeft: '5px' }}>Carregando...</span>
+                                                )}
                                                 {statusImgLogo === false && (
                                                     <BsCheckAll className="check" size={25} color="#2e656a" />
                                                 )}
