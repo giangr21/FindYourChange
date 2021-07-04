@@ -230,12 +230,12 @@ const Profile: React.FC = () => {
                     })
                     .then(async (response) => {
                         const { data } = await api.get(`storage/base64/min/${imgId}`);
-                        profileInfo.providerImages.push({ id: response.data, base64Img: data });
                         if (profileInfo.providerImages.length === 0) {
                             await api.post(`providerImages/updateDefaultImage/${response.data}`, {
                                 providerId: user.id,
                             });
                         }
+                        profileInfo.providerImages.push({ id: response.data, base64Img: data });
                         toast.success('Imagem inserida com sucesso!!');
                         setTimeout(() => {
                             setStatusImgLogo(null);
