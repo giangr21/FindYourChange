@@ -56,7 +56,7 @@ const Index: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [products, setProducts] = useState<ProductData[]>([]);
     const [cities, setCities] = useState([]);
-    const [showFilter, setShowFilter] = useState(!mobile);
+    const [showFilter, setShowFilter] = useState(false);
     const formRef = useRef<FormHandles>(null);
     const history = useHistory();
 

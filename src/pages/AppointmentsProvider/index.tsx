@@ -40,7 +40,6 @@ const Index: React.FC = () => {
             .get(`/appointment/provider/${user.id}`)
             .then((response) => {
                 const { data } = response;
-                console.log('Data:', data);
                 setAppointments(data);
                 setLoading(false);
             })

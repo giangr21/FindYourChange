@@ -121,6 +121,7 @@ const HomePageProvider: React.FC = () => {
                             hourFormatted: format(parseISO(appointment.dateAppointment), 'HH:mm'),
                         });
                     }
+                    console.log(appointmentsFormatted);
                     setAppointments(appointmentsFormatted);
                     setLoading(false);
                 });

@@ -69,7 +69,6 @@ const UserProfile: React.FC = () => {
                 r.hourAppointment = moment(r.dateAppointment).format('HH:mm');
                 r.monthAppointment = moment(r.dateAppointment).locale('pt-br').format('MMMM');
             });
-            console.log(response.data);
             setAppointments(response.data);
         });
     }, [user.id]);

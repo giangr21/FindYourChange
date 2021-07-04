@@ -41,6 +41,14 @@ const Appointment: React.FC<AppointmentProps> = ({ appointmentInfo }): any => (
                         marginBottom: '5px',
                     }}
                 >
+                    <h4 style={{ color: '#ff9000', marginRight: '7px' }}>Serviço:</h4>
+                    <h4>{appointmentInfo.service.title}</h4>
+                </section>
+                <section
+                    style={{
+                        marginBottom: '5px',
+                    }}
+                >
                     <h4 style={{ color: '#ff9000', marginRight: '7px' }}>Tipo Serviço:</h4>
                     <h4>{appointmentInfo.service.category}</h4>
                 </section>
