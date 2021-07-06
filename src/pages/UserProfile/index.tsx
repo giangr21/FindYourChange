@@ -499,7 +499,15 @@ const UserProfile: React.FC = () => {
                                         <Col key={review.id} xs={12} sm={6} md={4} lg={4}>
                                             <Card
                                                 overrides={{
-                                                    Root: { style: { width: '328px', borderRadius: '10px' } },
+                                                    Root: {
+                                                        style: {
+                                                            width: '328px',
+                                                            height: '300px',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            borderRadius: '10px',
+                                                        },
+                                                    },
                                                 }}
                                                 title={review.providerLegalName}
                                             >
