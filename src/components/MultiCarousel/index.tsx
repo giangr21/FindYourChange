@@ -55,7 +55,7 @@ export const CarouselWithCustomDots = ({ items = [], title, updatedImgInCarousel
             alt={title}
             style={{
                 minWidth: 'auto',
-                height: 'auto',
+                height: '250px',
                 position: 'relative',
                 margin: 'auto',
             }}
@@ -94,12 +94,6 @@ export const CarouselWithCustomDots = ({ items = [], title, updatedImgInCarousel
     };
 
     const deviceType = 'desktop';
-    // if (mobile) {
-    //     deviceType = 'mobile';
-    // }
-    // if (tablet) {
-    //     deviceType = 'tablet';
-    // }
 
     return (
         <Carousel

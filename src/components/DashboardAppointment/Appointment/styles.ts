@@ -47,6 +47,7 @@ export const Container = styled.div`
 
         @media (max-width: 440px) {
             flex-direction: column;
+            margin-left: 10px;
 
             img {
                 margin-bottom: 7px;
@@ -54,6 +55,8 @@ export const Container = styled.div`
 
             section {
                 text-align: center;
+                display: flex;
+                flex-direction: column;
             }
         }
     }

@@ -273,13 +273,14 @@ export const RecommendationCard = styled.div`
     align-items: center;
     padding: 0px 5px;
     margin-bottom: 15px;
+    margin: 0px 5px;
 
     @media only screen and (max-width: 850px) {
         margin-bottom: 10px;
     }
 
     img {
-        width: 275px;
+        /* width: 275px; */
         max-height: 200px;
         border-radius: 10px;
     }
