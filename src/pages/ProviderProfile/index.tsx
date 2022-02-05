@@ -188,28 +188,30 @@ const Profile: React.FC = () => {
         if (cep === '' || cep.length < 8) {
             toast.error('Digite um cep valido.');
         } else {
-            await api
-                .get(`https://ecommerce-api-dev.jclan.com.br/street/${cep}`)
-                .then((response) => {
-                    if (response.data !== '') {
-                        formRef.current?.setFieldValue('addressArea', `${response.data.area.clearName}`);
-                        formRef.current?.setFieldValue('addressCity', `${response.data.city.clearName}`);
-                        formRef.current?.setFieldValue('addressCountry', 'Brasil');
-                        formRef.current?.setFieldValue('addressStreet', `${response.data.clearPublicPlace}`);
-                        formRef.current?.setFieldValue('addressState', `${response.data.state}`);
+            toast.error('Falha ao buscar cep.');
 
-                        const inputNumber = formRef.current?.getFieldRef('addressNumber');
-                        if (inputNumber) {
-                            inputNumber.focus();
-                        }
-                    } else {
-                        toast.error('Digite um cep válido.');
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    toast.error('Falha ao buscar cep');
-                });
+            // await api
+            //     .get(`https://ecommerce-api-dev.jclan.com.br/street/${cep}`)
+            //     .then((response) => {
+            //         if (response.data !== '') {
+            //             formRef.current?.setFieldValue('addressArea', `${response.data.area.clearName}`);
+            //             formRef.current?.setFieldValue('addressCity', `${response.data.city.clearName}`);
+            //             formRef.current?.setFieldValue('addressCountry', 'Brasil');
+            //             formRef.current?.setFieldValue('addressStreet', `${response.data.clearPublicPlace}`);
+            //             formRef.current?.setFieldValue('addressState', `${response.data.state}`);
+
+            //             const inputNumber = formRef.current?.getFieldRef('addressNumber');
+            //             if (inputNumber) {
+            //                 inputNumber.focus();
+            //             }
+            //         } else {
+            //             toast.error('Digite um cep válido.');
+            //         }
+            //     })
+            //     .catch((error) => {
+            //         console.log(error);
+            //         toast.error('Falha ao buscar cep');
+            //     });
         }
     }, []);
 

@@ -57,8 +57,8 @@ const Index: React.FC = () => {
     const [newRecommendation, setNewRecommendation] = useState(false);
     const [specificServiceInfo, setSpecificServiceInfo] = useState({});
     const [latlng, setLatLng] = useState({
-        lat: 0,
-        lng: 0,
+        lat: 1000,
+        lng: 1000,
     });
 
     const getProvider = useCallback(async () => {
@@ -68,14 +68,6 @@ const Index: React.FC = () => {
             .get(`/provider/specificProvider/${idProvider}`)
             .then(async (response) => {
                 setProvider(response.data);
-                await api
-                    .get(`https://ecommerce-api-dev.jclan.com.br/street/${response.data.addressZipCode}`)
-                    .then((rsp) => {
-                        setLatLng({
-                            lat: Number(rsp.data.latitude),
-                            lng: Number(rsp.data.longitude),
-                        });
-                    });
                 setLoading(false);
                 if (location.state === 'redirectToProviderRecommendations') {
                     tabRef2.current.click();
