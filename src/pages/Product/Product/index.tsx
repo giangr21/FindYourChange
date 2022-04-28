@@ -78,7 +78,7 @@ const Product: React.FC = () => {
         (window as any).mp.checkout({
             tokenizer: {
                 totalAmount: Number(product.value),
-                backUrl: `https://fyc-tcc.herokuapp.com/products/checkout/${product.id}`,
+                backUrl: `http://localhost:3333/products/checkout/${product.id}`,
             },
             autoOpen: true,
             theme: {
