@@ -5,7 +5,6 @@ import React, { useRef, useCallback, useState, useEffect, ChangeEvent } from 're
 import { FormHandles } from '@unform/core';
 import { FiCamera, FiCheckSquare, FiDelete } from 'react-icons/fi';
 import { FaWindowClose } from 'react-icons/fa';
-import { BsCheckAll } from 'react-icons/bs';
 import * as Yup from 'yup';
 import { withStyle } from 'baseui';
 import { toast } from 'react-toastify';
@@ -21,6 +20,7 @@ import getValidationErrors from '../../../util/getValidationErrors';
 import Loading from '../../../components/Loading';
 import { useAuth } from '../../../hooks/authentication';
 import { useMedia } from '../../../util/use-media';
+import FileInput from '../../../components/FormComponents/File';
 
 interface ModalProps {
     isOpen: boolean;
@@ -98,7 +98,9 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
                 else response.data.isPopularService = { value: false, label: 'Não' };
 
                 if (response.data.image) {
-                    const imgNamePhotoData = await api.get(`storage/base64/min/${response.data.image}`);
+                    const imgNamePhotoData = await api.get(
+                        `storage/base64/min/${response.data.image}`,
+                    );
                     setImgPhotoMin(imgNamePhotoData.data);
                 }
 
@@ -106,10 +108,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
 
                 if (response.data.clerks.length > 0)
                     response.data.clerks = response.data.clerks.map((clerk: any) => {
-                        return {
-                            value: clerk.id,
-                            label: clerk.name,
-                        };
+                        return { value: clerk.id, label: clerk.name };
                     });
 
                 setServiceData(response.data);
@@ -178,6 +177,7 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
     const submitService = useCallback(
         async (data: ServiceData) => {
             try {
+                setLoadingRequest(true);
                 formRef.current?.setErrors({});
                 const schema = Yup.object().shape({
                     title: Yup.string().required('Título obrigatório'),
@@ -201,11 +201,9 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
                 }
 
                 data.provider = user.id;
-                setLoadingRequest(true);
 
                 if (edit) {
-                    data.id = serviceId;
-                    await api.put('services', data);
+                    await api.put('services', { ...data, id: serviceId });
                 } else {
                     await api.post('services/add', data);
                 }
@@ -240,7 +238,12 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
     }, []);
 
     return (
-        <Modal width={mobile ? '100%' : '520px'} height="620px" isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Modal
+            width={mobile ? '100%' : '520px'}
+            height="620px"
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+        >
             <Form ref={formRef} initialData={serviceData} onSubmit={submitService}>
                 <Header>
                     {edit ? <h1>Editar Serviço</h1> : <h1>Novo Serviço</h1>}
@@ -319,7 +322,11 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
                                     <Input type="number" name="value" placeholder="Valor $" />
                                 </Col>
                                 <Col xs={12} sm={6} md={6} lg={6}>
-                                    <Input type="number" name="disccount" placeholder="Desconto %" />
+                                    <Input
+                                        type="number"
+                                        name="disccount"
+                                        placeholder="Desconto %"
+                                    />
                                 </Col>
                             </Row>
                             <Row>
@@ -348,77 +355,59 @@ const ModalServicesProvider: React.FC<ModalProps> = ({
                                         >
                                             <div className="img">
                                                 Foto Serviço:
-                                                {statusImgLogo === null && (
-                                                    <label htmlFor="serviceImg">
-                                                        <FiCamera />
-                                                        <input
-                                                            accept=".jpg, .jpeg, .png"
-                                                            onChange={handleLogoChange}
-                                                            type="file"
-                                                            id="serviceImg"
-                                                        />
-                                                    </label>
-                                                )}
-                                                {statusImgLogo === true && <span>Carregando...</span>}
-                                                {statusImgLogo === false && (
-                                                    <BsCheckAll
-                                                        className="check"
-                                                        style={{
-                                                            marginLeft: '15px',
-                                                        }}
-                                                        size={25}
-                                                        color="#2e656a"
-                                                    />
-                                                )}
+                                                <FileInput
+                                                    statusImgLogo={statusImgLogo}
+                                                    onChange={handleLogoChange}
+                                                />
                                             </div>
                                         </Container>
                                     )}
                                 </Col>
                             </Row>
                             {edit && serviceData.image && !changeImg && (
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        margin: '15px 0px',
-                                        cursor: 'pointer',
-                                    }}
-                                    onClick={() => clickImg(serviceData.image)}
-                                >
-                                    Preview Imagem:{' '}
-                                    <img
+                                <>
+                                    <div
                                         style={{
-                                            marginLeft: '10px',
-                                            width: '56px',
-                                            height: '56px',
-                                            borderRadius: '50%',
-                                            borderColor: '#ff9000',
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            margin: '15px 0px',
+                                            cursor: 'pointer',
                                         }}
-                                        src={`data:image/png;base64,${imgPhotoMin}`}
                                         onClick={() => clickImg(serviceData.image)}
-                                        alt=""
-                                    />
-                                </div>
-                            )}
-                            {edit && !changeImg && serviceData.image && (
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    <IconButton
-                                        type="button"
-                                        icon={FiCamera}
-                                        title="Alterar Imagem"
-                                        background="#2e656a"
-                                        action={() => setChangeImg(true)}
-                                    />
-                                </div>
+                                    >
+                                        Preview Imagem:{' '}
+                                        <img
+                                            style={{
+                                                marginLeft: '10px',
+                                                width: '56px',
+                                                height: '56px',
+                                                borderRadius: '50%',
+                                                borderColor: '#ff9000',
+                                            }}
+                                            src={`data:image/png;base64,${imgPhotoMin}`}
+                                            onClick={() => clickImg(serviceData.image)}
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        <IconButton
+                                            type="button"
+                                            icon={FiCamera}
+                                            title="Alterar Imagem"
+                                            background="#2e656a"
+                                            action={() => setChangeImg(true)}
+                                        />
+                                    </div>
+                                </>
                             )}
                         </>
                     )}

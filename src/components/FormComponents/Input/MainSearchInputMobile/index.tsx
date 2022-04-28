@@ -3,7 +3,7 @@ import { IconBaseProps } from 'react-icons';
 import { Container } from './styles';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-    icon?: React.ComponentType<IconBaseProps>;
+    icon?: any;
     onClick: () => any;
 }
 

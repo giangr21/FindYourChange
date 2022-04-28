@@ -1,11 +1,9 @@
 import React, { ButtonHTMLAttributes, useCallback } from 'react';
-
-import { IconBaseProps } from 'react-icons/lib';
 import { Button, Container } from './styles';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     title?: string;
-    icon?: React.ComponentType<IconBaseProps>;
+    icon?: any;
     action: () => any;
     background: string;
     justIcon?: boolean;

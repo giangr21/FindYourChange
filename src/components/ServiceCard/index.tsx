@@ -6,7 +6,8 @@ import {
     ProductInfo,
     Image,
     ProductTitle,
-    ProductWeight,
+    ProductDescriptionWrapper,
+    ProductDescription,
     ProductMeta,
     ProductPriceWrapper,
     ProductPrice,
@@ -33,12 +34,14 @@ type ProductCardProps = {
 };
 
 const ServiceCard: React.FC<ProductCardProps> = ({ serviceData, handleEdit }) => {
+    const hasDiscount = serviceData.disccount !== '' && serviceData.disccount !== '0';
+
     return (
         <>
             <ProductCardWrapper onClick={() => handleEdit(serviceData.id)} className="product-card">
                 <ProductImageWrapper>
                     <Image url={serviceData.image} className="product-image" />
-                    {serviceData.disccount !== '' && serviceData.disccount !== '0' && (
+                    {hasDiscount && (
                         <>
                             <SaleTag>Promoção</SaleTag>
                             <DiscountPercent>{serviceData.disccount}% Off</DiscountPercent>
@@ -47,29 +50,25 @@ const ServiceCard: React.FC<ProductCardProps> = ({ serviceData, handleEdit }) =>
                 </ProductImageWrapper>
                 <ProductInfo>
                     <ProductTitle>{serviceData.title}</ProductTitle>
-                    <div
-                        style={{
-                            height: '50px',
-                            maxHeight: '50px',
-                            overflowY: 'auto',
-                        }}
-                    >
-                        <ProductWeight>{serviceData.description}</ProductWeight>
-                    </div>
+                    <ProductDescriptionWrapper>
+                        <ProductDescription>{serviceData.description}</ProductDescription>
+                    </ProductDescriptionWrapper>
                     <ProductMeta>
                         <ProductPriceWrapper>
                             <ProductPrice>
-                                {serviceData.disccount !== '' && serviceData.disccount !== '0'
-                                    ? Intl.NumberFormat('pt-BR', {
-                                          style: 'currency',
-                                          currency: 'BRL',
-                                      }).format(Number(serviceData.totalValueWithDisccount))
-                                    : Intl.NumberFormat('pt-BR', {
-                                          style: 'currency',
-                                          currency: 'BRL',
-                                      }).format(Number(serviceData.value))}
+                                {Intl.NumberFormat('pt-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL',
+                                }).format(
+                                    Number(
+                                        hasDiscount
+                                            ? serviceData.totalValueWithDisccount
+                                            : serviceData.value,
+                                    ),
+                                )}
                             </ProductPrice>
-                            {serviceData.disccount !== '' && serviceData.disccount !== '0' && (
+
+                            {hasDiscount && (
                                 <DiscountedPrice>
                                     {Intl.NumberFormat('pt-BR', {
                                         style: 'currency',

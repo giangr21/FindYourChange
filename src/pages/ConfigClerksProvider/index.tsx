@@ -19,7 +19,13 @@ export interface ClerkData {
     phone: string;
 }
 
-const DAYS_OF_WEEK: string[] = ['Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira'];
+const DAYS_OF_WEEK: string[] = [
+    'Segunda-Feira',
+    'Terça-Feira',
+    'Quarta-Feira',
+    'Quinta-Feira',
+    'Sexta-Feira',
+];
 
 const Index: React.FC = () => {
     const { user } = useAuth();
@@ -88,7 +94,9 @@ const Index: React.FC = () => {
                 setIdClerk('');
             }
         } else {
-            toast.error('É necessário cadastrar os horários do estabelecimento de Segunda a Sexta-Feira.');
+            toast.error(
+                'É necessário cadastrar os horários do estabelecimento de Segunda a Sexta-Feira.',
+            );
         }
     }, [handleOpenModals, isEdit]);
 
@@ -119,7 +127,9 @@ const Index: React.FC = () => {
                 setIdClerk(id);
                 setIsEdit(true);
             } else {
-                toast.error('É necessário cadastrar os horários do estabelecimento de Segunda a Sexta-Feira.');
+                toast.error(
+                    'É necessário cadastrar os horários do estabelecimento de Segunda a Sexta-Feira.',
+                );
             }
         },
         [handleOpenModals],
@@ -133,7 +143,6 @@ const Index: React.FC = () => {
                 <Container>
                     <HeaderContainer>
                         <IconButton
-                            // style={{ marginTop: 19 }}
                             icon={FaPlus}
                             title="Novo"
                             background="#2e656a"

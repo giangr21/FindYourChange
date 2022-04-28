@@ -33,6 +33,7 @@ export const HeaderResults = styled.div`
     height: 50px;
     span {
         width: 280%;
+        margin-right: 5px;
     }
 `;
 
@@ -92,6 +93,13 @@ export const ProductInfo = styled.div`
     @media only screen and (max-width: 767px) {
         padding: 15px 20px;
     }
+`;
+
+export const ProductWrapper = styled.div`
+    height: '60px';
+    max-height: '60px';
+    overflow-y: 'auto';
+    padding: '5px 0px';
 `;
 
 export const ProductTitle = styled.h3`

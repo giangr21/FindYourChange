@@ -8,10 +8,7 @@ import { FiLock, FiMail, FiUser, FiCamera, FiArrowLeft } from 'react-icons/fi';
 import * as Yup from 'yup';
 import { useHistory, Link } from 'react-router-dom';
 import { FaMapSigns, FaPhoneAlt } from 'react-icons/fa';
-import { MdCheck, MdClose } from 'react-icons/md';
-import Switch from 'react-switch';
 import { toast } from 'react-toastify';
-import { BsCheckAll } from 'react-icons/bs';
 import api from '../../services/api';
 import Button from '../../components/FormComponents/Button';
 import Input from '../../components/FormComponents/Input';
@@ -21,6 +18,8 @@ import { useAuth } from '../../hooks/authentication';
 import InputMask from '../../components/FormComponents/Input/InputMask';
 import Loading from '../../components/Loading';
 import { CarouselWithCustomDots } from '../../components/MultiCarousel';
+import SwitchInput from '../../components/FormComponents/Switch';
+import FileInput from '../../components/FormComponents/File';
 
 const Profile: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
@@ -158,7 +157,9 @@ const Profile: React.FC = () => {
                         .post('/storage/img', data)
                         .then(async (response) => {
                             setProfileAvatar(response.data);
-                            const { data: responseImg } = await api.get(`storage/base64/min/${response.data}`);
+                            const { data: responseImg } = await api.get(
+                                `storage/base64/min/${response.data}`,
+                            );
                             setProfileInfo({ ...profileInfo, avatar: responseImg });
                         })
                         .catch((error) => {
@@ -172,15 +173,15 @@ const Profile: React.FC = () => {
         [profileInfo],
     );
 
-    const toggleBarber = useCallback(() => {
+    const toggleBarber = () => {
         setIsBarber((prevState) => !prevState);
-    }, []);
-    const toggleTattoo = useCallback(() => {
+    };
+    const toggleTattoo = () => {
         setIsTattoo((prevState) => !prevState);
-    }, []);
-    const togglePiercing = useCallback(() => {
+    };
+    const togglePiercing = () => {
         setIsPiercing((prevState) => !prevState);
-    }, []);
+    };
 
     const getCep = useCallback(async () => {
         let cep = formRef.current?.getFieldValue('addressZipCode');
@@ -188,28 +189,30 @@ const Profile: React.FC = () => {
         if (cep === '' || cep.length < 8) {
             toast.error('Digite um cep valido.');
         } else {
-            await api
-                .get(`https://ecommerce-api-dev.jclan.com.br/street/${cep}`)
-                .then((response) => {
-                    if (response.data !== '') {
-                        formRef.current?.setFieldValue('addressArea', `${response.data.area.clearName}`);
-                        formRef.current?.setFieldValue('addressCity', `${response.data.city.clearName}`);
-                        formRef.current?.setFieldValue('addressCountry', 'Brasil');
-                        formRef.current?.setFieldValue('addressStreet', `${response.data.clearPublicPlace}`);
-                        formRef.current?.setFieldValue('addressState', `${response.data.state}`);
+            toast.error('Falha ao buscar cep.');
 
-                        const inputNumber = formRef.current?.getFieldRef('addressNumber');
-                        if (inputNumber) {
-                            inputNumber.focus();
-                        }
-                    } else {
-                        toast.error('Digite um cep válido.');
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    toast.error('Falha ao buscar cep');
-                });
+            // await api
+            //     .get(`https://ecommerce-api-dev.jclan.com.br/street/${cep}`)
+            //     .then((response) => {
+            //         if (response.data !== '') {
+            //             formRef.current?.setFieldValue('addressArea', `${response.data.area.clearName}`);
+            //             formRef.current?.setFieldValue('addressCity', `${response.data.city.clearName}`);
+            //             formRef.current?.setFieldValue('addressCountry', 'Brasil');
+            //             formRef.current?.setFieldValue('addressStreet', `${response.data.clearPublicPlace}`);
+            //             formRef.current?.setFieldValue('addressState', `${response.data.state}`);
+
+            //             const inputNumber = formRef.current?.getFieldRef('addressNumber');
+            //             if (inputNumber) {
+            //                 inputNumber.focus();
+            //             }
+            //         } else {
+            //             toast.error('Digite um cep válido.');
+            //         }
+            //     })
+            //     .catch((error) => {
+            //         console.log(error);
+            //         toast.error('Falha ao buscar cep');
+            //     });
         }
     }, []);
 
@@ -230,6 +233,11 @@ const Profile: React.FC = () => {
                     })
                     .then(async (response) => {
                         const { data } = await api.get(`storage/base64/min/${imgId}`);
+                        if (profileInfo.providerImages.length === 0) {
+                            await api.post(`providerImages/updateDefaultImage/${response.data}`, {
+                                providerId: user.id,
+                            });
+                        }
                         profileInfo.providerImages.push({ id: response.data, base64Img: data });
                         toast.success('Imagem inserida com sucesso!!');
                         setTimeout(() => {
@@ -341,10 +349,17 @@ const Profile: React.FC = () => {
                             {isUpdatedProfile ? (
                                 <>
                                     <AvatarInput>
-                                        <img src={`data:image/png;base64,${profileInfo.avatar}`} alt={user.name} />
+                                        <img
+                                            src={`data:image/png;base64,${profileInfo.avatar}`}
+                                            alt={user.name}
+                                        />
                                         <label htmlFor="avatar">
                                             <FiCamera />
-                                            <input type="file" id="avatar" onChange={handleAvatarChange} />
+                                            <input
+                                                type="file"
+                                                id="avatar"
+                                                onChange={handleAvatarChange}
+                                            />
                                         </label>
                                     </AvatarInput>
                                     <h1>Meu Perfil</h1>
@@ -354,10 +369,18 @@ const Profile: React.FC = () => {
                                             <Input name="name" icon={FiUser} placeholder="Nome" />
                                         </Col>
                                         <Col xs={12} sm={4} md={4} lg={4}>
-                                            <Input name="lastName" icon={FiUser} placeholder="Sobrenome" />
+                                            <Input
+                                                name="lastName"
+                                                icon={FiUser}
+                                                placeholder="Sobrenome"
+                                            />
                                         </Col>
                                         <Col xs={12} sm={4} md={4} lg={4}>
-                                            <Input name="email" icon={FiMail} placeholder="E-mail" />
+                                            <Input
+                                                name="email"
+                                                icon={FiMail}
+                                                placeholder="E-mail"
+                                            />
                                         </Col>
                                     </Row>
 
@@ -410,22 +433,42 @@ const Profile: React.FC = () => {
                                             />
                                         </Col>
                                         <Col xs={12} sm={4} md={4} lg={4}>
-                                            <Input name="addressStreet" placeholder="Rua" icon={FaMapSigns} />
+                                            <Input
+                                                name="addressStreet"
+                                                placeholder="Rua"
+                                                icon={FaMapSigns}
+                                            />
                                         </Col>
                                         <Col xs={12} sm={4} md={4} lg={4}>
-                                            <Input name="addressArea" placeholder="Bairro" icon={FaMapSigns} />
+                                            <Input
+                                                name="addressArea"
+                                                placeholder="Bairro"
+                                                icon={FaMapSigns}
+                                            />
                                         </Col>
                                     </Row>
 
                                     <Row>
                                         <Col xs={12} sm={3} md={3} lg={3}>
-                                            <Input name="addressNumber" placeholder="Número" icon={FaMapSigns} />
+                                            <Input
+                                                name="addressNumber"
+                                                placeholder="Número"
+                                                icon={FaMapSigns}
+                                            />
                                         </Col>
                                         <Col xs={12} sm={3} md={3} lg={3}>
-                                            <Input name="addressCity" placeholder="Cidade" icon={FaMapSigns} />
+                                            <Input
+                                                name="addressCity"
+                                                placeholder="Cidade"
+                                                icon={FaMapSigns}
+                                            />
                                         </Col>
                                         <Col xs={12} sm={3} md={3} lg={3}>
-                                            <Input name="addressState" placeholder="Estado" icon={FaMapSigns} />
+                                            <Input
+                                                name="addressState"
+                                                placeholder="Estado"
+                                                icon={FaMapSigns}
+                                            />
                                         </Col>
                                         <Col xs={12} sm={3} md={3} lg={3}>
                                             <Input
@@ -447,39 +490,9 @@ const Profile: React.FC = () => {
                                             >
                                                 Barbearia:
                                             </span>
-                                            <Switch
+                                            <SwitchInput
                                                 onChange={toggleBarber}
-                                                checked={isBarber}
-                                                uncheckedIcon={
-                                                    <div
-                                                        style={{
-                                                            display: 'flex',
-                                                            justifyContent: 'center',
-                                                            alignItems: 'center',
-                                                            height: '100%',
-                                                            fontSize: 19,
-                                                        }}
-                                                    >
-                                                        <MdClose />
-                                                    </div>
-                                                }
-                                                checkedIcon={
-                                                    <div
-                                                        style={{
-                                                            display: 'flex',
-                                                            justifyContent: 'center',
-                                                            alignItems: 'center',
-                                                            height: '100%',
-                                                            fontSize: 19,
-                                                        }}
-                                                    >
-                                                        <MdCheck />
-                                                    </div>
-                                                }
-                                                height={23}
-                                                width={55}
-                                                onColor="#2e656a"
-                                                offColor="#c53030"
+                                                isChecked={isBarber}
                                             />
                                         </Col>
                                         <Col xs={12} sm={4} md={4} lg={4}>
@@ -490,39 +503,9 @@ const Profile: React.FC = () => {
                                             >
                                                 Tatuagem:
                                             </span>
-                                            <Switch
+                                            <SwitchInput
                                                 onChange={toggleTattoo}
-                                                checked={isTattoo}
-                                                uncheckedIcon={
-                                                    <div
-                                                        style={{
-                                                            display: 'flex',
-                                                            justifyContent: 'center',
-                                                            alignItems: 'center',
-                                                            height: '100%',
-                                                            fontSize: 19,
-                                                        }}
-                                                    >
-                                                        <MdClose />
-                                                    </div>
-                                                }
-                                                checkedIcon={
-                                                    <div
-                                                        style={{
-                                                            display: 'flex',
-                                                            justifyContent: 'center',
-                                                            alignItems: 'center',
-                                                            height: '100%',
-                                                            fontSize: 19,
-                                                        }}
-                                                    >
-                                                        <MdCheck />
-                                                    </div>
-                                                }
-                                                height={23}
-                                                width={55}
-                                                onColor="#2e656a"
-                                                offColor="#c53030"
+                                                isChecked={isTattoo}
                                             />
                                         </Col>
                                         <Col xs={12} sm={4} md={4} lg={4}>
@@ -533,39 +516,9 @@ const Profile: React.FC = () => {
                                             >
                                                 Piercing:
                                             </span>
-                                            <Switch
+                                            <SwitchInput
                                                 onChange={togglePiercing}
-                                                checked={isPiercing}
-                                                uncheckedIcon={
-                                                    <div
-                                                        style={{
-                                                            display: 'flex',
-                                                            justifyContent: 'center',
-                                                            alignItems: 'center',
-                                                            height: '100%',
-                                                            fontSize: 19,
-                                                        }}
-                                                    >
-                                                        <MdClose />
-                                                    </div>
-                                                }
-                                                checkedIcon={
-                                                    <div
-                                                        style={{
-                                                            display: 'flex',
-                                                            justifyContent: 'center',
-                                                            alignItems: 'center',
-                                                            height: '100%',
-                                                            fontSize: 19,
-                                                        }}
-                                                    >
-                                                        <MdCheck />
-                                                    </div>
-                                                }
-                                                height={23}
-                                                width={55}
-                                                onColor="#2e656a"
-                                                offColor="#c53030"
+                                                isChecked={isPiercing}
                                             />
                                         </Col>
                                     </Row>
@@ -577,7 +530,9 @@ const Profile: React.FC = () => {
                                     {profileInfo && (
                                         <ImgPreview>
                                             <CarouselWithCustomDots
-                                                items={profileInfo ? profileInfo.providerImages : []}
+                                                items={
+                                                    profileInfo ? profileInfo.providerImages : []
+                                                }
                                                 updatedImgInCarousel={(indexImg: number) =>
                                                     setIndexImgSelectedInCarousel(indexImg)
                                                 }
@@ -588,30 +543,19 @@ const Profile: React.FC = () => {
                                         <Col xs={12} sm={4} md={4} lg={4}>
                                             <div className="img">
                                                 Upload Imagem
-                                                {statusImgLogo === null && (
-                                                    <label htmlFor="avatar">
-                                                        <FiCamera />
-                                                        <input
-                                                            accept=".jpg, .jpeg, .png"
-                                                            onChange={handleImageChange}
-                                                            type="file"
-                                                            id="avatar"
-                                                        />
-                                                    </label>
-                                                )}
-                                                {statusImgLogo === true && <span>Carregando...</span>}
-                                                {statusImgLogo === false && (
-                                                    <BsCheckAll className="check" size={25} color="#2e656a" />
-                                                )}
+                                                <FileInput
+                                                    onChange={handleImageChange}
+                                                    statusImgLogo={statusImgLogo}
+                                                />
                                             </div>
                                         </Col>
                                         <Col xs={12} sm={4} md={4} lg={4}>
-                                            <Button type="button" onClick={deleteProviderImage}>
+                                            <Button onClick={deleteProviderImage}>
                                                 Excluir Imagem
                                             </Button>
                                         </Col>
                                         <Col xs={12} sm={4} md={4} lg={4}>
-                                            <Button type="button" onClick={updateDefaultProviderImage}>
+                                            <Button onClick={updateDefaultProviderImage}>
                                                 Tornar Imagem Principal
                                             </Button>
                                         </Col>

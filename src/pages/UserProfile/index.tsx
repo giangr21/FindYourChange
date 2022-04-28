@@ -40,7 +40,7 @@ const UserProfile: React.FC = () => {
     const mobile = useMedia('(max-width: 760px)');
     const formRef = useRef<FormHandles>(null);
     const history = useHistory();
-    const { user, updateSimpleUser } = useAuth();
+    const { user, updateUser } = useAuth();
     const [loading, setLoading] = useState(true);
     const [profileInfo, setProfileInfo] = useState<any>({});
     const [appointments, setAppointments] = useState<any>([]);
@@ -116,7 +116,7 @@ const UserProfile: React.FC = () => {
 
                 await api.put('/user', data);
 
-                updateSimpleUser(data);
+                updateUser(data);
 
                 toast.success('Perfil atualizado com sucesso!');
 
@@ -133,7 +133,7 @@ const UserProfile: React.FC = () => {
                 toast.error('Houve um erro! Tente novamente.');
             }
         },
-        [user.id, profileAvatar, updateSimpleUser, profileInfo],
+        [user.id, profileAvatar, updateUser, profileInfo],
     );
 
     useEffect(() => {
@@ -166,7 +166,9 @@ const UserProfile: React.FC = () => {
                         .post('/storage/img', data)
                         .then(async (response) => {
                             setProfileAvatar(response.data);
-                            const { data: responseImg } = await api.get(`storage/base64/min/${response.data}`);
+                            const { data: responseImg } = await api.get(
+                                `storage/base64/min/${response.data}`,
+                            );
                             setProfileInfo({ ...profileInfo, avatar: responseImg });
                         })
                         .catch((error) => {
@@ -233,13 +235,24 @@ const UserProfile: React.FC = () => {
                             title="Editar Cadastro"
                         >
                             <Content center={!mobile}>
-                                <Form initialData={profileInfo} ref={formRef} onSubmit={handleSubmit}>
+                                <Form
+                                    initialData={profileInfo}
+                                    ref={formRef}
+                                    onSubmit={handleSubmit}
+                                >
                                     <h1>Minha Conta</h1>
                                     <AvatarInput>
-                                        <img src={`data:image/png;base64,${profileInfo.avatar}`} alt={user.name} />
+                                        <img
+                                            src={`data:image/png;base64,${profileInfo.avatar}`}
+                                            alt={user.name}
+                                        />
                                         <label htmlFor="avatar">
                                             <FiCamera />
-                                            <input type="file" id="avatar" onChange={handleAvatarChange} />
+                                            <input
+                                                type="file"
+                                                id="avatar"
+                                                onChange={handleAvatarChange}
+                                            />
                                         </label>
                                     </AvatarInput>
                                     <Row>
@@ -247,10 +260,18 @@ const UserProfile: React.FC = () => {
                                             <Input name="name" icon={FiUser} placeholder="Nome" />
                                         </Col>
                                         <Col xs={12} sm={4} md={4} lg={4}>
-                                            <Input name="lastName" icon={FiUser} placeholder="Sobrenome" />
+                                            <Input
+                                                name="lastName"
+                                                icon={FiUser}
+                                                placeholder="Sobrenome"
+                                            />
                                         </Col>
                                         <Col xs={12} sm={4} md={4} lg={4}>
-                                            <Input name="email" icon={FiMail} placeholder="E-mail" />
+                                            <Input
+                                                name="email"
+                                                icon={FiMail}
+                                                placeholder="E-mail"
+                                            />
                                         </Col>
                                     </Row>
 
@@ -314,7 +335,12 @@ const UserProfile: React.FC = () => {
                                         <Col key={appointment.id} xs={12} sm={6} md={6} lg={6}>
                                             <Card
                                                 overrides={{
-                                                    Root: { style: { width: '100%', borderRadius: '10px' } },
+                                                    Root: {
+                                                        style: {
+                                                            width: '100%',
+                                                            borderRadius: '10px',
+                                                        },
+                                                    },
                                                     Contents: { style: { margin: '10px' } },
                                                 }}
                                                 title={appointment.service.title}
@@ -323,7 +349,9 @@ const UserProfile: React.FC = () => {
                                                     <div className="left">
                                                         <ul>
                                                             <ListItem
-                                                                artwork={(props: any) => <ArrowRight {...props} />}
+                                                                artwork={(props: any) => (
+                                                                    <ArrowRight {...props} />
+                                                                )}
                                                                 artworkSize={ARTWORK_SIZES.MEDIUM}
                                                                 overrides={{
                                                                     Content: {
@@ -353,7 +381,9 @@ const UserProfile: React.FC = () => {
                                                                 </ListItemLabel>
                                                             </ListItem>
                                                             <ListItem
-                                                                artwork={(props: any) => <ArrowRight {...props} />}
+                                                                artwork={(props: any) => (
+                                                                    <ArrowRight {...props} />
+                                                                )}
                                                                 artworkSize={ARTWORK_SIZES.MEDIUM}
                                                                 overrides={{
                                                                     Content: {
@@ -378,12 +408,17 @@ const UserProfile: React.FC = () => {
                                                                             marginLeft: '4px',
                                                                         }}
                                                                     >
-                                                                        {appointment.service.category}
+                                                                        {
+                                                                            appointment.service
+                                                                                .category
+                                                                        }
                                                                     </span>
                                                                 </ListItemLabel>
                                                             </ListItem>
                                                             <ListItem
-                                                                artwork={(props: any) => <ArrowRight {...props} />}
+                                                                artwork={(props: any) => (
+                                                                    <ArrowRight {...props} />
+                                                                )}
                                                                 artworkSize={ARTWORK_SIZES.MEDIUM}
                                                                 overrides={{
                                                                     Content: {
@@ -408,17 +443,25 @@ const UserProfile: React.FC = () => {
                                                                             marginLeft: '4px',
                                                                         }}
                                                                     >
-                                                                        {Intl.NumberFormat('pt-BR', {
-                                                                            style: 'currency',
-                                                                            currency: 'BRL',
-                                                                        }).format(
-                                                                            Number(appointment.service.value),
+                                                                        {Intl.NumberFormat(
+                                                                            'pt-BR',
+                                                                            {
+                                                                                style: 'currency',
+                                                                                currency: 'BRL',
+                                                                            },
+                                                                        ).format(
+                                                                            Number(
+                                                                                appointment.service
+                                                                                    .value,
+                                                                            ),
                                                                         )}
                                                                     </span>
                                                                 </ListItemLabel>
                                                             </ListItem>
                                                             <ListItem
-                                                                artwork={(props: any) => <ArrowRight {...props} />}
+                                                                artwork={(props: any) => (
+                                                                    <ArrowRight {...props} />
+                                                                )}
                                                                 artworkSize={ARTWORK_SIZES.MEDIUM}
                                                                 overrides={{
                                                                     Content: {
@@ -453,8 +496,12 @@ const UserProfile: React.FC = () => {
                                                         <span className="month">
                                                             {appointment.monthAppointment}
                                                         </span>
-                                                        <span className="day">{appointment.dayAppointment}</span>
-                                                        <span className="hour">{appointment.hourAppointment}</span>
+                                                        <span className="day">
+                                                            {appointment.dayAppointment}
+                                                        </span>
+                                                        <span className="hour">
+                                                            {appointment.hourAppointment}
+                                                        </span>
                                                     </div>
                                                 </Appointments>
                                                 <div
@@ -466,7 +513,11 @@ const UserProfile: React.FC = () => {
                                                         icon={FaAngleDoubleRight}
                                                         title="Mais Informações"
                                                         background="#ff9000"
-                                                        action={() => handleClickProvider(appointment.provider.id)}
+                                                        action={() =>
+                                                            handleClickProvider(
+                                                                appointment.provider.id,
+                                                            )
+                                                        }
                                                     />
                                                 </div>
                                             </Card>

@@ -24,6 +24,7 @@ import {
     SearchContainer,
     ContentSearch,
     FooterFilter,
+    ProductWrapper,
 } from './styles';
 import Radio from '../../components/FormComponents/Radio';
 import Input from '../../components/FormComponents/Input/MainSearchInput';
@@ -286,8 +287,15 @@ const Index: React.FC = () => {
             {!loading ? (
                 <Results>
                     <HeaderResults>
-                        <span>{products.length} produtos encontrados. Exibindo todos os resultados.</span>
-                        <IconButton icon={FaSearch} background="#777777" justIcon action={handleFilter} />
+                        <span>
+                            {products.length} produtos encontrados. Exibindo todos os resultados.
+                        </span>
+                        <IconButton
+                            icon={FaSearch}
+                            background="#777777"
+                            justIcon
+                            action={handleFilter}
+                        />
                     </HeaderResults>
                     <ContentResults>
                         <Row>
@@ -299,30 +307,19 @@ const Index: React.FC = () => {
                                         key={product.id}
                                     >
                                         <ProductImageWrapper>
-                                            <Image url={product.productImage} className="product-image" />
+                                            <Image
+                                                url={product.productImage}
+                                                className="product-image"
+                                            />
                                         </ProductImageWrapper>
                                         <ProductInfo>
-                                            <div
-                                                style={{
-                                                    height: '60px',
-                                                    maxHeight: '60px',
-                                                    overflowY: 'auto',
-                                                    padding: '5px 0px',
-                                                }}
-                                            >
+                                            <ProductWrapper>
                                                 <ProductTitle>{product.name}</ProductTitle>
-                                            </div>
+                                            </ProductWrapper>
 
-                                            <div
-                                                style={{
-                                                    height: '60px',
-                                                    maxHeight: '60px',
-                                                    overflowY: 'auto',
-                                                    padding: '5px 0px',
-                                                }}
-                                            >
+                                            <ProductWrapper>
                                                 <ProductWeight>{product.description}</ProductWeight>
-                                            </div>
+                                            </ProductWrapper>
                                             <ProductMeta>
                                                 <ProductPriceWrapper>
                                                     <ProductPrice>

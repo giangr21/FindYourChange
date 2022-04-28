@@ -4,7 +4,7 @@ import { IconBaseProps } from 'react-icons/lib';
 import { Button } from './styles';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-    icon: React.ComponentType<IconBaseProps>;
+    icon: any;
     action?: () => void;
 };
 

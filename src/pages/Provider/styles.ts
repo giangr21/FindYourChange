@@ -51,7 +51,6 @@ export const InfoContainer = styled.div`
 
     span {
         font-size: 15px;
-        /* padding-bottom: 10px; */
     }
 
     .separator {

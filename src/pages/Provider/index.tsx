@@ -57,8 +57,8 @@ const Index: React.FC = () => {
     const [newRecommendation, setNewRecommendation] = useState(false);
     const [specificServiceInfo, setSpecificServiceInfo] = useState({});
     const [latlng, setLatLng] = useState({
-        lat: 0,
-        lng: 0,
+        lat: 1000,
+        lng: 1000,
     });
 
     const getProvider = useCallback(async () => {
@@ -68,14 +68,6 @@ const Index: React.FC = () => {
             .get(`/provider/specificProvider/${idProvider}`)
             .then(async (response) => {
                 setProvider(response.data);
-                await api
-                    .get(`https://ecommerce-api-dev.jclan.com.br/street/${response.data.addressZipCode}`)
-                    .then((rsp) => {
-                        setLatLng({
-                            lat: Number(rsp.data.latitude),
-                            lng: Number(rsp.data.longitude),
-                        });
-                    });
                 setLoading(false);
                 if (location.state === 'redirectToProviderRecommendations') {
                     tabRef2.current.click();
@@ -102,7 +94,9 @@ const Index: React.FC = () => {
 
     const toggleModalAppointment = useCallback(
         (serviceId?: string): any => {
-            setSpecificServiceInfo(provider.services.filter((service: any) => service.id === serviceId)[0]);
+            setSpecificServiceInfo(
+                provider.services.filter((service: any) => service.id === serviceId)[0],
+            );
             setModalAppointmentOpen((prevState) => !prevState);
         },
         [provider.services],
@@ -128,7 +122,8 @@ const Index: React.FC = () => {
     const handleAppointment = useCallback(
         (serviceId: string) => {
             if (!isAuthenticated) return toggleModalLogin();
-            if (user.isProvider) return toast.error('Agendamento disponíveis somente para usuarios!');
+            if (user.isProvider)
+                return toast.error('Agendamento disponíveis somente para usuarios!');
             toggleModalAppointment(serviceId);
         },
         [isAuthenticated, toggleModalAppointment, toggleModalLogin, user],
@@ -167,7 +162,9 @@ const Index: React.FC = () => {
                             </span>
                             <span className="servicesAvailable">
                                 {provider.isTattoo &&
-                                    `Tatuagem ${provider.isBarber || provider.isPiercing ? '/ ' : ''}`}
+                                    `Tatuagem ${
+                                        provider.isBarber || provider.isPiercing ? '/ ' : ''
+                                    }`}
                                 {provider.isBarber && `Barbeiro ${provider.isPiercing ? '/ ' : ''}`}
                                 {provider.isPiercing && 'Piercing'}
                             </span>
@@ -217,7 +214,9 @@ const Index: React.FC = () => {
                                                     icon={MdCheck}
                                                     title="Agendar"
                                                     background="#ff9000"
-                                                    action={() => handleAppointment(serviceIsPopular.id)}
+                                                    action={() =>
+                                                        handleAppointment(serviceIsPopular.id)
+                                                    }
                                                 />
                                             </div>
                                         </ProviderService>
@@ -243,7 +242,9 @@ const Index: React.FC = () => {
                                                     icon={MdCheck}
                                                     title="Agendar"
                                                     background="#ff9000"
-                                                    action={() => handleAppointment(serviceIsNotPopular.id)}
+                                                    action={() =>
+                                                        handleAppointment(serviceIsNotPopular.id)
+                                                    }
                                                 />
                                             </div>
                                         </ProviderService>
@@ -276,8 +277,12 @@ const Index: React.FC = () => {
                                         providerRecommendations={provider.providerRecommendations}
                                         newRecommendation={newRecommendation}
                                         providerId={provider.id}
-                                        setNewRecommendationToFalse={() => setNewRecommendation(false)}
-                                        removeRecommendation={(id) => handleRemoveRecommendation(id)}
+                                        setNewRecommendationToFalse={() =>
+                                            setNewRecommendation(false)
+                                        }
+                                        removeRecommendation={(id) =>
+                                            handleRemoveRecommendation(id)
+                                        }
                                         infosToCreateNewRecommendation={
                                             user
                                                 ? {
@@ -359,7 +364,9 @@ const Index: React.FC = () => {
                                 </div>
                             )}
                         </InfoContainer>
-                        {modalLoginOpen && <ModalLogin isOpen={modalLoginOpen} setIsOpen={toggleModalLogin} />}
+                        {modalLoginOpen && (
+                            <ModalLogin isOpen={modalLoginOpen} setIsOpen={toggleModalLogin} />
+                        )}
                         {modalAppointmentOpen && (
                             <ModalHandleAppointment
                                 serviceInfo={specificServiceInfo}

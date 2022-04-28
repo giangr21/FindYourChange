@@ -12,8 +12,7 @@ const DefaultLayout: React.FC = ({ children }) => {
     const location = useLocation();
 
     const showHeader = (): boolean => {
-        if (location.pathname === '/' && mobile) return false;
-        return true;
+        return location.pathname === '/' && mobile ? false : true;
     };
 
     return (

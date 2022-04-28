@@ -9,8 +9,6 @@ import 'rc-time-picker/assets/index.css';
 
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import { BsCheckAll } from 'react-icons/bs';
-import axios from 'axios';
 import { Form, Container, Header, Footer, Content } from './styles';
 import Input from '../../../components/FormComponents/Input/InputModal';
 import Modal from '../../../components/Modal';
@@ -21,6 +19,7 @@ import Loading from '../../../components/Loading';
 import Select from '../../../components/FormComponents/Select';
 import { useAuth } from '../../../hooks/authentication';
 import { useMedia } from '../../../util/use-media';
+import FileInput from '../../../components/FormComponents/File';
 
 interface ModalProps {
     isOpen: boolean;
@@ -41,7 +40,13 @@ interface ProductData {
     provider: string;
 }
 
-const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, productId, isOpen, edit }) => {
+const ModalProductProvider: React.FC<ModalProps> = ({
+    setIsOpen,
+    reloadProduct,
+    productId,
+    isOpen,
+    edit,
+}) => {
     const mobile = useMedia('(max-width: 760px)');
     const { user } = useAuth();
     const formRef = useRef<FormHandles>(null);
@@ -73,7 +78,9 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                     response.data.productStatus = { value: 'Usado', label: 'Usado' };
                 }
                 if (response.data.productImage) {
-                    const imgNamePhotoData = await api.get(`storage/base64/min/${response.data.productImage}`);
+                    const imgNamePhotoData = await api.get(
+                        `storage/base64/min/${response.data.productImage}`,
+                    );
                     setImgPhotoMin(imgNamePhotoData.data);
                 }
                 setProductData(response.data);
@@ -125,27 +132,14 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
         }
     }, []);
 
-    const handleMercadoPago = useCallback(async (id: string) => {
-        const response = await axios.get(`https://api.mercadopago.com/v1/payments/${id}`, {
-            headers: {
-                Authorization: 'Bearer TEST-6807718697390524-051723-9d40471e78db261b65f02e1c7c74bab7-154938818',
-            },
-        });
-        const myjson = JSON.stringify(response.data, null, 2);
-        const x = window.open();
-        if (x) {
-            x.document.open();
-            x.document.write(`<html><body><pre>${myjson}</pre></body></html>`);
-            x.document.close();
-        }
-    }, []);
-
     const submitProduct = useCallback(
         async (data: ProductData) => {
             try {
                 formRef.current?.setErrors({});
                 const schema = Yup.object().shape({
-                    name: Yup.string().required('Nome obrigatório').max(60, 'Digite um nome válido'),
+                    name: Yup.string()
+                        .required('Nome obrigatório')
+                        .max(60, 'Digite um nome válido'),
                     value: Yup.string().required('Valor obrigatório'),
                     category: Yup.string()
                         .required('Categoria obrigatória')
@@ -205,7 +199,12 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
     }, []);
 
     return (
-        <Modal width={mobile ? '100%' : '420px'} height="630px" isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Modal
+            width={mobile ? '100%' : '420px'}
+            height="630px"
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+        >
             <Form ref={formRef} initialData={productData} onSubmit={submitProduct}>
                 <Header>
                     {edit ? <h1>Editar Produto</h1> : <h1>Novo Produto</h1>}
@@ -316,89 +315,62 @@ const ModalProductProvider: React.FC<ModalProps> = ({ setIsOpen, reloadProduct, 
                                         }}
                                     >
                                         Foto Produto:
-                                        {statusImgLogo === null && (
-                                            <label htmlFor="avatar">
-                                                <FiCamera />
-                                                <input
-                                                    accept=".jpg, .jpeg, .png"
-                                                    onChange={handleLogoChange}
-                                                    type="file"
-                                                    id="avatar"
-                                                />
-                                            </label>
-                                        )}
-                                        {statusImgLogo === true && <span>Carregando...</span>}
-                                        {statusImgLogo === false && (
-                                            <BsCheckAll
-                                                style={{
-                                                    marginLeft: '15px',
-                                                }}
-                                                className="check"
-                                                size={25}
-                                                color="#2e656a"
-                                            />
-                                        )}
+                                        <FileInput
+                                            statusImgLogo={statusImgLogo}
+                                            onChange={handleLogoChange}
+                                        />
                                     </div>
                                 </Container>
                             )}
                             {edit && productData.productImage && !changeImg && (
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        margin: '15px 0px',
-                                        cursor: 'pointer',
-                                    }}
-                                    onClick={() => clickImg(productData.productImage)}
-                                >
-                                    Preview Imagem:{' '}
-                                    <img
+                                <>
+                                    <div
                                         style={{
-                                            marginLeft: '10px',
-                                            width: '56px',
-                                            height: '56px',
-                                            borderRadius: '50%',
-                                            borderColor: '#ff9000',
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            margin: '15px 0px',
+                                            cursor: 'pointer',
                                         }}
-                                        src={`data:image/png;base64,${imgPhotoMin}`}
                                         onClick={() => clickImg(productData.productImage)}
-                                        alt=""
-                                    />
-                                </div>
-                            )}
-                            {edit && !changeImg && productData.productImage && (
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    <IconButton
-                                        type="button"
-                                        icon={FiCamera}
-                                        title="Alterar Imagem"
-                                        background="#2e656a"
-                                        action={() => setChangeImg(true)}
-                                    />
-                                </div>
+                                    >
+                                        Preview Imagem:{' '}
+                                        <img
+                                            style={{
+                                                marginLeft: '10px',
+                                                width: '56px',
+                                                height: '56px',
+                                                borderRadius: '50%',
+                                                borderColor: '#ff9000',
+                                            }}
+                                            src={`data:image/png;base64,${imgPhotoMin}`}
+                                            onClick={() => clickImg(productData.productImage)}
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        <IconButton
+                                            type="button"
+                                            icon={FiCamera}
+                                            title="Alterar Imagem"
+                                            background="#2e656a"
+                                            action={() => setChangeImg(true)}
+                                        />
+                                    </div>
+                                </>
                             )}
                         </>
                     )}
                 </Content>
                 <Footer>
-                    <div
-                        style={{
-                            cursor: 'pointer',
-                            fontSize: '10px',
-                        }}
-                        onClick={() => handleMercadoPago(productData.lastMercadoPagoId)}
-                    >
-                        {productData && productData.lastMercadoPagoId}
-                    </div>
                     <div
                         style={{
                             display: 'flex',

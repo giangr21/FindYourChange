@@ -57,7 +57,9 @@ const Product: React.FC = () => {
         await api
             .get(`/products/${idProduct}`)
             .then(async (response) => {
-                const imgNamePhotoData = await api.get(`storage/base64/${response.data.productImage}`);
+                const imgNamePhotoData = await api.get(
+                    `storage/base64/${response.data.productImage}`,
+                );
                 setImgPhotoMin(imgNamePhotoData.data);
                 setProduct(response.data);
                 setLoading(false);
@@ -76,7 +78,7 @@ const Product: React.FC = () => {
         (window as any).mp.checkout({
             tokenizer: {
                 totalAmount: Number(product.value),
-                backUrl: `http://localhost:3333/products/checkout/${product.id}`,
+                backUrl: `https://fyc-tcc.herokuapp.com/products/checkout/${product.id}`,
             },
             autoOpen: true,
             theme: {
@@ -96,7 +98,10 @@ const Product: React.FC = () => {
                     <Panel>
                         <Column>
                             <Gallery>
-                                <img alt="imgProduct" src={`data:image/png;base64,${imgPhotoMin}`} />
+                                <img
+                                    alt="imgProduct"
+                                    src={`data:image/png;base64,${imgPhotoMin}`}
+                                />
                             </Gallery>
 
                             <Description>
@@ -127,7 +132,8 @@ const Product: React.FC = () => {
                                     <span>
                                         <p className="title">Compra Garantida com o Mercado Pago</p>
                                         <p className="description">
-                                            Receba o produto que está esperando ou devolvemos seu dinheiro
+                                            Receba o produto que está esperando ou devolvemos seu
+                                            dinheiro
                                         </p>
                                     </span>
                                     <span>
@@ -159,7 +165,9 @@ const Product: React.FC = () => {
                                 }}
                             >
                                 <span className="symbol">R$</span>
-                                <span className="fraction">{Math.floor(Number(product.value))}</span>
+                                <span className="fraction">
+                                    {Math.floor(Number(product.value))}
+                                </span>
                                 <span className="cents">{product.value.split('.')[1]}</span>
                             </PriceRow>
 
@@ -239,7 +247,8 @@ const Product: React.FC = () => {
                                     <span>
                                         <p className="title">Compra Garantida com o Mercado Pago</p>
                                         <p className="description">
-                                            Receba o produto que está esperando ou devolvemos seu dinheiro
+                                            Receba o produto que está esperando ou devolvemos seu
+                                            dinheiro
                                         </p>
                                     </span>
                                     <span>
@@ -254,8 +263,6 @@ const Product: React.FC = () => {
                                         </a>
                                     </span>
                                 </div>
-                                {/* TODO: Se o MercadoPago tiver alguma página genérica sobre Garantia, linkar aqui  */}
-                                {/* <a href="#">Saiba mais sobre garantia</a> */}
                             </Section>
                         </ContentMobile>
                     </PanelMobile>

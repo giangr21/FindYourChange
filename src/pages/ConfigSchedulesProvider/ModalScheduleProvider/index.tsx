@@ -27,7 +27,13 @@ interface ModalProps {
     scheduleId: string;
 }
 
-const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule, isOpen, edit, scheduleId }) => {
+const ModalServicesProvider: React.FC<ModalProps> = ({
+    setIsOpen,
+    reloadSchedule,
+    isOpen,
+    edit,
+    scheduleId,
+}) => {
     const mobile = useMedia('(max-width: 760px)');
     const { user } = useAuth();
     const [loading, setLoading] = useState(true);
@@ -44,11 +50,17 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
             .get(`/schedule/${scheduleId}`)
             .then((response) => {
                 if (response.data.dayOfWeek) {
-                    response.data.dayOfWeek = { value: response.data.dayOfWeek, label: response.data.dayOfWeek };
+                    response.data.dayOfWeek = {
+                        value: response.data.dayOfWeek,
+                        label: response.data.dayOfWeek,
+                    };
                 }
 
                 setTimeout(() => {
-                    formRef.current?.setFieldValue('active', response.data.active ? 'true' : 'false');
+                    formRef.current?.setFieldValue(
+                        'active',
+                        response.data.active ? 'true' : 'false',
+                    );
                     setHourStart(moment(response.data.hourStart, ['HH:mm']));
                     setHourStartLunch(moment(response.data.hourLunchStart, ['HH:mm']));
                     setHourEnd(moment(response.data.hourEnd, ['HH:mm']));
@@ -97,7 +109,9 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
             try {
                 formRef.current?.setErrors({});
                 const schema = Yup.object().shape({
-                    dayOfWeek: Yup.string().required('Nome obrigatório').max(60, 'Digite um nome válido'),
+                    dayOfWeek: Yup.string()
+                        .required('Nome obrigatório')
+                        .max(60, 'Digite um nome válido'),
                 });
 
                 await schema.validate(scheduleData, {
@@ -262,11 +276,26 @@ const ModalServicesProvider: React.FC<ModalProps> = ({ setIsOpen, reloadSchedule
                 toast.error(`Houve uma falha ao ${edit ? 'editar' : 'inserir'} os dados`);
             }
         },
-        [hourStart, hourLunchStart, hourEnd, hourLunchEnd, edit, setIsOpen, reloadSchedule, scheduleId, user.id],
+        [
+            hourStart,
+            hourLunchStart,
+            hourEnd,
+            hourLunchEnd,
+            edit,
+            setIsOpen,
+            reloadSchedule,
+            scheduleId,
+            user.id,
+        ],
     );
 
     return (
-        <Modal width={mobile ? '100%' : '420px'} height="620px" isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Modal
+            width={mobile ? '100%' : '420px'}
+            height="620px"
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+        >
             <Form ref={formRef} initialData={initialScheduleData} onSubmit={submitSchedule}>
                 <Header>
                     {edit ? <h1>Editar Turno</h1> : <h1>Novo Turno</h1>}

@@ -68,14 +68,15 @@ const Index: React.FC = () => {
         for (let index = 0; index < establishmentsList.data.length; index++) {
             const provider = establishmentsList.data[index];
 
-            for (let i = 0; i < provider.services.length; i++) {
-                const service = provider.services[i];
+            provider.services.forEach((service: any) => {
                 const valueToDiscount = service.value * (service.disccount / 100);
                 service.totalValueWithDisccount = (service.value - valueToDiscount).toFixed(2);
-            }
+            });
 
             if (provider.providerImages.length > 0) {
-                const { data: imgBase64 } = await api.get(`storage/base64/${provider.providerImages[0].image}`);
+                const { data: imgBase64 } = await api.get(
+                    `storage/base64/${provider.providerImages[0].image}`,
+                );
 
                 provider.defaultImg = imgBase64;
             }
@@ -205,7 +206,11 @@ const Index: React.FC = () => {
                                     marginTop: '5px',
                                 }}
                             >
-                                <Input name="serviceName" icon={FaSearch} placeholder="Nome do Serviço" />
+                                <Input
+                                    name="serviceName"
+                                    icon={FaSearch}
+                                    placeholder="Nome do Serviço"
+                                />
                             </div>
                             <div className="separator" />
                             <div
@@ -213,7 +218,11 @@ const Index: React.FC = () => {
                                     marginTop: '5px',
                                 }}
                             >
-                                <Input name="name" icon={FaSearch} placeholder="Nome do Estabelecimento" />
+                                <Input
+                                    name="name"
+                                    icon={FaSearch}
+                                    placeholder="Nome do Estabelecimento"
+                                />
                             </div>
                             <div className="separator" />
                             <span>Cidades: </span>
@@ -311,10 +320,15 @@ const Index: React.FC = () => {
                         <>
                             <Header>
                                 <span>
-                                    {providers.length} estabelecimentos encontrados. Exibindo resultados de 1 a{' '}
-                                    {providers.length}.
+                                    {providers.length} estabelecimentos encontrados. Exibindo
+                                    resultados de 1 a {providers.length}.
                                 </span>
-                                <IconButton icon={FaSearch} background="#777777" justIcon action={handleFilter} />
+                                <IconButton
+                                    icon={FaSearch}
+                                    background="#777777"
+                                    justIcon
+                                    action={handleFilter}
+                                />
                             </Header>
                             <ContentResults>
                                 <Row>
@@ -333,62 +347,82 @@ const Index: React.FC = () => {
                                                 <ProviderInfo>
                                                     <span>{provider.legalName}</span>
                                                     <span className="city">
-                                                        {provider.addressCity} / {provider.addressArea}
+                                                        {provider.addressCity} /{' '}
+                                                        {provider.addressArea}
                                                     </span>
                                                     <span className="servicesAvailable">
                                                         {provider.isTattoo &&
                                                             `Tatuagem ${
-                                                                provider.isBarber || provider.isPiercing
+                                                                provider.isBarber ||
+                                                                provider.isPiercing
                                                                     ? '/ '
                                                                     : ''
                                                             }`}
                                                         {provider.isBarber &&
-                                                            `Barbeiro ${provider.isPiercing ? '/ ' : ''}`}
+                                                            `Barbeiro ${
+                                                                provider.isPiercing ? '/ ' : ''
+                                                            }`}
                                                         {provider.isPiercing && 'Piercing'}
                                                     </span>
                                                 </ProviderInfo>
                                                 <ProviderServiceContent>
                                                     <ProviderServices>
-                                                        {provider.services.slice(0, 4).map((service: any) => (
-                                                            <div className="service" key={service.id}>
+                                                        {provider.services
+                                                            .slice(0, 4)
+                                                            .map((service: any) => (
                                                                 <div
-                                                                    style={{
-                                                                        display: 'flex',
-                                                                        alignItems: 'center',
-                                                                    }}
+                                                                    className="service"
+                                                                    key={service.id}
                                                                 >
-                                                                    <BsDot size={21} />
-                                                                    {service.title}
-                                                                </div>
-                                                                <div className="price">
-                                                                    <ProductPrice>
-                                                                        {service.disccount !== '' &&
-                                                                        service.disccount !== '0'
-                                                                            ? Intl.NumberFormat('pt-BR', {
-                                                                                  style: 'currency',
-                                                                                  currency: 'BRL',
-                                                                              }).format(
-                                                                                  Number(
-                                                                                      service.totalValueWithDisccount,
-                                                                                  ),
-                                                                              )
-                                                                            : Intl.NumberFormat('pt-BR', {
-                                                                                  style: 'currency',
-                                                                                  currency: 'BRL',
-                                                                              }).format(Number(service.value))}
-                                                                    </ProductPrice>
-                                                                    {service.disccount !== '' &&
-                                                                        service.disccount !== '0' && (
-                                                                            <DiscountedPrice>
-                                                                                {Intl.NumberFormat('pt-BR', {
+                                                                    <div
+                                                                        style={{
+                                                                            display: 'flex',
+                                                                            alignItems: 'center',
+                                                                        }}
+                                                                    >
+                                                                        <BsDot size={21} />
+                                                                        {service.title}
+                                                                    </div>
+                                                                    <div className="price">
+                                                                        <ProductPrice>
+                                                                            {Intl.NumberFormat(
+                                                                                'pt-BR',
+                                                                                {
                                                                                     style: 'currency',
                                                                                     currency: 'BRL',
-                                                                                }).format(Number(service.value))}
-                                                                            </DiscountedPrice>
-                                                                        )}
+                                                                                },
+                                                                            ).format(
+                                                                                Number(
+                                                                                    service.disccount !==
+                                                                                        '' &&
+                                                                                        service.disccount !==
+                                                                                            '0'
+                                                                                        ? service.totalValueWithDisccount
+                                                                                        : service.value,
+                                                                                ),
+                                                                            )}
+                                                                        </ProductPrice>
+                                                                        {service.disccount !== '' &&
+                                                                            service.disccount !==
+                                                                                '0' && (
+                                                                                <DiscountedPrice>
+                                                                                    {Intl.NumberFormat(
+                                                                                        'pt-BR',
+                                                                                        {
+                                                                                            style: 'currency',
+                                                                                            currency:
+                                                                                                'BRL',
+                                                                                        },
+                                                                                    ).format(
+                                                                                        Number(
+                                                                                            service.value,
+                                                                                        ),
+                                                                                    )}
+                                                                                </DiscountedPrice>
+                                                                            )}
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        ))}
+                                                            ))}
 
                                                         {provider.services.length === 0 && (
                                                             <div
@@ -401,8 +435,8 @@ const Index: React.FC = () => {
                                                                 }}
                                                             >
                                                                 <h3>
-                                                                    Nao existem serviços populares para este
-                                                                    estabelecimento.
+                                                                    Nao existem serviços populares
+                                                                    para este estabelecimento.
                                                                 </h3>
                                                             </div>
                                                         )}
@@ -417,7 +451,9 @@ const Index: React.FC = () => {
                                                             icon={FaAngleDoubleRight}
                                                             title="Mais Informações"
                                                             background="#ff9000"
-                                                            action={() => handleClickProvider(provider.id)}
+                                                            action={() =>
+                                                                handleClickProvider(provider.id)
+                                                            }
                                                         />
                                                     </div>
                                                 </ProviderServiceContent>

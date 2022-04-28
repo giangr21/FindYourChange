@@ -16,7 +16,12 @@ interface FilterProps {
     conditionClearIncident?: boolean;
 }
 
-const Filter: React.FC<FilterProps> = ({ showFilter, submitFilter, conditionClearIncident, children }) => {
+const Filter: React.FC<FilterProps> = ({
+    showFilter,
+    submitFilter,
+    conditionClearIncident,
+    children,
+}) => {
     const formRef = useRef<FormHandles>(null);
     const { user } = useAuth();
     const [optionsSelect, setOptionsSelect] = useState<any>([]);
@@ -55,11 +60,16 @@ const Filter: React.FC<FilterProps> = ({ showFilter, submitFilter, conditionClea
             <HeaderFilter>
                 <strong>Filtros</strong>
             </HeaderFilter>
-            <Form ref={formRef} onSubmit={formFilterSubmit}>
+            <Form translate={undefined} ref={formRef} onSubmit={formFilterSubmit}>
                 {children}
             </Form>
             <FooterFilter>
-                <IconButton icon={MdDeleteForever} title="Limpar" background="#777777" action={clearFilter} />
+                <IconButton
+                    icon={MdDeleteForever}
+                    title="Limpar"
+                    background="#777777"
+                    action={clearFilter}
+                />
                 <IconButton
                     icon={FaCheck}
                     title="Aplicar"

@@ -3,14 +3,10 @@
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import React, { useCallback, useRef, useState, useEffect, ChangeEvent } from 'react';
-import { FiArrowLeft, FiCamera, FiLock, FiMail, FiUser } from 'react-icons/fi';
-import { MdClose, MdCheck } from 'react-icons/md';
-import { BsCheckAll } from 'react-icons/bs';
-import Switch from 'react-switch';
+import { FiArrowLeft, FiLock, FiMail, FiUser } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-// import * as Yup from 'yup';
 import { Link, useHistory } from 'react-router-dom';
 import { FaMapSigns, FaPhoneAlt } from 'react-icons/fa';
 import api from '../../services/api';
@@ -21,6 +17,8 @@ import InputMask from '../../components/FormComponents/Input/InputMask';
 import Radio from '../../components/FormComponents/Radio';
 import getValidationErrors from '../../util/getValidationErrors';
 import { Background, Container, Content, AnimationContainer, Row, Column } from './styles';
+import SwitchInput from '../../components/FormComponents/Switch';
+import FileInput from '../../components/FormComponents/File';
 
 interface SignUpUserData {
     name: string;
@@ -68,7 +66,9 @@ const SignUp: React.FC = () => {
                 const schema = Yup.object().shape({
                     name: Yup.string().required('Nome obrigatório'),
                     lastName: Yup.string().required('Sobrenome obrigatório'),
-                    email: Yup.string().required('E-mail obrigatório').email('Digite um e-mail válido'),
+                    email: Yup.string()
+                        .required('E-mail obrigatório')
+                        .email('Digite um e-mail válido'),
                     password: Yup.string().min(4, 'No mínimo 4 digitos'),
                 });
 
@@ -101,7 +101,9 @@ const SignUp: React.FC = () => {
                 const schema = Yup.object().shape({
                     name: Yup.string().required('Nome obrigatório'),
                     lastName: Yup.string().required('Sobrenome obrigatório'),
-                    email: Yup.string().required('E-mail obrigatório').email('Digite um e-mail válido'),
+                    email: Yup.string()
+                        .required('E-mail obrigatório')
+                        .email('Digite um e-mail válido'),
                     password: Yup.string().min(4, 'No mínimo 4 dígitos'),
                     addressStreet: Yup.string().required('Rua obrigatória'),
                     addressNumber: Yup.string().required('Número obrigatório'),
@@ -136,7 +138,11 @@ const SignUp: React.FC = () => {
     );
 
     useEffect(() => {
-        if (history.location && history.location.state && history.location.state.prevPath.includes('/provider/')) {
+        if (
+            history.location &&
+            history.location.state &&
+            history.location.state.prevPath.includes('/provider/')
+        ) {
             setPrevPathProvider(true);
         }
         setTimeout(() => {
@@ -180,29 +186,7 @@ const SignUp: React.FC = () => {
         if (cep === '' || cep.length < 8) {
             toast.error('Digite um cep válido.');
         } else {
-            await api
-                .get(`https://ecommerce-api-dev.jclan.com.br/street/${cep}`)
-                .then((response) => {
-                    if (response.data !== '') {
-                        console.log(response.data);
-                        formRef.current?.setFieldValue('addressArea', `${response.data.area.clearName}`);
-                        formRef.current?.setFieldValue('addressCity', `${response.data.city.clearName}`);
-                        formRef.current?.setFieldValue('addressCountry', 'Brasil');
-                        formRef.current?.setFieldValue('addressStreet', `${response.data.clearPublicPlace}`);
-                        formRef.current?.setFieldValue('addressState', `${response.data.state}`);
-
-                        const inputNumber = formRef.current?.getFieldRef('addressNumber');
-                        if (inputNumber) {
-                            inputNumber.focus();
-                        }
-                    } else {
-                        toast.error('Digite um cep válido.');
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    toast.error('Falha ao buscar cep');
-                });
+            toast.error('Falha ao buscar cep');
         }
     }, []);
 
@@ -212,15 +196,15 @@ const SignUp: React.FC = () => {
         }
     }, []);
 
-    const toggleBarber = useCallback(() => {
+    const toggleBarber = () => {
         setIsBarber((prevState) => !prevState);
-    }, []);
-    const toggleTattoo = useCallback(() => {
+    };
+    const toggleTattoo = () => {
         setIsTattoo((prevState) => !prevState);
-    }, []);
-    const togglePiercing = useCallback(() => {
+    };
+    const togglePiercing = () => {
         setIsPiercing((prevState) => !prevState);
-    }, []);
+    };
 
     return (
         <Container>
@@ -228,7 +212,10 @@ const SignUp: React.FC = () => {
             <Content>
                 <img src={logoImg} alt="logo" />
                 <AnimationContainer>
-                    <Form ref={formRef} onSubmit={isProvider ? handleSubmitProvider : handleSubmitUser}>
+                    <Form
+                        ref={formRef}
+                        onSubmit={isProvider ? handleSubmitProvider : handleSubmitUser}
+                    >
                         <div
                             style={{
                                 marginBottom: '24px',
@@ -257,12 +244,20 @@ const SignUp: React.FC = () => {
                                 <Row>
                                     <Column>
                                         <Input name="name" icon={FiUser} placeholder="Nome" />
-                                        <Input name="lastName" icon={FiUser} placeholder="Sobrenome" />
+                                        <Input
+                                            name="lastName"
+                                            icon={FiUser}
+                                            placeholder="Sobrenome"
+                                        />
                                     </Column>
                                 </Row>
                                 <Row>
                                     <Column>
-                                        <Input name="legalName" icon={FiUser} placeholder="Nome Fantasia" />
+                                        <Input
+                                            name="legalName"
+                                            icon={FiUser}
+                                            placeholder="Nome Fantasia"
+                                        />
                                     </Column>
                                 </Row>
                                 <Row>
@@ -278,7 +273,12 @@ const SignUp: React.FC = () => {
                                 </Row>
                                 <Row>
                                     <Column>
-                                        <Input name="password" icon={FiLock} type="password" placeholder="Senha" />
+                                        <Input
+                                            name="password"
+                                            icon={FiLock}
+                                            type="password"
+                                            placeholder="Senha"
+                                        />
                                         <InputMask
                                             mask="99999-999"
                                             name="addressZipCode"
@@ -292,20 +292,40 @@ const SignUp: React.FC = () => {
                                 <Row>
                                     <Column>
                                         <Column>
-                                            <Input name="addressStreet" placeholder="Rua" icon={FaMapSigns} />
-                                            <Input name="addressArea" placeholder="Bairro" icon={FaMapSigns} />
+                                            <Input
+                                                name="addressStreet"
+                                                placeholder="Rua"
+                                                icon={FaMapSigns}
+                                            />
+                                            <Input
+                                                name="addressArea"
+                                                placeholder="Bairro"
+                                                icon={FaMapSigns}
+                                            />
                                         </Column>
                                     </Column>
                                 </Row>
                                 <Row>
                                     <Column>
-                                        <Input name="addressNumber" placeholder="Número" icon={FaMapSigns} />
-                                        <Input name="addressCity" placeholder="Cidade" icon={FaMapSigns} />
+                                        <Input
+                                            name="addressNumber"
+                                            placeholder="Número"
+                                            icon={FaMapSigns}
+                                        />
+                                        <Input
+                                            name="addressCity"
+                                            placeholder="Cidade"
+                                            icon={FaMapSigns}
+                                        />
                                     </Column>
                                 </Row>
                                 <Row>
                                     <Column>
-                                        <Input name="addressState" placeholder="Estado" icon={FaMapSigns} />
+                                        <Input
+                                            name="addressState"
+                                            placeholder="Estado"
+                                            icon={FaMapSigns}
+                                        />
                                         <Input
                                             name="addressComplement"
                                             placeholder="Complemento"
@@ -315,21 +335,10 @@ const SignUp: React.FC = () => {
                                 </Row>
                                 <div className="img">
                                     Selecione uma imagem
-                                    {statusImgLogo === null && (
-                                        <label htmlFor="avatar">
-                                            <FiCamera />
-                                            <input
-                                                accept=".jpg, .jpeg, .png"
-                                                onChange={handleLogoChange}
-                                                type="file"
-                                                id="avatar"
-                                            />
-                                        </label>
-                                    )}
-                                    {statusImgLogo === true && <span>Carregando...</span>}
-                                    {statusImgLogo === false && (
-                                        <BsCheckAll className="check" size={25} color="#2e656a" />
-                                    )}
+                                    <FileInput
+                                        statusImgLogo={statusImgLogo}
+                                        onChange={handleLogoChange}
+                                    />
                                 </div>
                                 <div
                                     style={{
@@ -342,116 +351,25 @@ const SignUp: React.FC = () => {
                                     <Column>
                                         <div
                                             style={{
-                                                // display: 'flex',
                                                 alignItems: 'center',
                                                 textAlign: 'center',
                                                 width: '100%',
                                             }}
                                         >
                                             <span>Barbearia:</span>
-                                            <Switch
+                                            <SwitchInput
                                                 onChange={toggleBarber}
-                                                checked={isBarber}
-                                                uncheckedIcon={
-                                                    <div
-                                                        style={{
-                                                            display: 'flex',
-                                                            justifyContent: 'center',
-                                                            alignItems: 'center',
-                                                            height: '100%',
-                                                            fontSize: 19,
-                                                        }}
-                                                    >
-                                                        <MdClose />
-                                                    </div>
-                                                }
-                                                checkedIcon={
-                                                    <div
-                                                        style={{
-                                                            display: 'flex',
-                                                            justifyContent: 'center',
-                                                            alignItems: 'center',
-                                                            height: '100%',
-                                                            fontSize: 19,
-                                                        }}
-                                                    >
-                                                        <MdCheck />
-                                                    </div>
-                                                }
-                                                height={23}
-                                                width={55}
-                                                onColor="#2e656a"
-                                                offColor="#c53030"
+                                                isChecked={isBarber}
                                             />
                                             <span>Tatuagem:</span>
-                                            <Switch
+                                            <SwitchInput
                                                 onChange={toggleTattoo}
-                                                checked={isTattoo}
-                                                uncheckedIcon={
-                                                    <div
-                                                        style={{
-                                                            display: 'flex',
-                                                            justifyContent: 'center',
-                                                            alignItems: 'center',
-                                                            height: '100%',
-                                                            fontSize: 19,
-                                                        }}
-                                                    >
-                                                        <MdClose />
-                                                    </div>
-                                                }
-                                                checkedIcon={
-                                                    <div
-                                                        style={{
-                                                            display: 'flex',
-                                                            justifyContent: 'center',
-                                                            alignItems: 'center',
-                                                            height: '100%',
-                                                            fontSize: 19,
-                                                        }}
-                                                    >
-                                                        <MdCheck />
-                                                    </div>
-                                                }
-                                                height={23}
-                                                width={55}
-                                                onColor="#2e656a"
-                                                offColor="#c53030"
+                                                isChecked={isTattoo}
                                             />
                                             <span>Piercing:</span>
-                                            <Switch
+                                            <SwitchInput
                                                 onChange={togglePiercing}
-                                                checked={isPiercing}
-                                                uncheckedIcon={
-                                                    <div
-                                                        style={{
-                                                            display: 'flex',
-                                                            justifyContent: 'center',
-                                                            alignItems: 'center',
-                                                            height: '100%',
-                                                            fontSize: 19,
-                                                        }}
-                                                    >
-                                                        <MdClose />
-                                                    </div>
-                                                }
-                                                checkedIcon={
-                                                    <div
-                                                        style={{
-                                                            display: 'flex',
-                                                            justifyContent: 'center',
-                                                            alignItems: 'center',
-                                                            height: '100%',
-                                                            fontSize: 19,
-                                                        }}
-                                                    >
-                                                        <MdCheck />
-                                                    </div>
-                                                }
-                                                height={23}
-                                                width={55}
-                                                onColor="#2e656a"
-                                                offColor="#c53030"
+                                                isChecked={isPiercing}
                                             />
                                         </div>
                                     </Column>
@@ -477,25 +395,19 @@ const SignUp: React.FC = () => {
                                     <Input name="email" icon={FiMail} placeholder="E-mail" />
                                 </Row>
                                 <Row>
-                                    <Input name="password" icon={FiLock} type="password" placeholder="Senha" />
+                                    <Input
+                                        name="password"
+                                        icon={FiLock}
+                                        type="password"
+                                        placeholder="Senha"
+                                    />
                                 </Row>
                                 <div className="img">
                                     Selecione uma imagem
-                                    {statusImgLogo === null && (
-                                        <label htmlFor="avatar">
-                                            <FiCamera />
-                                            <input
-                                                accept=".jpg, .jpeg, .png"
-                                                onChange={handleLogoChange}
-                                                type="file"
-                                                id="avatar"
-                                            />
-                                        </label>
-                                    )}
-                                    {statusImgLogo === true && <span>Carregando...</span>}
-                                    {statusImgLogo === false && (
-                                        <BsCheckAll className="check" size={25} color="#2e656a" />
-                                    )}
+                                    <FileInput
+                                        statusImgLogo={statusImgLogo}
+                                        onChange={handleLogoChange}
+                                    />
                                 </div>
                             </>
                         )}

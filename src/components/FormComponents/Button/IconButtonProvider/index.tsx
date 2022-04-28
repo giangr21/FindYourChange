@@ -5,12 +5,18 @@ import { Button, Container } from './styles';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     title?: string;
-    icon?: React.ComponentType<IconBaseProps>;
+    icon?: any;
     action: () => any;
     background: string;
 };
 
-const IconButtonProvider: React.FC<ButtonProps> = ({ title, icon: Icon, action, background, ...rest }) => {
+const IconButtonProvider: React.FC<ButtonProps> = ({
+    title,
+    icon: Icon,
+    action,
+    background,
+    ...rest
+}) => {
     const onClickAction = useCallback(() => {
         action();
     }, [action]);
