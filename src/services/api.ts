@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://fyc-tcc.herokuapp.com/',
+    baseURL: 'http://localhost:3333/',
 });
 
 api.interceptors.request.use(
