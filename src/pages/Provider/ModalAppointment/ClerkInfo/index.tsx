@@ -9,7 +9,7 @@ interface ClerkProps {
     isSelectedClerk: boolean;
 }
 
-const ClerkInfo: React.FC<ClerkProps> = ({ clerk, isSelectedClerk }): any => {
+const ClerkInfo: React.FC<ClerkProps> = ({ clerk, isSelectedClerk }) => {
     return (
         <Container isSelectedClerk={isSelectedClerk}>
             <img src={`data:image/png;base64,${clerk.image}`} alt="" />

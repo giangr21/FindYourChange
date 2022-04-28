@@ -33,7 +33,6 @@ const Index: React.FC = () => {
     const { user } = useAuth();
     const [loading, setLoading] = useState(true);
     const [appointments, setAppointments] = useState<AppointmentData[]>([]);
-    const [idAppointment, setIdAppointment] = useState('');
 
     const getAppointments = useCallback(async () => {
         await api

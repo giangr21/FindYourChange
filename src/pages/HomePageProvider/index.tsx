@@ -23,11 +23,6 @@ import { DeliveryIcon } from '../../components/StickerCard/Icons/iconDelivery';
 import NextAppointment from '../../components/DashboardAppointment/NextAppointment';
 import Appointment from '../../components/DashboardAppointment/Appointment';
 
-interface MonthAvailability {
-    day: number;
-    available: boolean;
-}
-
 interface Appointment {
     id: string;
     notes: string;
@@ -69,8 +64,6 @@ const HomePageProvider: React.FC = () => {
     const { user } = useAuth();
     const history = useHistory();
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [currentMonth, setCurrentMonth] = useState(new Date());
-    const [monthAvailability, setMonthAvailability] = useState<MonthAvailability[]>([]);
     const [appointments, setAppointments] = useState<Appointment[]>([]);
     const [dashboardInfo, setDashboardInfo] = useState({
         services: 'Carregando..',
@@ -93,10 +86,6 @@ const HomePageProvider: React.FC = () => {
         }
     }, []);
 
-    const handleMonthChange = useCallback((month: Date) => {
-        setCurrentMonth(month);
-    }, []);
-
     useEffect(() => {
         async function getAppointments(): Promise<void> {
             await api
@@ -113,7 +102,9 @@ const HomePageProvider: React.FC = () => {
                     for (let index = 0; index < response.data.length; index++) {
                         const appointment = response.data[index];
 
-                        const { data: imgBase64 } = await api.get(`storage/base64/min/${appointment.user.avatar}`);
+                        const { data: imgBase64 } = await api.get(
+                            `storage/base64/min/${appointment.user.avatar}`,
+                        );
                         appointment.user.avatar = imgBase64;
 
                         appointmentsFormatted.push({
@@ -121,7 +112,6 @@ const HomePageProvider: React.FC = () => {
                             hourFormatted: format(parseISO(appointment.dateAppointment), 'HH:mm'),
                         });
                     }
-                    console.log(appointmentsFormatted);
                     setAppointments(appointmentsFormatted);
                     setLoading(false);
                 });
@@ -136,17 +126,6 @@ const HomePageProvider: React.FC = () => {
         getAppointments();
         getDashboardInfo();
     }, [selectedDate, user.id]);
-
-    // const disabledDays = useMemo(() => {
-    //     const dates = monthAvailability
-    //         .filter((monthDay) => monthDay.available === false)
-    //         .map((monthDay) => {
-    //             const year = currentMonth.getFullYear();
-    //             const month = currentMonth.getMonth();
-    //             return new Date(year, month, monthDay.day);
-    //         });
-    //     return dates;
-    // }, [currentMonth, monthAvailability]);
 
     const selectedDateAsText = useMemo(() => {
         return format(selectedDate, "'Dia' dd 'de' MMMM", {
@@ -173,7 +152,9 @@ const HomePageProvider: React.FC = () => {
     }, [appointments]);
 
     const nextAppointment = useMemo(() => {
-        return appointments.find((appointment) => isAfter(parseISO(appointment.dateAppointment), new Date()));
+        return appointments.find((appointment) =>
+            isAfter(parseISO(appointment.dateAppointment), new Date()),
+        );
     }, [appointments]);
 
     if (loading) {
@@ -259,23 +240,34 @@ const HomePageProvider: React.FC = () => {
                     <Section>
                         <strong>Manhã</strong>
 
-                        {morningAppointments.length === 0 && <p>Nenhum agendamento neste período</p>}
-
-                        {morningAppointments.map((morningAppointment) => (
-                            <Appointment key={morningAppointment.id} appointmentInfo={morningAppointment} />
-                        ))}
+                        {morningAppointments.length === 0 ? (
+                            <p>Nenhum agendamento neste período</p>
+                        ) : (
+                            morningAppointments.map((morningAppointment) => (
+                                <Appointment
+                                    key={morningAppointment.id}
+                                    appointmentInfo={morningAppointment}
+                                />
+                            ))
+                        )}
                     </Section>
 
                     <Section>
                         <strong>Tarde</strong>
 
-                        {afternoonAppointments.length === 0 && <p>Nenhum agendamento neste período</p>}
-
-                        {afternoonAppointments.map((afternoonAppointment) => (
-                            <Appointment key={afternoonAppointment.id} appointmentInfo={afternoonAppointment} />
-                        ))}
+                        {afternoonAppointments.length === 0 ? (
+                            <p>Nenhum agendamento neste período</p>
+                        ) : (
+                            afternoonAppointments.map((afternoonAppointment) => (
+                                <Appointment
+                                    key={afternoonAppointment.id}
+                                    appointmentInfo={afternoonAppointment}
+                                />
+                            ))
+                        )}
                     </Section>
                 </Schedule>
+
                 <Calendar>
                     <DayPicker
                         weekdaysShort={['D', 'S', 'T', 'Q', 'Q', 'S', 'S']}
@@ -294,7 +286,7 @@ const HomePageProvider: React.FC = () => {
                             'Dezembro',
                         ]}
                         onDayClick={handleDateChange}
-                        onMonthChange={handleMonthChange}
+                        onMonthChange={() => {}}
                         fromMonth={new Date()}
                         selectedDays={selectedDate}
                         disabledDays={[{ daysOfWeek: [0, 7] }]}

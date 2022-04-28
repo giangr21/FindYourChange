@@ -13,7 +13,6 @@ import {
     IconServiceDesktop,
     Image,
     Content,
-    Title,
     Description,
     SearchWrapper,
     Container,
@@ -92,6 +91,13 @@ const Index: React.FC = () => {
         setValueSearchBox(e.target.value);
     }, []);
 
+    const handleClickService = (state: string) => {
+        history.push({
+            pathname: `/allServicesProvider/`,
+            state,
+        });
+    };
+
     return (
         <>
             <Box display={['none', 'none', 'flex']}>
@@ -125,41 +131,20 @@ const Index: React.FC = () => {
                     </SearchWrapper>
                     <ServiceCard>
                         <div className="services">
-                            <div
-                                onClick={() => {
-                                    history.push({
-                                        pathname: `/allServicesProvider/`,
-                                        state: 'isBarber',
-                                    });
-                                }}
-                                className="service"
-                            >
+                            <div onClick={() => handleClickService('isBarber')} className="service">
                                 <IconServiceDesktop>
                                     <Barber width="92px" height="92px" color="#fff" />
                                 </IconServiceDesktop>
                                 <small>Barbearia</small>
                             </div>
-                            <div
-                                onClick={() => {
-                                    history.push({
-                                        pathname: `/allServicesProvider/`,
-                                        state: 'isTattoo',
-                                    });
-                                }}
-                                className="service"
-                            >
+                            <div onClick={() => handleClickService('isTattoo')} className="service">
                                 <IconServiceDesktop>
                                     <Tattoo width="92px" height="92px" color="#fff" />
                                 </IconServiceDesktop>
                                 <small>Tatuagem</small>
                             </div>
                             <div
-                                onClick={() => {
-                                    history.push({
-                                        pathname: `/allServicesProvider/`,
-                                        state: 'isPiercing',
-                                    });
-                                }}
+                                onClick={() => handleClickService('isPiercing')}
                                 className="service"
                             >
                                 <IconServiceDesktop>
@@ -183,43 +168,19 @@ const Index: React.FC = () => {
                         value={valueSearchBox}
                     />
                     <div className="services">
-                        <div
-                            onClick={() => {
-                                history.push({
-                                    pathname: `/allServicesProvider/`,
-                                    state: 'isBarber',
-                                });
-                            }}
-                            className="service"
-                        >
+                        <div onClick={() => handleClickService('isBarber')} className="service">
                             <IconService>
                                 <Barber width="62px" height="62px" color="#fff" />
                             </IconService>
                             <small>Barbearia</small>
                         </div>
-                        <div
-                            onClick={() => {
-                                history.push({
-                                    pathname: `/allServicesProvider/`,
-                                    state: 'isTattoo',
-                                });
-                            }}
-                            className="service"
-                        >
+                        <div onClick={() => handleClickService('isTattoo')} className="service">
                             <IconService>
                                 <Tattoo width="62px" height="62px" color="#fff" />
                             </IconService>
                             <small>Tatuagem</small>
                         </div>
-                        <div
-                            onClick={() => {
-                                history.push({
-                                    pathname: `/allServicesProvider/`,
-                                    state: 'isPiercing',
-                                });
-                            }}
-                            className="service"
-                        >
+                        <div onClick={() => handleClickService('isPiercing')} className="service">
                             <IconService>
                                 <Piercing width="62px" height="62px" color="#fff" />
                             </IconService>
@@ -261,7 +222,9 @@ const Index: React.FC = () => {
                                 <RecommendationCard
                                     key={popularRecommendation.id}
                                     onClick={() => {
-                                        history.push(`/provider/${popularRecommendation.provider.id}`);
+                                        history.push(
+                                            `/provider/${popularRecommendation.provider.id}`,
+                                        );
                                     }}
                                 >
                                     {popularRecommendation.defaultImg && (
@@ -272,7 +235,10 @@ const Index: React.FC = () => {
                                     )}
                                     <span>
                                         {popularRecommendation.provider.legalName.length > 20
-                                            ? `${popularRecommendation.provider.legalName.substring(0, 20)}..`
+                                            ? `${popularRecommendation.provider.legalName.substring(
+                                                  0,
+                                                  20,
+                                              )}..`
                                             : popularRecommendation.provider.legalName}{' '}
                                     </span>
                                     <p>

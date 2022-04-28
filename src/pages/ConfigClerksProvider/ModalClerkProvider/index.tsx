@@ -5,7 +5,6 @@ import React, { useRef, useCallback, useState, useEffect, ChangeEvent } from 're
 import { FormHandles } from '@unform/core';
 import { FiCamera, FiCheckSquare } from 'react-icons/fi';
 import { FaWindowClose } from 'react-icons/fa';
-import { BsCheckAll } from 'react-icons/bs';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import 'rc-time-picker/assets/index.css';
@@ -22,6 +21,7 @@ import InputMask from '../../../components/FormComponents/Input/InputModalMask';
 import Loading from '../../../components/Loading';
 import { useAuth } from '../../../hooks/authentication';
 import { useMedia } from '../../../util/use-media';
+import FileInput from '../../../components/FormComponents/File';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const _ = require('lodash');
@@ -121,7 +121,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
             .get(`/clerk/${clerkId}`)
             .then(async (response) => {
                 if (response.data.image) {
-                    const imgNamePhotoData = await api.get(`storage/base64/min/${response.data.image}`);
+                    const imgNamePhotoData = await api.get(
+                        `storage/base64/min/${response.data.image}`,
+                    );
                     setImgPhotoMin(imgNamePhotoData.data);
                 }
                 setClerkData(response.data);
@@ -136,37 +138,49 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
         for (let i = 0; i < scheduleProvider.length; i++) {
             switch (scheduleProvider[i].dayOfWeek) {
                 case 'Segunda-Feira':
-                    FORMATTED_WEEK_DAY.seg.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
+                    FORMATTED_WEEK_DAY.seg.inicio = moment(scheduleProvider[i].hourStart, [
+                        'HH:mm',
+                    ]);
                     FORMATTED_WEEK_DAY.seg.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
                     FORMATTED_WEEK_DAY.seg.dia = scheduleProvider[i].dayOfWeek;
                     break;
 
                 case 'Terça-Feira':
-                    FORMATTED_WEEK_DAY.ter.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
+                    FORMATTED_WEEK_DAY.ter.inicio = moment(scheduleProvider[i].hourStart, [
+                        'HH:mm',
+                    ]);
                     FORMATTED_WEEK_DAY.ter.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
                     FORMATTED_WEEK_DAY.ter.dia = scheduleProvider[i].dayOfWeek;
                     break;
 
                 case 'Quarta-Feira':
-                    FORMATTED_WEEK_DAY.qua.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
+                    FORMATTED_WEEK_DAY.qua.inicio = moment(scheduleProvider[i].hourStart, [
+                        'HH:mm',
+                    ]);
                     FORMATTED_WEEK_DAY.qua.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
                     FORMATTED_WEEK_DAY.qua.dia = scheduleProvider[i].dayOfWeek;
                     break;
 
                 case 'Quinta-Feira':
-                    FORMATTED_WEEK_DAY.qui.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
+                    FORMATTED_WEEK_DAY.qui.inicio = moment(scheduleProvider[i].hourStart, [
+                        'HH:mm',
+                    ]);
                     FORMATTED_WEEK_DAY.qui.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
                     FORMATTED_WEEK_DAY.qui.dia = scheduleProvider[i].dayOfWeek;
                     break;
 
                 case 'Sexta-Feira':
-                    FORMATTED_WEEK_DAY.sex.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
+                    FORMATTED_WEEK_DAY.sex.inicio = moment(scheduleProvider[i].hourStart, [
+                        'HH:mm',
+                    ]);
                     FORMATTED_WEEK_DAY.sex.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
                     FORMATTED_WEEK_DAY.sex.dia = scheduleProvider[i].dayOfWeek;
                     break;
 
                 case 'Sabado':
-                    FORMATTED_WEEK_DAY.sab.inicio = moment(scheduleProvider[i].hourStart, ['HH:mm']);
+                    FORMATTED_WEEK_DAY.sab.inicio = moment(scheduleProvider[i].hourStart, [
+                        'HH:mm',
+                    ]);
                     FORMATTED_WEEK_DAY.sab.fim = moment(scheduleProvider[i].hourEnd, ['HH:mm']);
                     FORMATTED_WEEK_DAY.sab.dia = scheduleProvider[i].dayOfWeek;
                     break;
@@ -375,7 +389,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
             weekDays.seg.fim > limitWeekHours.seg.fim ||
             weekDays.seg.inicio > weekDays.seg.fim
         ) {
-            toast.error('Os horários da Segunda-feira devem estar dentro dos horários limites do estabelecimento');
+            toast.error(
+                'Os horários da Segunda-feira devem estar dentro dos horários limites do estabelecimento',
+            );
             hasError = true;
         }
         if (
@@ -383,7 +399,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
             weekDays.ter.fim > limitWeekHours.ter.fim ||
             weekDays.ter.inicio > weekDays.ter.fim
         ) {
-            toast.error('Os horários da Terça-feira devem estar dentro dos horários limites do estabelecimento!');
+            toast.error(
+                'Os horários da Terça-feira devem estar dentro dos horários limites do estabelecimento!',
+            );
             hasError = true;
         }
         if (
@@ -391,7 +409,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
             weekDays.qua.fim > limitWeekHours.qua.fim ||
             weekDays.qua.inicio > weekDays.qua.fim
         ) {
-            toast.error('Os horários da Quarta-feira devem estar dentro dos horários limites do estabelecimento!');
+            toast.error(
+                'Os horários da Quarta-feira devem estar dentro dos horários limites do estabelecimento!',
+            );
             hasError = true;
         }
         if (
@@ -399,7 +419,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
             weekDays.qui.fim > limitWeekHours.qui.fim ||
             weekDays.qui.inicio > weekDays.qui.fim
         ) {
-            toast.error('Os horários da Quinta-feira devem estar dentro dos horários limites do estabelecimento!');
+            toast.error(
+                'Os horários da Quinta-feira devem estar dentro dos horários limites do estabelecimento!',
+            );
             hasError = true;
         }
         if (
@@ -407,7 +429,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
             weekDays.sex.fim > limitWeekHours.sex.fim ||
             weekDays.sex.inicio > weekDays.sex.fim
         ) {
-            toast.error('Os horários da Sexta-feira devem estar dentro dos horários limites do estabelecimento!');
+            toast.error(
+                'Os horários da Sexta-feira devem estar dentro dos horários limites do estabelecimento!',
+            );
             hasError = true;
         }
         if (workOnSaturday) {
@@ -417,7 +441,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                 weekDays.sab.fim > limitWeekHours.sab.fim ||
                 weekDays.sab.inicio > weekDays.sab.fim
             ) {
-                toast.error('Os horários do Sábado devem estar dentro dos horários limites do estabelecimento!');
+                toast.error(
+                    'Os horários do Sábado devem estar dentro dos horários limites do estabelecimento!',
+                );
                 hasError = true;
             }
         }
@@ -505,8 +531,12 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                 formRef.current?.setErrors({});
                 const schema = Yup.object().shape({
                     name: Yup.string().required('Nome obrigatório'),
-                    email: Yup.string().required('E-mail obrigatório').email('Digite um e-mail válido'),
-                    phone: Yup.string().required('Telefone obrigatório').max(14, 'Digite um telefone valido'),
+                    email: Yup.string()
+                        .required('E-mail obrigatório')
+                        .email('Digite um e-mail válido'),
+                    phone: Yup.string()
+                        .required('Telefone obrigatório')
+                        .max(14, 'Digite um telefone valido'),
                 });
                 await schema.validate(data, {
                     abortEarly: false,
@@ -549,7 +579,16 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                 toast.error(`Houve uma falha ao ${edit ? 'editar' : 'inserir'} os dados`);
             }
         },
-        [clerkId, clerkAvatar, user.id, validateHours, edit, setIsOpen, reloadClerk, mountScheduleToSave],
+        [
+            clerkId,
+            clerkAvatar,
+            user.id,
+            validateHours,
+            edit,
+            setIsOpen,
+            reloadClerk,
+            mountScheduleToSave,
+        ],
     );
 
     const clickImg = useCallback(async (imgName: string) => {
@@ -566,7 +605,12 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
     }, []);
 
     return (
-        <Modal width={mobile ? '100%' : '420px'} height="460px" isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Modal
+            width={mobile ? '100%' : '420px'}
+            height="460px"
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+        >
             <Form ref={formRef} initialData={clerkData} onSubmit={submitClerk}>
                 <Header>
                     {edit ? <h1>Editar Atendente</h1> : <h1>Novo Atendente</h1>}
@@ -599,7 +643,11 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                         width: '100%',
                                     }}
                                 >
-                                    <InputMask mask="(99)99999-9999" name="phone" placeholder="Telefone" />
+                                    <InputMask
+                                        mask="(99)99999-9999"
+                                        name="phone"
+                                        placeholder="Telefone"
+                                    />
                                 </div>
                             </Container>
                             <Row>
@@ -613,7 +661,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                     >
                                         <TimePicker
                                             showSecond={false}
-                                            onChange={(e) => handleWeekData(e, DAY_OF_WEEK.SegundaInicio)}
+                                            onChange={(e) =>
+                                                handleWeekData(e, DAY_OF_WEEK.SegundaInicio)
+                                            }
                                             className="timePicker"
                                             inputReadOnly
                                             value={weekDays?.seg.inicio}
@@ -631,7 +681,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                     >
                                         <TimePicker
                                             showSecond={false}
-                                            onChange={(e) => handleWeekData(e, DAY_OF_WEEK.SegundaFim)}
+                                            onChange={(e) =>
+                                                handleWeekData(e, DAY_OF_WEEK.SegundaFim)
+                                            }
                                             className="timePicker"
                                             inputReadOnly
                                             value={weekDays?.seg.fim}
@@ -652,7 +704,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                     >
                                         <TimePicker
                                             showSecond={false}
-                                            onChange={(e) => handleWeekData(e, DAY_OF_WEEK.TercaInicio)}
+                                            onChange={(e) =>
+                                                handleWeekData(e, DAY_OF_WEEK.TercaInicio)
+                                            }
                                             className="timePicker"
                                             inputReadOnly
                                             value={weekDays?.ter.inicio}
@@ -670,7 +724,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                     >
                                         <TimePicker
                                             showSecond={false}
-                                            onChange={(e) => handleWeekData(e, DAY_OF_WEEK.TercaFim)}
+                                            onChange={(e) =>
+                                                handleWeekData(e, DAY_OF_WEEK.TercaFim)
+                                            }
                                             className="timePicker"
                                             inputReadOnly
                                             value={weekDays?.ter.fim}
@@ -691,7 +747,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                     >
                                         <TimePicker
                                             showSecond={false}
-                                            onChange={(e) => handleWeekData(e, DAY_OF_WEEK.QuartaInicio)}
+                                            onChange={(e) =>
+                                                handleWeekData(e, DAY_OF_WEEK.QuartaInicio)
+                                            }
                                             className="timePicker"
                                             inputReadOnly
                                             value={weekDays?.qua.inicio}
@@ -709,7 +767,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                     >
                                         <TimePicker
                                             showSecond={false}
-                                            onChange={(e) => handleWeekData(e, DAY_OF_WEEK.QuartaFim)}
+                                            onChange={(e) =>
+                                                handleWeekData(e, DAY_OF_WEEK.QuartaFim)
+                                            }
                                             className="timePicker"
                                             inputReadOnly
                                             value={weekDays?.qua.fim}
@@ -730,7 +790,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                     >
                                         <TimePicker
                                             showSecond={false}
-                                            onChange={(e) => handleWeekData(e, DAY_OF_WEEK.QuintaInicio)}
+                                            onChange={(e) =>
+                                                handleWeekData(e, DAY_OF_WEEK.QuintaInicio)
+                                            }
                                             className="timePicker"
                                             inputReadOnly
                                             value={weekDays?.qui.inicio}
@@ -748,7 +810,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                     >
                                         <TimePicker
                                             showSecond={false}
-                                            onChange={(e) => handleWeekData(e, DAY_OF_WEEK.QuintaFim)}
+                                            onChange={(e) =>
+                                                handleWeekData(e, DAY_OF_WEEK.QuintaFim)
+                                            }
                                             className="timePicker"
                                             inputReadOnly
                                             value={weekDays?.qui.fim}
@@ -769,7 +833,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                     >
                                         <TimePicker
                                             showSecond={false}
-                                            onChange={(e) => handleWeekData(e, DAY_OF_WEEK.SextaInicio)}
+                                            onChange={(e) =>
+                                                handleWeekData(e, DAY_OF_WEEK.SextaInicio)
+                                            }
                                             className="timePicker"
                                             inputReadOnly
                                             value={weekDays?.sex.inicio}
@@ -787,7 +853,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                     >
                                         <TimePicker
                                             showSecond={false}
-                                            onChange={(e) => handleWeekData(e, DAY_OF_WEEK.SextaFim)}
+                                            onChange={(e) =>
+                                                handleWeekData(e, DAY_OF_WEEK.SextaFim)
+                                            }
                                             className="timePicker"
                                             inputReadOnly
                                             value={weekDays?.sex.fim}
@@ -808,7 +876,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                         >
                                             <TimePicker
                                                 showSecond={false}
-                                                onChange={(e) => handleWeekData(e, DAY_OF_WEEK.SabadoInicio)}
+                                                onChange={(e) =>
+                                                    handleWeekData(e, DAY_OF_WEEK.SabadoInicio)
+                                                }
                                                 className="timePicker"
                                                 inputReadOnly
                                                 value={weekDays?.sab.inicio}
@@ -826,7 +896,9 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                         >
                                             <TimePicker
                                                 showSecond={false}
-                                                onChange={(e) => handleWeekData(e, DAY_OF_WEEK.SabadoFim)}
+                                                onChange={(e) =>
+                                                    handleWeekData(e, DAY_OF_WEEK.SabadoFim)
+                                                }
                                                 className="timePicker"
                                                 inputReadOnly
                                                 value={weekDays?.sab.fim}
@@ -847,28 +919,10 @@ const ModalClerkProvider: React.FC<ModalProps> = ({
                                         }}
                                     >
                                         Foto Atendente:
-                                        {statusImgLogo === null && (
-                                            <label htmlFor="avatar">
-                                                <FiCamera />
-                                                <input
-                                                    accept=".jpg, .jpeg, .png"
-                                                    onChange={handleLogoChange}
-                                                    type="file"
-                                                    id="avatar"
-                                                />
-                                            </label>
-                                        )}
-                                        {statusImgLogo === true && <span>Carregando...</span>}
-                                        {statusImgLogo === false && (
-                                            <BsCheckAll
-                                                style={{
-                                                    marginLeft: '15px',
-                                                }}
-                                                className="check"
-                                                size={25}
-                                                color="#2e656a"
-                                            />
-                                        )}
+                                        <FileInput
+                                            statusImgLogo={statusImgLogo}
+                                            onChange={handleLogoChange}
+                                        />
                                     </div>
                                 </Container>
                             )}

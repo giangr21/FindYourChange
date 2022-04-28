@@ -16,7 +16,7 @@ import getValidationErrors from '../../../util/getValidationErrors';
 import { useAuth } from '../../../hooks/authentication';
 import { useMedia } from '../../../util/use-media';
 
-interface ModalProps {
+export interface ModalProps {
     children?: any;
     isOpen: boolean;
     setIsOpen: () => void;
@@ -37,7 +37,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
             try {
                 formRef.current?.setErrors({});
                 const schema = Yup.object().shape({
-                    email: Yup.string().required('E-mail obrigatório').email('Digite um e-mail válido'),
+                    email: Yup.string()
+                        .required('E-mail obrigatório')
+                        .email('Digite um e-mail válido'),
                     password: Yup.string().required('Senha obrigatória'),
                 });
 
@@ -97,13 +99,18 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
                 <LeftContainer />
                 <RightContainer>
                     <img src={logoImg} alt="logo" width="35%" />
-                    <Form ref={formRef} onSubmit={handleSubmit}>
+                    <Form translate={undefined} ref={formRef} onSubmit={handleSubmit}>
                         <h2>Para realizar um agendamento é necessario estar logado.</h2>
                         <Row>
                             <Input name="email" icon={FiMail} placeholder="E-mail" />
                         </Row>
                         <Row>
-                            <Input name="password" icon={FiLock} type="password" placeholder="Senha" />
+                            <Input
+                                name="password"
+                                icon={FiLock}
+                                type="password"
+                                placeholder="Senha"
+                            />
                         </Row>
 
                         <Button type="submit">Entrar</Button>

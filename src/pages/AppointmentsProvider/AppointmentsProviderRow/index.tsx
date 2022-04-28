@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import moment from 'moment';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyledBodyCell } from '../../../components/Table/styles';
 
 interface AppointmentsProviderRow {
@@ -11,12 +11,12 @@ interface AppointmentsProviderRow {
 
 const AppointmentsProviderRow: React.FC<AppointmentsProviderRow> = ({ data, dataAberta }) => {
     const dataAppointment = moment(data.dateAppointment);
-    const dataAtual = moment(Date.now());
-    if (dataAppointment >= dataAtual) {
-        dataAberta = true;
-    } else {
-        dataAberta = false;
-    }
+    const now = moment(Date.now());
+
+    useEffect(() => {
+        dataAppointment >= now ? (dataAberta = true) : (dataAberta = false);
+    }, []);
+
     return (
         <React.Fragment key={data.id}>
             <StyledBodyCell>{data.service.title}</StyledBodyCell>
@@ -28,7 +28,11 @@ const AppointmentsProviderRow: React.FC<AppointmentsProviderRow> = ({ data, data
                     currency: 'BRL',
                 }).format(Number(data.service.value))}
             </StyledBodyCell>
-            {dataAberta ? <StyledBodyCell>Aberto</StyledBodyCell> : <StyledBodyCell>Concluído</StyledBodyCell>}
+            {dataAberta ? (
+                <StyledBodyCell>Aberto</StyledBodyCell>
+            ) : (
+                <StyledBodyCell>Concluído</StyledBodyCell>
+            )}
         </React.Fragment>
     );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch } from 'react-router-dom';
+import { Switch, BrowserRouter } from 'react-router-dom';
 import Route from './router';
 
 import Index from '../pages/Index';
@@ -16,33 +16,39 @@ import ProviderProfile from '../pages/ProviderProfile';
 import Marketplace from '../pages/Marketplace';
 import Product from '../pages/Product';
 import About from '../pages/About';
-import Clerk from '../pages/Clerk';
+import Clerk from '../pages/ConfigClerksProvider';
 import UserProfile from '../pages/UserProfile';
 import AppointmentsProvider from '../pages/AppointmentsProvider';
 
 const Routes: React.FC = () => (
-    <Switch>
-        <Route path="/" exact component={Index} />
-        <Route path="/allServicesProvider" component={ServicesProvider} />
-        <Route path="/provider" component={Provider} />
-        <Route path="/About" component={About} />
+    <BrowserRouter>
+        <Switch>
+            <Route path="/" exact component={Index} />
+            <Route path="/allServicesProvider" component={ServicesProvider} />
+            <Route path="/provider" component={Provider} />
+            <Route path="/About" component={About} />
 
-        <Route path="/signIn" signPages component={SignIn} />
-        <Route path="/signUp" signPages component={SignUp} />
+            <Route path="/signIn" signPages component={SignIn} />
+            <Route path="/signUp" signPages component={SignUp} />
 
-        <Route path="/forgotPassword" signPages component={ForgotPassword} />
-        <Route path="/userProfile" privateUserPages component={UserProfile} />
+            <Route path="/forgotPassword" signPages component={ForgotPassword} />
+            <Route path="/userProfile" privateUserPages component={UserProfile} />
 
-        <Route path="/homeProvider" privatePages component={HomePageProvider} />
-        <Route path="/providerProfile" privatePages component={ProviderProfile} />
-        <Route path="/marketplace" privatePages component={Marketplace} />
-        <Route path="/Product" privatePages component={Product} />
-        <Route path="/configServicesProvider" privatePages component={ConfigServicesProvider} />
-        <Route path="/configSchedulesProvider" privatePages component={ConfigSchedulesProvider} />
-        <Route path="/configProductsProvider" privatePages component={ConfigProductsProvider} />
-        <Route path="/configClerksProvider" privatePages component={Clerk} />
-        <Route path="/appointmentsProvider" privatePages component={AppointmentsProvider} />
-    </Switch>
+            <Route path="/homeProvider" privatePages component={HomePageProvider} />
+            <Route path="/providerProfile" privatePages component={ProviderProfile} />
+            <Route path="/marketplace" privatePages component={Marketplace} />
+            <Route path="/Product" privatePages component={Product} />
+            <Route path="/configServicesProvider" privatePages component={ConfigServicesProvider} />
+            <Route
+                path="/configSchedulesProvider"
+                privatePages
+                component={ConfigSchedulesProvider}
+            />
+            <Route path="/configProductsProvider" privatePages component={ConfigProductsProvider} />
+            <Route path="/configClerksProvider" privatePages component={Clerk} />
+            <Route path="/appointmentsProvider" privatePages component={AppointmentsProvider} />
+        </Switch>
+    </BrowserRouter>
 );
 
 export default Routes;

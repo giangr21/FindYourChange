@@ -1,5 +1,4 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { Client as Styletron } from 'styletron-engine-atomic';
 import { Provider as StyletronProvider } from 'styletron-react';
 import { BaseProvider } from 'baseui';
@@ -7,11 +6,10 @@ import { ToastContainer } from 'react-toastify';
 import 'react-multi-carousel/lib/styles.css';
 import './components/MultiCarousel/styles.css';
 
-import AppProvider from './hooks';
-
 import Routes from './routes';
 import GlobalStyle from './styles/global';
 import { theme } from './theme';
+import { AuthProvider } from './hooks/authentication';
 
 const App: React.FC = () => {
     const engine = new Styletron();
@@ -19,14 +17,12 @@ const App: React.FC = () => {
     return (
         <StyletronProvider value={engine}>
             <BaseProvider theme={theme}>
-                <Router>
-                    <AppProvider>
-                        <Routes />
-                    </AppProvider>
+                <AuthProvider>
+                    <Routes />
+                </AuthProvider>
 
-                    <GlobalStyle />
-                    <ToastContainer autoClose={3000} />
-                </Router>
+                <GlobalStyle />
+                <ToastContainer autoClose={3000} />
             </BaseProvider>
         </StyletronProvider>
     );

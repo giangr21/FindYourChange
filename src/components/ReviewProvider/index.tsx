@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import ReactStars from 'react-rating-stars-component';
 import { Textarea } from 'baseui/textarea';
 import { MdCheck, MdClose, MdDeleteForever } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import moment from 'moment';
-import { useLocation } from 'react-router-dom';
 import { Container, HeaderReview, NewRecommendation, Reviews, Review } from './styles';
 import IconButton from '../FormComponents/Button/IconButton';
 import api from '../../services/api';
@@ -40,7 +39,7 @@ const ReviewProvider: React.FC<ReviewProps> = ({
     providerId,
     setNewRecommendationToFalse,
     removeRecommendation,
-}): any => {
+}) => {
     const [valueTextArea, setValueTextArea] = useState('');
     const [newRatingStars, setNewRatingStars] = useState(0);
     const { user, isAuthenticated } = useAuth();
@@ -50,6 +49,7 @@ const ReviewProvider: React.FC<ReviewProps> = ({
         if (valueTextArea.trim() === '' || !valueTextArea) {
             return toast.error('Favor inserir uma mensagem. Tente novamente');
         }
+
         try {
             await api
                 .post('/providerRecommendation', {
@@ -228,7 +228,8 @@ const ReviewProvider: React.FC<ReviewProps> = ({
                                 <p style={{}}>{recommendation.notes}</p>
 
                                 {isAuthenticated &&
-                                    (recommendation.user.id === user.id || providerId === user.id) && (
+                                    (recommendation.user.id === user.id ||
+                                        providerId === user.id) && (
                                         <MdDeleteForever
                                             onClick={() => handleDeleteReview(recommendation.id)}
                                             color="#DE3B3B"

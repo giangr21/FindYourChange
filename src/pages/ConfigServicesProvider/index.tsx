@@ -60,6 +60,7 @@ const Index: React.FC = () => {
     const [showFilter, setShowFilter] = useState(false);
 
     const getServices = useCallback(async (filterProduct: any) => {
+        setLoading(true);
         await api
             .post('services', filterProduct)
             .then(async (response) => {
@@ -74,7 +75,9 @@ const Index: React.FC = () => {
                     service.totalValueWithDisccount = (service.value - valueToDiscount).toFixed(2);
 
                     if (service.image) {
-                        const { data: imgBase64 } = await api.get(`storage/base64/min/${service.image}`);
+                        const { data: imgBase64 } = await api.get(
+                            `storage/base64/min/${service.image}`,
+                        );
                         auxServices.push({ ...service, image: imgBase64 });
                     } else {
                         auxServices.push({ ...service });
@@ -150,13 +153,17 @@ const Index: React.FC = () => {
                     <>
                         <HeaderContainer>
                             <IconButton
-                                // style={{ marginTop: 19 }}
                                 icon={FaPlus}
                                 title="Novo"
                                 background="#2e656a"
                                 action={toggleModal}
                             />
-                            <IconButton icon={FaSearch} background="#777777" justIcon action={handleFilter} />
+                            <IconButton
+                                icon={FaSearch}
+                                background="#777777"
+                                justIcon
+                                action={handleFilter}
+                            />
                         </HeaderContainer>
 
                         {services.length > 0 ? (
@@ -181,7 +188,10 @@ const Index: React.FC = () => {
                                     sm={6}
                                     xs={12}
                                     key={service.id}
-                                    style={{ margin: '15px 0', padding: mobile ? '0px 20px' : null }}
+                                    style={{
+                                        margin: '15px 0',
+                                        padding: mobile && '0px 20px',
+                                    }}
                                 >
                                     <ServiceCard handleEdit={handleEdit} serviceData={service} />
                                 </Col>
@@ -209,6 +219,7 @@ const Index: React.FC = () => {
                     </>
                 )}
             </Content>
+
             <Filter showFilter={showFilter} submitFilter={submitFilter}>
                 <div className="space">
                     <Input name="serviceName" placeholder="Nome do Serviço" />

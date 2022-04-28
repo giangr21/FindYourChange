@@ -11,7 +11,7 @@ import './style.css';
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     name: string;
     placeholder: string;
-    icon?: React.ComponentType<IconBaseProps>;
+    icon?: any;
 }
 
 const Input: React.FC<InputProps> = ({ name, placeholder, icon: Icon, ...rest }) => {

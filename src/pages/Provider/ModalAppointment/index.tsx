@@ -1,5 +1,5 @@
 /* eslint-disable react/no-this-in-sfc */
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { DatePicker } from 'baseui/datepicker';
 import { TimePicker } from 'baseui/timepicker';
 import { FormControl } from 'baseui/form-control';
@@ -448,7 +448,10 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                                         >
                                             <ListItemLabel>
                                                 Agendamento:
-                                                <span> {resumeInformation.service.dateAppointment}</span>
+                                                <span>
+                                                    {' '}
+                                                    {resumeInformation.service.dateAppointment}
+                                                </span>
                                             </ListItemLabel>
                                         </ListItem>
                                         <ListItem
@@ -469,7 +472,8 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                                             }}
                                         >
                                             <ListItemLabel>
-                                                Serviço: <span>{resumeInformation.service.title}</span>
+                                                Serviço:{' '}
+                                                <span>{resumeInformation.service.title}</span>
                                             </ListItemLabel>
                                         </ListItem>
                                         <ListItem
@@ -490,7 +494,8 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                                             }}
                                         >
                                             <ListItemLabel>
-                                                Tempo de duração: <span>{resumeInformation.service.time}</span>
+                                                Tempo de duração:{' '}
+                                                <span>{resumeInformation.service.time}</span>
                                             </ListItemLabel>
                                         </ListItem>
                                         <ListItem
@@ -516,7 +521,9 @@ const ModalHandleAppointment: React.FC<ModalAppointmentProps> = ({
                                                     {Intl.NumberFormat('pt-BR', {
                                                         style: 'currency',
                                                         currency: 'BRL',
-                                                    }).format(Number(resumeInformation.service.value))}
+                                                    }).format(
+                                                        Number(resumeInformation.service.value),
+                                                    )}
                                                 </span>
                                             </ListItemLabel>
                                         </ListItem>

@@ -9,7 +9,7 @@ import { Container, Error } from './styles';
 
 interface Props extends InputProps {
     name: string;
-    icon?: React.ComponentType<IconBaseProps>;
+    icon?: any;
     cepIcon?: boolean;
     getCep?: () => void;
 }
@@ -62,7 +62,11 @@ const InputMask: React.FC<Props> = ({ name, icon: Icon, cepIcon, getCep, ...rest
             )}
             {cepIcon && (
                 <div style={{ marginRight: 0 }}>
-                    <FaSearch style={{ marginRight: 0, cursor: 'pointer' }} onClick={getCep} color="#2e656a" />
+                    <FaSearch
+                        style={{ marginRight: 0, cursor: 'pointer' }}
+                        onClick={getCep}
+                        color="#2e656a"
+                    />
                 </div>
             )}
         </Container>

@@ -1,17 +1,16 @@
 import { styled } from 'baseui';
 import Images from '../Image';
 
-export const ProductCardWrapper = styled('div', ({ $theme }) => ({
+export const ProductCardWrapper = styled('div', () => ({
     height: '100%',
     width: '100%',
     backgroundColor: '#f4ede8',
     position: 'relative',
-    // fontFamily: $theme.typography.primaryFontFamily,
     cursor: 'pointer',
     borderRadius: '11px',
 }));
 
-export const ProductImageWrapper = styled('div', ({ $theme }) => ({
+export const ProductImageWrapper = styled('div', () => ({
     height: '180px',
     padding: '5px',
     position: 'relative',
@@ -32,20 +31,20 @@ export const Image = styled(Images, () => ({
     display: 'inline-block',
 }));
 
-export const ProductInfo = styled('div', ({ $theme }) => ({
+export const ProductInfo = styled('div', () => ({
     padding: '20px 25px 30px',
     '@media only screen and (max-width: 767px)': {
         padding: '15px 20px',
-        // minHeight: '123px',
     },
 }));
 
-export const ProductTitle = styled('h3', ({ $theme }): any => ({
+export const ProductTitle = styled('h3', (): any => ({
     fontSize: '16px',
     fontWeight: '700',
     color: '#28262e',
     margin: '0 0 7px 0',
-    minHeight: '30px',
+    height: '45px',
+    maxHeight: '45px',
     wordBreak: 'break-word',
 
     '@media only screen and (max-width: 767px)': {
@@ -55,7 +54,13 @@ export const ProductTitle = styled('h3', ({ $theme }): any => ({
     },
 }));
 
-export const ProductWeight = styled('span', ({ $theme }): any => ({
+export const ProductDescriptionWrapper = styled('div', () => ({
+    height: '50px',
+    maxHeight: '50px',
+    overflowY: 'auto',
+}));
+
+export const ProductDescription = styled('span', (): any => ({
     fontSize: '14px',
     fontWeight: '700',
     color: '#3A3A3A',
@@ -67,18 +72,14 @@ export const ProductWeight = styled('span', ({ $theme }): any => ({
     },
 }));
 
-export const ProductMeta = styled('div', ({ $theme }) => ({
+export const ProductMeta = styled('div', () => ({
     marginTop: '15px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-
-    '@media only screen and (max-width: 767px)': {
-        // minHeight: '32px',
-    },
 }));
 
-export const ProductPriceWrapper = styled('div', ({ $theme }) => ({
+export const ProductPriceWrapper = styled('div', () => ({
     display: 'flex',
     alignItems: 'center',
     position: 'relative',
@@ -95,7 +96,7 @@ export const ProductPrice = styled('span', ({ $theme }): any => ({
     },
 }));
 
-export const DiscountedPrice = styled('span', ({ $theme }) => ({
+export const DiscountedPrice = styled('span', () => ({
     fontSize: '11px',
     color: '#3A3A3A',
     padding: '0 5px',
@@ -115,7 +116,7 @@ export const DiscountedPrice = styled('span', ({ $theme }) => ({
     },
 }));
 
-export const SaleTag = styled('span', ({ $theme }): any => ({
+export const SaleTag = styled('span', (): any => ({
     fontSize: '12px',
     fontWeight: '500',
     color: '#ffffff',
@@ -129,7 +130,7 @@ export const SaleTag = styled('span', ({ $theme }): any => ({
     right: '15px',
 }));
 
-export const DiscountPercent = styled('span', ({ $theme }): any => ({
+export const DiscountPercent = styled('span', (): any => ({
     fontSize: '12px',
     fontWeight: '500',
     color: '#ffffff',

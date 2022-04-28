@@ -81,7 +81,6 @@ const Index: React.FC = () => {
                     <>
                         <HeaderContainer>
                             <IconButton
-                                // style={{ marginTop: 19 }}
                                 icon={FaPlus}
                                 title="Novo"
                                 background="#2e656a"

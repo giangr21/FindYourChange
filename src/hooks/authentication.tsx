@@ -1,5 +1,4 @@
 import React, { createContext, useCallback, useState, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
 import api from '../services/api';
 
 interface User {
@@ -33,13 +32,11 @@ interface AuthContextData {
     signIn(credentials: SignInCredentials): Promise<any>;
     signOut(): void;
     updateUser(user: User): void;
-    updateSimpleUser(user: any): void;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 const AuthProvider: React.FC = ({ children }) => {
-    const history = useHistory();
     const [data, setData] = useState<AuthState>(() => {
         const token = localStorage.getItem('@FYC:token');
         const user = localStorage.getItem('@FYC:user');
@@ -52,13 +49,10 @@ const AuthProvider: React.FC = ({ children }) => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
         const token = localStorage.getItem('@FYC:token');
-        if (token) {
-            return true;
-        }
-        return false;
+        return !!token;
     });
 
-    const signIn = useCallback(async ({ email, password, isProvider }) => {
+    const signIn = async ({ email, password, isProvider }: any) => {
         const response = await api.post('sessions', {
             email,
             password,
@@ -89,15 +83,15 @@ const AuthProvider: React.FC = ({ children }) => {
 
         setData({ token, user });
         setIsAuthenticated(true);
-    }, []);
+    };
 
-    const signOut = useCallback(() => {
+    const signOut = () => {
         localStorage.removeItem('@FYC:token');
         localStorage.removeItem('@FYC:user');
 
         setData({} as AuthState);
         setIsAuthenticated(false);
-    }, []);
+    };
 
     const updateUser = useCallback(
         (user: User) => {
@@ -112,20 +106,6 @@ const AuthProvider: React.FC = ({ children }) => {
         [data.token, data.user],
     );
 
-    const updateSimpleUser = useCallback(
-        (user: any) => {
-            const updatedUser = { ...data.user, ...user };
-
-            setData({
-                token: data.token,
-                user: updatedUser,
-            });
-
-            localStorage.setItem('@FYC:user', JSON.stringify(updatedUser));
-        },
-        [data.token, data.user],
-    );
-
     return (
         <AuthContext.Provider
             value={{
@@ -133,7 +113,6 @@ const AuthProvider: React.FC = ({ children }) => {
                 signIn,
                 signOut,
                 updateUser,
-                updateSimpleUser,
                 isAuthenticated,
             }}
         >

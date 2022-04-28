@@ -66,7 +66,7 @@ const MobileHeader: React.FC<MobileProps> = ({
             }}
         >
             <SidebarWrapper>
-                <ContentSearch ref={formRef} onSubmit={formFilterSubmit}>
+                <ContentSearch translate={undefined} ref={formRef} onSubmit={formFilterSubmit}>
                     <p>Filtro Serviços</p>
                     <Input name="serviceName" icon={FaSearch} placeholder="Nome do Serviço" />
                     <div className="separator" />
@@ -142,7 +142,12 @@ const MobileHeader: React.FC<MobileProps> = ({
                     </div>
                 </ContentSearch>
                 <FooterFilter>
-                    <IconButton icon={MdDeleteForever} title="Limpar" background="#777777" action={clearFilter} />
+                    <IconButton
+                        icon={MdDeleteForever}
+                        title="Limpar"
+                        background="#777777"
+                        action={clearFilter}
+                    />
                     <IconButton
                         icon={FaCheck}
                         title="Aplicar"

@@ -14,7 +14,7 @@ interface ModalProps {
     handleConfirm: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ children, isOpen, setIsOpen, handleConfirm }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen, handleConfirm }) => {
     const [modalStatus, setModalStatus] = useState(isOpen);
 
     useEffect(() => {
@@ -49,13 +49,22 @@ const Modal: React.FC<ModalProps> = ({ children, isOpen, setIsOpen, handleConfir
                 },
             }}
         >
-            {/* {children} */}
             <Container>
                 <FiAlertOctagon size={40} />
                 <p>Deseja realmente excluir este registro ?</p>
                 <div className="buttons">
-                    <IconButton icon={MdDeleteForever} title="Cancelar" background="#DE3B3B" action={setIsOpen} />
-                    <IconButton icon={FaCheck} title="Confirmar" background="#00A57C" action={handleConfirm} />
+                    <IconButton
+                        icon={MdDeleteForever}
+                        title="Cancelar"
+                        background="#DE3B3B"
+                        action={setIsOpen}
+                    />
+                    <IconButton
+                        icon={FaCheck}
+                        title="Confirmar"
+                        background="#00A57C"
+                        action={handleConfirm}
+                    />
                 </div>
             </Container>
         </ReactModal>

@@ -1,5 +1,14 @@
 import styled from 'styled-components';
-import { background, compose, space, color, layout, position, flexbox, border } from 'styled-system';
+import {
+    background,
+    compose,
+    space,
+    color,
+    layout,
+    position,
+    flexbox,
+    border,
+} from 'styled-system';
 import css from '@styled-system/css';
 
 export const Box = styled.div<any>(
@@ -13,7 +22,6 @@ export const Box = styled.div<any>(
         alignItems: 'center',
         width: '100%',
         position: 'relative',
-        // backgroundColor: #f7f7f7;
 
         '@media (max-width: 990px)': {
             padding: '80px 0 25px',
